@@ -12,20 +12,18 @@ dependencies:
 #   name: mariadb
 #   repository: https://charts.bitnami.com/bitnami
 #   version: 11.4.2
-description: A simple, self-hosted, easy-to-use platform for organising and storing
-  information.
-home: https://hub.docker.com/r/linuxserver/musicbrainz
+description: A simple, self-hosted, easy-to-use platform for dev completion
+home: https://tabby.tabbyml.com/
 icon: https://avatars3.githubusercontent.com/u/20912696?s=400&v=4?sanitize=true
 keywords:
-- musicbrainz
+- tabbyml
 - server
 - hosted
 kubeVersion: '>=1.16.0-0'
 maintainers:
 - email: joseph@zacharie.org
   name: jzacharie
-name: musicbrainz
+name: tabbyml
 sources:
-- https://wiki.musicbrainz.org/MusicBrainz_Server/Setup
-- https://hub.docker.com/r/linuxserver/musicbrainz
-version: 2.9.6
+- https://github.com/TabbyML/tabby
+version: 0.0.1
