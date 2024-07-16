@@ -21,7 +21,8 @@ jobs:
 
       # - name: Install Helm
       #   uses: azure/setup-helm@v1
-
+      - name: Verify Git Remote
+        run: git remote -v
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.6.0
         env:
