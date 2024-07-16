@@ -26,4 +26,4 @@ maintainers:
 name: tabbyml
 sources:
 - https://github.com/TabbyML/tabby
-version: 0.1.0
+version: 1.0.0
