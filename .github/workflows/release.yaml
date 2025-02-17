@@ -19,12 +19,14 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      # - name: Install Helm
-      #   uses: azure/setup-helm@v1
+      - name: Install Helm
+        uses: azure/setup-helm@v4.2.0
+        
       - name: Verify Git Remote
         run: git remote -v
+        
       - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.6.0
+        uses: helm/chart-releaser-action@v1.7.0
         # with:
         #   skip_existing: 'true'
         env:
