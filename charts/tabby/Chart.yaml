@@ -3,7 +3,7 @@ annotations:
     - kind: changed
       description: update tabbyml/tabby docker tag to 0.24.0
 apiVersion: v2
-appVersion: "v2.9.3"
+appVersion: "0.24.0"
 dependencies:
   - name: common
     repository: https://zekker6.github.io/helm-charts
