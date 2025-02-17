@@ -1,0 +1,30 @@
+---
+version: "3"
+
+vars:
+  PROJECT_DIR:
+    sh: "git rev-parse --show-toplevel"
+
+includes:
+  charts: .taskfiles/charts.yaml
+  docs: .taskfiles/docs.yaml
+  precommit: .taskfiles/precommit.yaml
+
+tasks:
+  default:
+    silent: true
+    cmds:
+      - task -l
+
+  precommit:all:
+    cmds:
+      - task charts:format
+      - task charts:dependency-cleanup
+      - task charts:docs
+      - task docs:charts
+      - task precommit:run-all
+      - task charts:lint-all
+
+  renovate:all:
+    cmds:
+      - bash .taskfiles/merge-renovate-prs.sh

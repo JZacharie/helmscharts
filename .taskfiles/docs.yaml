@@ -1,0 +1,38 @@
+---
+version: "3"
+
+vars:
+  MKDOCS_CONFIG_FILE: .ci/mkdocs/mkdocs.yaml
+
+tasks:
+  build:
+    desc: >
+      Build documentation using mkdocs
+    cmds:
+      - mkdocs build --config-file ./.ci/mkdocs/mkdocs.yaml
+    silent: true
+
+  charts:
+    desc: >
+      Sync docs from charts to docs
+    cmds:
+      - mkdir -p docs/charts
+      - for chart in $(ls charts/apps); do
+          cp charts/apps/$chart/README.md docs/charts/$chart.md;
+        done
+
+  sync:
+    decs: >
+      Generate and sync docs
+    cmds:
+      - task charts:docs
+      - task docs:charts
+
+  serve:
+    desc: >
+      Start development server on http://localhost:{{ .PORT }} using mkdocs
+    vars:
+      PORT: 8000
+    cmds:
+      - mkdocs serve --config-file ./.ci/mkdocs/mkdocs.yaml --dev-addr localhost:{{ .PORT }} --livereload
+    silent: true

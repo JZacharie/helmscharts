@@ -1,0 +1,24 @@
+apiVersion: v2
+name: common
+description: Function library for Helm charts
+type: library
+version: 0.5.2
+kubeVersion: ">=1.16.0-0"
+keywords:
+  - common
+  - library
+home: https://github.com/zekker6/helm-charts/tree/main/charts/library/common
+maintainers:
+  - name: "zekker6"
+    email: "me@zekker.dev"
+    url: "https://github.com/zekker6/"
+annotations:
+  artifacthub.io/changes: |-
+    - kind: changed
+      description: update ghcr.io/coder/code-server to 4.93.1
+    - kind: changed
+      description: update docker.io/grafana/promtail to 3.2.1
+    - kind: changed
+      description: update docker.io/qmcgaw/gluetun to v3.39.1
+    - kind: fixed
+      description: properly handle empty paths in ingress configuration
