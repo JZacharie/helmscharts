@@ -20,8 +20,6 @@ web:
     pullPolicy: IfNotPresent
   
   service:
-    type: NodePort
-    port: 5000
     nodePort: 1616
   
   resources: 
