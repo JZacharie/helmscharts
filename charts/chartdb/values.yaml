@@ -1,0 +1,38 @@
+image:
+  # -- image repository
+  repository: luvx/chartdb
+  # -- image tag
+  tag: "1.7.0"
+  # -- image pull policy
+  pullPolicy: IfNotPresent
+
+env: 
+    FOO: bar
+    # OPENAI_API_ENDPOINT: 
+    # LLM_MODEL_NAME:
+    # OPENAI_API_KEY:
+
+# -- Configures service settings for the chart.
+# @default -- See values.yaml
+service:
+  main:
+    ports:
+      http:
+        port: 80
+
+ingress:
+  main:
+    enabled: true
+    labels: {}
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production-dns
+    ingressClassName: "traefik"
+    hosts: 
+       - host: chartdb.p.zacharie.org
+         paths:
+           - path: /
+             pathType: Prefix
+    tls:
+      - secretName: chartdb.p.zacharie.org-tls
+        hosts:
+          - chartdb.p.zacharie.org
