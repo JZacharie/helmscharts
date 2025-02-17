@@ -1,0 +1,27 @@
+annotations:
+  artifacthub.io/changes: |-
+    - kind: changed
+      description: update linkwarden/linkwarden docker tag to v2.9.3
+apiVersion: v2
+appVersion: "v2.9.3"
+dependencies:
+  - name: common
+    repository: https://zekker6.github.io/helm-charts
+    version: 0.5.2
+description: linkwarden helm package
+home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/linkwarden
+icon: https://www.linkwarden.co/favicon-32x32.png
+keywords:
+  - pdf-signature
+  - pdf-sign
+  - document-signing
+kubeVersion: ">=1.16.0-0"
+maintainers:
+  - name: "zekker6"
+    email: "me@zekker.dev"
+    url: "https://github.com/zekker6/"
+name: linkwarden
+sources:
+  - https://github.com/linkwardenco/linkwarden
+  - https://github.com/zekker6/helm-charts/tree/master/charts/apps/linkwarden
+version: 2.9.3
