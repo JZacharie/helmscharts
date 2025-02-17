@@ -456,7 +456,7 @@ ingress:
 # @default -- See values.yaml
 persistence:
   config:
-    enabled: true
+    enabled: false
   music:
-    enabled: true
+    enabled: false
     # mountPath: /data
