@@ -31,12 +31,19 @@ ingress:
 # @default -- See values.yaml
 persistence:
   config:
-    enabled: false
+    enabled: true
     mountPath: /config
     accessMode: ReadWriteOnce
-    size: 1Gb  
+    size: 1Gi
+    storageClass: "-"
+    matchLabels: {}
+    matchExpressions: {}
   music:
-    enabled: false
+    enabled: true
     mountPath: /music
     accessMode: ReadWriteOnce
-    size: 1Gb  
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: "-"
+    matchLabels: {}
+    matchExpressions: {}
