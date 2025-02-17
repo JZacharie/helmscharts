@@ -1,4 +1,4 @@
 # Helm Zacharie example
 
-add swingmusic
-add faster-whisper
+- add swingmusic
+- add faster-whisper
