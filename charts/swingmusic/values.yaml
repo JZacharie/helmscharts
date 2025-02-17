@@ -37,11 +37,6 @@ ingress:
       - secretName: swingmusic.p.zacharie.org-tls
         hosts:
           - swingmusic.p.zacharie.org
-    integrations:
-      traefik:
-        fixedMiddlewares:
-          - name: element-web-security-headers
-            namespace: "default"
 
 # -- Configure persistence settings for the chart under this key.
 # @default -- See values.yaml
