@@ -1,9 +1,9 @@
 annotations:
   artifacthub.io/changes: |-
     - kind: changed
-      description: update tabby/tabby docker tag to v1.9.1
+      description: update tabbyml/tabby docker tag to 0.24.0
 apiVersion: v2
-appVersion: "v1.9.1"
+appVersion: "v2.9.3"
 dependencies:
   - name: common
     repository: https://zekker6.github.io/helm-charts
@@ -11,10 +11,6 @@ dependencies:
 description: tabby helm package
 home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/tabby
 icon: https://www.tabby.co/favicon-32x32.png
-keywords:
-  - pdf-signature
-  - pdf-sign
-  - document-signing
 kubeVersion: ">=1.16.0-0"
 maintainers:
   - name: "zekker6"
@@ -24,4 +20,4 @@ name: tabby
 sources:
   - https://github.com/tabbyco/tabby
   - https://github.com/zekker6/helm-charts/tree/master/charts/apps/tabby
-version: 1.61.0
+version: 0.24.0
