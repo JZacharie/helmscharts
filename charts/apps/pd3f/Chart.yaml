@@ -1,6 +1,6 @@
 apiVersion: v2
 name: pd3f
 description: A Helm chart for PD3F application
-version: 0.1.1
+version: 0.1.2
 appVersion: "1.0"
 dependencies: []

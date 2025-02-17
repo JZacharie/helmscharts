@@ -7,6 +7,6 @@ spec:
   ports:
   - port: {{ .Values.web.service.port }}
     targetPort: {{ .Values.web.service.port }}
-    nodePort: {{ .Values.web.service.nodePort }}
+    # nodePort: {{ .Values.web.service.nodePort }}
   selector:
     app: {{ .Values.global.appName }}-web

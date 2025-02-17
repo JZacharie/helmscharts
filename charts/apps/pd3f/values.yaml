@@ -20,7 +20,7 @@ web:
     pullPolicy: IfNotPresent
   
   service:
-    nodePort: 1616
+    port: 1616
   
   resources: 
     requests:
