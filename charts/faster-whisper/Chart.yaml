@@ -24,4 +24,4 @@ name: faster-whisper
 sources:
   - https://github.com/faster-whisperco/faster-whisper
   - https://github.com/zekker6/helm-charts/tree/master/charts/apps/faster-whisper
-version: 2.4.0
+version: 2.4.1
