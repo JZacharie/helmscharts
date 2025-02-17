@@ -1,0 +1,103 @@
+global:
+  appName: pd3f
+
+volumes:
+  cache:
+    enabled: true
+    size: 1Gi
+    storageClass: ""
+  to_ocr:
+    enabled: true
+    size: 1Gi
+    storageClass: ""
+  uploads:
+    hostPath: /data/pd3f-data-uploads
+
+web:
+  image: 
+    repository: pd3f/pd3f
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: NodePort
+    port: 5000
+    nodePort: 1616
+  
+  resources: 
+    requests:
+      memory: "512Mi"
+      cpu: "500m"
+  
+  volumeMounts:
+    uploads:
+      mountPath: "/uploads"
+  
+  command: ["gunicorn", "app:app", "--bind=0.0.0.0:5000"]
+
+parsr:
+  image:
+    repository: axarev/parsr
+    tag: v1.2.2
+    pullPolicy: IfNotPresent
+  
+  service:
+    port: 3001
+  
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: "1000m"
+
+redis:
+  image:
+    repository: redis
+    tag: 6-alpine
+    pullPolicy: IfNotPresent
+  
+  service:
+    port: 6379
+  
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+
+worker:
+  image:
+    repository: pd3f/pd3f
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  env:
+    KEEP_RESULTS_HOURS: 24
+  
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "500m"
+  
+  volumeMounts:
+    cache:
+      mountPath: "/root/.cache"
+    to_ocr:
+      mountPath: "/to-ocr"
+    uploads:
+      mountPath: "/uploads"
+  
+  command: ["rq", "worker", "-u", "redis://redis:6379", "--results-ttl", "86400"]
+
+ocrWorker:
+  image:
+    repository: pd3f-ocr-worker
+    tag: latest
+    pullPolicy: Never
+  
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: "1000m"
+  
+  volumeMounts:
+    to_ocr:
+      mountPath: "/to-ocr"

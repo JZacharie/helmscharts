@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.global.appName }}-parsr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: parsr
+  template:
+    metadata:
+      labels:
+        app: parsr
+    spec:
+      containers:
+      - name: parsr
+        image: "{{ .Values.parsr.image.repository }}:{{ .Values.parsr.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.parsr.service.port }}
+        resources:
+          {{- toYaml .Values.parsr.resources | nindent 10 }}

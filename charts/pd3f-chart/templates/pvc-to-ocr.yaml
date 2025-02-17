@@ -1,0 +1,15 @@
+{{- if .Values.volumes.to_ocr.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: to-ocr-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.volumes.to_ocr.size }}
+  {{- if .Values.volumes.to_ocr.storageClass }}
+  storageClassName: {{ .Values.volumes.to_ocr.storageClass }}
+  {{- end }}
+{{- end }}

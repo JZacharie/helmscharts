@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.global.appName }}-ocr-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ocr-worker
+  template:
+    metadata:
+      labels:
+        app: ocr-worker
+    spec:
+      containers:
+      - name: ocr-worker
+        image: "{{ .Values.ocrWorker.image.repository }}:{{ .Values.ocrWorker.image.tag }}"
+        imagePullPolicy: {{ .Values.ocrWorker.image.pullPolicy }}
+        volumeMounts:
+        - name: to-ocr
+          mountPath: {{ .Values.ocrWorker.volumeMounts.to_ocr.mountPath }}
+        resources:
+          {{- toYaml .Values.ocrWorker.resources | nindent 10 }}
+      volumes:
+      - name: to-ocr
+        persistentVolumeClaim:
+          claimName: to-ocr-pvc

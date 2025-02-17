@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.global.appName }}-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+      - name: worker
+        image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}"
+        command: {{ .Values.worker.command | toJson }}
+        env:
+        - name: KEEP_RESULTS_HOURS
+          value: "{{ .Values.worker.env.KEEP_RESULTS_HOURS }}"
+        volumeMounts:
+        - name: cache
+          mountPath: {{ .Values.worker.volumeMounts.cache.mountPath }}
+        - name: to-ocr
+          mountPath: {{ .Values.worker.volumeMounts.to_ocr.mountPath }}
+        - name: uploads
+          mountPath: {{ .Values.worker.volumeMounts.uploads.mountPath }}
+        resources:
+          {{- toYaml .Values.worker.resources | nindent 10 }}
+      volumes:
+      - name: cache
+        persistentVolumeClaim:
+          claimName: cache-pvc
+      - name: to-ocr
+        persistentVolumeClaim:
+          claimName: to-ocr-pvc
+      - name: uploads
+        hostPath:
+          path: {{ .Values.volumes.uploads.hostPath }}

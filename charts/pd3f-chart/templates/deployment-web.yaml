@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.global.appName }}-web
+  labels:
+    app: {{ .Values.global.appName }}-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.global.appName }}-web
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.global.appName }}-web
+    spec:
+      containers:
+      - name: web
+        image: "{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}"
+        imagePullPolicy: {{ .Values.web.image.pullPolicy }}
+        command: {{ .Values.web.command | toJson }}
+        ports:
+        - containerPort: {{ .Values.web.service.port }}
+        volumeMounts:
+        - name: uploads
+          mountPath: {{ .Values.web.volumeMounts.uploads.mountPath }}
+        resources:
+          {{- toYaml .Values.web.resources | nindent 10 }}
+      volumes:
+      - name: uploads
+        hostPath:
+          path: {{ .Values.volumes.uploads.hostPath }}

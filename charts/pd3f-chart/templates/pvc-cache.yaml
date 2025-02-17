@@ -1,0 +1,15 @@
+{{- if .Values.volumes.cache.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cache-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.volumes.cache.size }}
+  {{- if .Values.volumes.cache.storageClass }}
+  storageClassName: {{ .Values.volumes.cache.storageClass }}
+  {{- end }}
+{{- end }}
