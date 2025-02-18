@@ -22,7 +22,7 @@ service:
   main:
     ports:
       http:
-        port: 7575
+        port: 10300
 
 ingress:
   main:
