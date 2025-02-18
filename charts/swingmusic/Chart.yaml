@@ -24,4 +24,4 @@ name: swingmusic
 sources:
   - https://github.com/swingmusicco/swingmusic
   - https://github.com/zekker6/helm-charts/tree/master/charts/apps/swingmusic
-version: v1.4.8
+version: v1.4.9
