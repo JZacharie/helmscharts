@@ -20,4 +20,4 @@ name: chartdb
 sources:
   - https://github.com/chartdbco/chartdb
   - https://github.com/zekker6/helm-charts/tree/master/charts/apps/chartdb
-version: 1.7.0
+version: 1.7.1
