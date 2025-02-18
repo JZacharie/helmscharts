@@ -49,7 +49,7 @@ persistence:
     mountPath: /config
     accessMode: ReadWriteOnce
     size: 1Gi
-    storageClass: "-"
+    storageClass: "longhorn"
     matchLabels: {}
     matchExpressions: {}
 
