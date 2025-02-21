@@ -24,4 +24,4 @@ name: linkwarden
 sources:
   - https://github.com/linkwardenco/linkwarden
   - https://github.com/zekker6/helm-charts/tree/master/charts/apps/linkwarden
-version: 2.9.3
+version: 2.9.4
