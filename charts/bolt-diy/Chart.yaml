@@ -1,0 +1,23 @@
+annotations:
+  artifacthub.io/changes: |-
+    - kind: changed
+      description: update bolt-diy/bolt-diy docker tag to v1.7.0
+apiVersion: v2
+appVersion: "1.7.0"
+dependencies:
+  - name: common
+    repository: https://zekker6.github.io/helm-charts
+    version: 0.5.2
+description: bolt-diy helm package
+home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/bolt-diy
+icon: https://www.bolt-diy.co/favicon-32x32.png
+kubeVersion: ">=1.16.0-0"
+maintainers:
+  - name: "zekker6"
+    email: "me@zekker.dev"
+    url: "https://github.com/zekker6/"
+name: bolt-diy
+sources:
+  - https://github.com/bolt-diyco/bolt-diy
+  - https://github.com/zekker6/helm-charts/tree/master/charts/apps/bolt-diy
+version: 0.1.0
