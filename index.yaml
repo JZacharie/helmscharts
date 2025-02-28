@@ -85,6 +85,36 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2/common-0.5.2.tgz
     version: 0.5.2
+  crewai:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update wud/wud docker tag to v2.9.3
+    apiVersion: v2
+    appVersion: 8.0.1
+    created: "2025-02-28T05:46:48.364667274Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: wud helm package
+    digest: ba8eee55383c0931550b6997e8a316627454f81a724d8ef1914214f25b2988ab
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/wud
+    icon: https://www.wud.co/favicon-32x32.png
+    keywords:
+    - docker
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: crewai
+    sources:
+    - https://github.com/wudco/wud
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/wud
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/crewai-1.0.0/crewai-1.0.0.tgz
+    version: 1.0.0
   faster-whisper:
   - annotations:
       artifacthub.io/changes: |-
@@ -343,4 +373,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-02-25T14:22:32.91860811Z"
+generated: "2025-02-28T05:46:48.364686029Z"
