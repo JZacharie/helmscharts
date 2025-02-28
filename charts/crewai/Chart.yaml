@@ -1,0 +1,25 @@
+annotations:
+  artifacthub.io/changes: |-
+    - kind: changed
+      description: update wud/wud docker tag to v2.9.3
+apiVersion: v2
+appVersion: "8.0.1"
+dependencies:
+  - name: common
+    repository: https://zekker6.github.io/helm-charts
+    version: 0.5.2
+description: wud helm package
+home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/wud
+icon: https://www.wud.co/favicon-32x32.png
+keywords:
+  - docker
+kubeVersion: ">=1.16.0-0"
+maintainers:
+  - name: "zekker6"
+    email: "me@zekker.dev"
+    url: "https://github.com/zekker6/"
+name: crewai
+sources:
+  - https://github.com/wudco/wud
+  - https://github.com/zekker6/helm-charts/tree/master/charts/apps/wud
+version: 1.0.0
