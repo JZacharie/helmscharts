@@ -7,6 +7,33 @@ entries:
           description: update bolt-diy/bolt-diy docker tag to v1.7.0
     apiVersion: v2
     appVersion: 1.7.0
+    created: "2025-03-07T15:12:56.066369006Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: bolt-diy helm package
+    digest: f1e04c50c9331574cdf65809af08df8b5c0a1e317aa24b61abffd9c514cb85ce
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/bolt-diy
+    icon: https://www.bolt-diy.co/favicon-32x32.png
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: bolt-diy
+    sources:
+    - https://github.com/bolt-diyco/bolt-diy
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/bolt-diy
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/bolt-diy-0.1.1/bolt-diy-0.1.1.tgz
+    version: 0.1.1
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update bolt-diy/bolt-diy docker tag to v1.7.0
+    apiVersion: v2
+    appVersion: 1.7.0
     created: "2025-02-25T14:22:32.918593412Z"
     dependencies:
     - name: common
@@ -222,6 +249,20 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/linkwarden-2.9.4/linkwarden-2.9.4.tgz
     version: 2.9.4
   openai-whisper-asr-webservice:
+  - apiVersion: v2
+    appVersion: 1.7.0
+    created: "2025-03-07T15:12:56.158455171Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: openai-whisper-asr-webservice helm package
+    digest: 56da3c6ffaf451b1bac4d6ebae6ccac52d05981272b2c1402570c8d4fdd02876
+    kubeVersion: '>=1.16.0-0'
+    name: openai-whisper-asr-webservice
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/openai-whisper-asr-webservice-0.1.2/openai-whisper-asr-webservice-0.1.2.tgz
+    version: 0.1.2
   - apiVersion: v2
     appVersion: 1.7.0
     created: "2025-03-07T14:51:40.149903609Z"
@@ -451,4 +492,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-03-07T14:51:40.149921182Z"
+generated: "2025-03-07T15:12:56.158478875Z"
