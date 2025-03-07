@@ -42,3 +42,8 @@ ingress:
       - secretName: openai-whisper-asr-webservice.p.zacharie.org-tls
         hosts:
           - openai-whisper-asr-webservice.p.zacharie.org
+
+persistence:
+  data:
+    enabled: true
+    mountPath: /data

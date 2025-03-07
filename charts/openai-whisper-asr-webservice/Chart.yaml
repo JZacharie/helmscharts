@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: "1.7.0"
+dependencies:
+  - name: common
+    repository: https://zekker6.github.io/helm-charts
+    version: 0.5.2
+description: openai-whisper-asr-webservice helm package
+kubeVersion: ">=1.16.0-0"
+name: openai-whisper-asr-webservice
+version: 0.1.1
