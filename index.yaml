@@ -221,6 +221,21 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/linkwarden-2.9.4/linkwarden-2.9.4.tgz
     version: 2.9.4
+  openai-whisper-asr-webservice:
+  - apiVersion: v2
+    appVersion: 1.7.0
+    created: "2025-03-07T14:51:40.149903609Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: openai-whisper-asr-webservice helm package
+    digest: 323f17f9646a8dd681338169f0a41eb240e2cc4e3fc2ee3a714a8282bf263e32
+    kubeVersion: '>=1.16.0-0'
+    name: openai-whisper-asr-webservice
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/openai-whisper-asr-webservice-0.1.0/openai-whisper-asr-webservice-0.1.0.tgz
+    version: 0.1.0
   speaches:
   - annotations:
       artifacthub.io/changes: |-
@@ -436,4 +451,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-03-07T05:30:59.427233748Z"
+generated: "2025-03-07T14:51:40.149921182Z"
