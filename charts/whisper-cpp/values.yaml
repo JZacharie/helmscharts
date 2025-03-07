@@ -1,6 +1,6 @@
 image:
   # -- image repository
-  repository: whisper-cpp-server
+  repository: litongjava/whisper-cpp-server
   # -- image tag
   tag: "1.0.0-medium-q5_0"
   # -- image pull policy

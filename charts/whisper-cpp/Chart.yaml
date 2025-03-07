@@ -24,4 +24,4 @@ name: whisper-cpp
 sources:
   - https://github.com/whisper-cppco/whisper-cpp
   - https://github.com/zekker6/helm-charts/tree/master/charts/apps/whisper-cpp
-version: 1.0.0
+version: 1.0.1
