@@ -350,6 +350,37 @@ entries:
           description: update whisper-cpp/whisper-cpp docker tag to 2.4.0
     apiVersion: v2
     appVersion: 2.4.0
+    created: "2025-03-07T05:30:59.427217448Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: whisper-cpp helm package
+    digest: ca0e423c9797fcf3a02552b1019989dde65155c50908e97bc18ee1f40673a0c6
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/whisper-cpp
+    icon: https://www.whisper-cpp.co/favicon-32x32.png
+    keywords:
+    - pdf-signature
+    - pdf-sign
+    - document-signing
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: whisper-cpp
+    sources:
+    - https://github.com/whisper-cppco/whisper-cpp
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/whisper-cpp
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/whisper-cpp-1.0.1/whisper-cpp-1.0.1.tgz
+    version: 1.0.1
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update whisper-cpp/whisper-cpp docker tag to 2.4.0
+    apiVersion: v2
+    appVersion: 2.4.0
     created: "2025-03-07T05:27:15.815956939Z"
     dependencies:
     - name: common
@@ -405,4 +436,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-03-07T05:27:15.815965234Z"
+generated: "2025-03-07T05:30:59.427233748Z"
