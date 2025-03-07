@@ -1,24 +1,21 @@
 image:
   # -- image repository
-  repository: pratheek1994/bolt-diy
+  repository: onerahmet/openai-whisper-asr-webservice
   # -- image tag
-  tag: "official"
+  tag: "latest"
   # -- image pull policy
   pullPolicy: IfNotPresent
 
 env: 
-    FOO: bar
-    # OPENAI_API_ENDPOINT: 
-    # LLM_MODEL_NAME:
-    # OPENAI_API_KEY:
-
+    ASR_MODEL: base
+    ASR_ENGINE: openai_whisper
 # -- Configures service settings for the chart.
 # @default -- See values.yaml
 service:
   main:
     ports:
       http:
-        port: 5173
+        port: 9000
 
 ingress:
   main:
@@ -28,11 +25,11 @@ ingress:
       cert-manager.io/cluster-issuer: letsencrypt-production-dns
     ingressClassName: "traefik"
     hosts: 
-       - host: bolt-diy.p.zacharie.org
+       - host: openai-whisper-asr-webservice.p.zacharie.org
          paths:
            - path: /
              pathType: Prefix
     tls:
-      - secretName: bolt-diy.p.zacharie.org-tls
+      - secretName: openai-whisper-asr-webservice.p.zacharie.org-tls
         hosts:
-          - bolt-diy.p.zacharie.org
+          - openai-whisper-asr-webservice.p.zacharie.org
