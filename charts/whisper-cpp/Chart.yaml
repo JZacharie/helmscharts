@@ -1,0 +1,27 @@
+annotations:
+  artifacthub.io/changes: |-
+    - kind: changed
+      description: update whisper-cpp/whisper-cpp docker tag to 2.4.0
+apiVersion: v2
+appVersion: "2.4.0"
+dependencies:
+  - name: common
+    repository: https://zekker6.github.io/helm-charts
+    version: 0.5.2
+description: whisper-cpp helm package
+home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/whisper-cpp
+icon: https://www.whisper-cpp.co/favicon-32x32.png
+keywords:
+  - pdf-signature
+  - pdf-sign
+  - document-signing
+kubeVersion: ">=1.16.0-0"
+maintainers:
+  - name: "zekker6"
+    email: "me@zekker.dev"
+    url: "https://github.com/zekker6/"
+name: whisper-cpp
+sources:
+  - https://github.com/whisper-cppco/whisper-cpp
+  - https://github.com/zekker6/helm-charts/tree/master/charts/apps/whisper-cpp
+version: 1.0.0

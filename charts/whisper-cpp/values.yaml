@@ -1,0 +1,55 @@
+image:
+  # -- image repository
+  repository: whisper-cpp-server
+  # -- image tag
+  tag: "1.0.0-medium-q5_0"
+  # -- image pull policy
+  pullPolicy: IfNotPresent
+
+# -- environment variables. See more environment variables in the [linkwarden documentation](https://github.com/linkwardenco/linkwarden).
+# @default -- See below
+# env: 
+#     PGID: '1000'
+#     PUID: '1000'
+#     TZ: Etc/UTC
+#     WHISPER_BEAM: '1'
+#     WHISPER_LANG: 'fr'
+#     WHISPER_MODEL: 'tiny-int8'
+
+# -- Configures service settings for the chart.
+# @default -- See values.yaml
+service:
+  main:
+    ports:
+      http:
+        port: 8080
+
+ingress:
+  main:
+    enabled: true
+    labels: {}
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production-dns
+    ingressClassName: "traefik"
+    hosts: 
+       - host: whisper-cpp.p.zacharie.org
+         paths:
+           - path: /
+             pathType: Prefix
+    tls:
+      - secretName: whisper-cpp.p.zacharie.org-tls
+        hosts:
+          - whisper-cpp.p.zacharie.org
+
+# -- Configure persistence settings for the chart under this key.
+# @default -- See values.yaml
+persistence:
+  config:
+    enabled: false
+    mountPath: /config
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: "longhorn"
+    matchLabels: {}
+    matchExpressions: {}
+
