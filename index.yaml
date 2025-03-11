@@ -142,6 +142,34 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/crewai-1.0.0/crewai-1.0.0.tgz
     version: 1.0.0
+  cursor:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update cursor/cursor docker tag to v1.7.0
+    apiVersion: v2
+    appVersion: 1.7.0
+    created: "2025-03-11T05:49:02.353603085Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: cursor helm package
+    digest: 49c49397c4764826a4cd924832553acb40656fc2fc017d74e662a9e7df63d29a
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/cursor
+    icon: https://www.cursor.co/favicon-32x32.png
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: cursor
+    sources:
+    - https://github.com/cursorco/cursor
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/cursor
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/cursor-0.1.0/cursor-0.1.0.tgz
+    version: 0.1.0
   faster-whisper:
   - annotations:
       artifacthub.io/changes: |-
@@ -492,4 +520,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-03-07T15:12:56.158478875Z"
+generated: "2025-03-11T05:49:02.353623343Z"
