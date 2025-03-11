@@ -1,0 +1,45 @@
+image:
+  # -- image repository
+  repository: jzacharie/cursor-ollama
+  # -- image tag
+  tag: "latest"
+  # -- image pull policy
+  pullPolicy: IfNotPresent
+
+env: 
+  # For DeepSeek
+  DEEPSEEK_API_KEY: your_deepseek_api_key_here
+  # OR for OpenRouter
+  OPENROUTER_API_KEY: your_openrouter_api_key_here
+  # OR for Ollama (when not running proxy in a docker container)
+  # OLLAMA_API_ENDPOINT: http://localhost:11434/api 
+  # OR for Ollama (when running proxy in a docker container)
+  OLLAMA_API_ENDPOINT: http://192.168.0.52:11434/api 
+  # Define the default model
+  DEFAULT_MODEL: deepseek-coder-v2:16b
+
+
+# -- Configures service settings for the chart.
+# @default -- See values.yaml
+service:
+  main:
+    ports:
+      http:
+        port: 9000
+
+ingress:
+  main:
+    enabled: true
+    labels: {}
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production-dns
+    ingressClassName: "traefik"
+    hosts: 
+       - host: cursor-ollama.p.zacharie.org
+         paths:
+           - path: /
+             pathType: Prefix
+    tls:
+      - secretName: cursor-ollama.p.zacharie.org-tls
+        hosts:
+          - cursor-ollama.p.zacharie.org

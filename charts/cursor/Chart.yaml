@@ -1,0 +1,23 @@
+annotations:
+  artifacthub.io/changes: |-
+    - kind: changed
+      description: update cursor/cursor docker tag to v1.7.0
+apiVersion: v2
+appVersion: "1.7.0"
+dependencies:
+  - name: common
+    repository: https://zekker6.github.io/helm-charts
+    version: 0.5.2
+description: cursor helm package
+home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/cursor
+icon: https://www.cursor.co/favicon-32x32.png
+kubeVersion: ">=1.16.0-0"
+maintainers:
+  - name: "zekker6"
+    email: "me@zekker.dev"
+    url: "https://github.com/zekker6/"
+name: cursor
+sources:
+  - https://github.com/cursorco/cursor
+  - https://github.com/zekker6/helm-charts/tree/master/charts/apps/cursor
+version: 0.1.0
