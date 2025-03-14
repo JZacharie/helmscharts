@@ -1,0 +1,58 @@
+image:
+  # -- image repository
+  repository: pedroetb/tts-api
+  tag: "latest"
+  # -- image pull policy
+  pullPolicy: IfNotPresent
+
+# -- environment variables. See more environment variables in the [linkwarden documentation](https://github.com/linkwardenco/linkwarden).
+# @default -- See below
+# env: 
+#     NEXTAUTH_URL: http://localhost:3000/api/v1/auth
+#     NEXTAUTH_SECRET: 
+#     DATABASE_URL: 
+
+# -- Configures service settings for the chart.
+# @default -- See values.yaml
+service:
+  main:
+    ports:
+      http:
+        port: 3000
+
+ingress:
+  main:
+    enabled: true
+    labels: {}
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production-dns
+    ingressClassName: "traefik"
+    hosts: 
+       - host: tts-api.p.zacharie.org
+         paths:
+           - path: /
+             pathType: Prefix
+    tls:
+      - secretName: tts-api.p.zacharie.org-tls
+        hosts:
+          - tts-api.p.zacharie.org
+
+# -- Configure persistence settings for the chart under this key.
+# @default -- See values.yaml
+# persistence:
+#   config:
+#     enabled: true
+#     mountPath: /config
+#     accessMode: ReadWriteOnce
+#     size: 1Gi
+#     storageClass: "-"
+#     matchLabels: {}
+#     matchExpressions: {}
+#   music:
+#     enabled: true
+#     mountPath: /music
+#     accessMode: ReadWriteOnce
+#     size: 1Gi
+#     storageClass: "-"
+#     matchLabels: {}
+#     matchExpressions: {}
