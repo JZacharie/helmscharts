@@ -397,6 +397,38 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/traccar-8.0.1/traccar-8.0.1.tgz
     version: 8.0.1
+  tts-api:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update tts-api/tts-api docker tag to vv1.4.8
+    apiVersion: v2
+    appVersion: vv1.4.8
+    created: "2025-03-14T18:16:07.623319364Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: tts-api helm package
+    digest: 64f010cd7a727aa8c5551db9247599e12b2e0d42055e9e0e6de1252480213e40
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/tts-api
+    icon: https://www.tts-api.co/favicon-32x32.png
+    keywords:
+    - pdf-signature
+    - pdf-sign
+    - document-signing
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: tts-api
+    sources:
+    - https://github.com/tts-apico/tts-api
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/tts-api
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/tts-api-v1.0.0/tts-api-v1.0.0.tgz
+    version: v1.0.0
   watchyourlan:
   - annotations:
       artifacthub.io/changes: |-
@@ -520,4 +552,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-03-11T05:49:02.353623343Z"
+generated: "2025-03-14T18:16:07.623373304Z"
