@@ -1,0 +1,82 @@
+image:
+  # -- image repository
+  repository: icereed/paperless-gpt
+  # -- image tag
+  tag: "latest"
+  # -- image pull policy
+  pullPolicy: IfNotPresent
+
+env: 
+  PAPERLESS_BASE_URL: "http://paperless-ngx:8000"
+  PAPERLESS_API_TOKEN: "your_paperless_api_token"
+  PAPERLESS_PUBLIC_URL: "http://paperless.mydomain.com" # Optional
+  MANUAL_TAG: "paperless-gpt" # Optional, default: paperless-gpt
+  AUTO_TAG: "paperless-gpt-auto" # Optional, default: paperless-gpt-auto
+  LLM_PROVIDER: "openai" # or 'ollama'
+  LLM_MODEL: "gpt-4o" # or 'deepseek-r1:8b'
+  # Optional, but recommended for Ollama
+  TOKEN_LIMIT: 1000
+  OPENAI_API_KEY: "your_openai_api_key"
+  # Optional - OPENAI_BASE_URL: 'https://litellm.yourinstallationof.it.com/v1'
+  LLM_LANGUAGE: "English" # Optional, default: English
+
+  # OCR Configuration - Choose one:
+  # Option 1: LLM-based OCR
+  OCR_PROVIDER: "llm" # Default OCR provider
+  VISION_LLM_PROVIDER: "ollama" # openai or ollama
+  VISION_LLM_MODEL: "minicpm-v" # minicpm-v (ollama) or gpt-4o (openai)
+  OLLAMA_HOST: "http://host.docker.internal:11434" # If using Ollama
+
+  # Option 2: Google Document AI
+  # OCR_PROVIDER: 'google_docai'       # Use Google Document AI
+  # GOOGLE_PROJECT_ID: 'your-project'  # Your GCP project ID
+  # GOOGLE_LOCATION: 'us'              # Document AI region
+  # GOOGLE_PROCESSOR_ID: 'processor-id' # Your processor ID
+  # GOOGLE_APPLICATION_CREDENTIALS: '/app/credentials.json' # Path to service account key
+
+  # Option 3: Azure Document Intelligence
+  # OCR_PROVIDER: 'azure'              # Use Azure Document Intelligence
+  # AZURE_DOCAI_ENDPOINT: 'your-endpoint' # Your Azure endpoint URL
+  # AZURE_DOCAI_KEY: 'your-key'        # Your Azure API key
+  # AZURE_DOCAI_MODEL_ID: 'prebuilt-read' # Optional, defaults to prebuilt-read
+  # AZURE_DOCAI_TIMEOUT_SECONDS: '120'  # Optional, defaults to 120 seconds
+
+  AUTO_OCR_TAG: "paperless-gpt-ocr-auto" # Optional, default: paperless-gpt-ocr-auto
+  OCR_LIMIT_PAGES: "5" # Optional, default: 5. Set to 0 for no limit.
+  LOG_LEVEL: "info" # Optional: debug, warn, error
+
+
+# -- Configures service settings for the chart.
+# @default -- See values.yaml
+service:
+  main:
+    ports:
+      http:
+        port: 8080
+
+ingress:
+  main:
+    enabled: true
+    labels: {}
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production-dns
+    ingressClassName: "traefik"
+    hosts: 
+       - host: paperless-gpt.p.zacharie.org
+         paths:
+           - path: /
+             pathType: Prefix
+    tls:
+      - secretName: paperless-gpt.p.zacharie.org-tls
+        hosts:
+          - paperless-gpt.p.zacharie.org
+
+persistence:
+  data:
+    mountPath: /app/prompts
+    enabled: true
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: "longhorn"
+    matchLabels: {}
+    matchExpressions: {}    
