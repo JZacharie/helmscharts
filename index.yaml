@@ -305,6 +305,34 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/openai-whisper-asr-webservice-0.1.0/openai-whisper-asr-webservice-0.1.0.tgz
     version: 0.1.0
+  paperless-gpt:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update paperless-gpt/paperless-gpt docker tag to v1.7.0
+    apiVersion: v2
+    appVersion: 1.7.0
+    created: "2025-03-23T06:22:55.161503033Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: paperless-gpt helm package
+    digest: 04b5acf4f7a2f8e55122a758beaed2d06dc0805882f9097bd4d7363d4f5006ba
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/paperless-gpt
+    icon: https://www.paperless-gpt.co/favicon-32x32.png
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: paperless-gpt
+    sources:
+    - https://github.com/paperless-gptco/paperless-gpt
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/paperless-gpt
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/paperless-gpt-0.1.0/paperless-gpt-0.1.0.tgz
+    version: 0.1.0
   speaches:
   - annotations:
       artifacthub.io/changes: |-
@@ -552,4 +580,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-03-14T18:16:07.623373304Z"
+generated: "2025-03-23T06:22:55.16154553Z"
