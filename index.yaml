@@ -550,6 +550,21 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/whisper-cpp-1.0.0/whisper-cpp-1.0.0.tgz
     version: 1.0.0
+  whisperx:
+  - apiVersion: v2
+    appVersion: 1.7.0
+    created: "2025-03-28T08:36:45.400664873Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: whisperx helm package
+    digest: ae5f81165e531da651bc06272c632df2ac55fe3850c92b3a64870345af9e41d5
+    kubeVersion: '>=1.16.0-0'
+    name: whisperx
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/whisperx-0.1.2/whisperx-0.1.2.tgz
+    version: 0.1.2
   wud:
   - annotations:
       artifacthub.io/changes: |-
@@ -580,4 +595,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-03-23T06:22:55.16154553Z"
+generated: "2025-03-28T08:36:45.400695551Z"
