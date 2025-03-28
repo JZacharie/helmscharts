@@ -47,3 +47,6 @@ persistence:
   data:
     enabled: true
     mountPath: /data
+
+nodeSelector:
+  workload: ai      
