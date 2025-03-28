@@ -1,0 +1,49 @@
+image:
+  # -- image repository
+  repository: r8.im/victor-upmeet/whisperx
+  # -- image tag
+  tag: "latest"
+  # -- image pull policy
+  pullPolicy: IfNotPresent
+
+# env: 
+#   MODEL_IDLE_TIMEOUT: 300
+#   ASR_DEVICE: cpu
+#   ASR_QUANTIZATION: int8
+#   ASR_MODEL_PATH: /data/whisper
+#   SUBTITLE_MAX_LINE_WIDTH: '1000'
+#   SUBTITLE_MAX_LINE_COUNT: '2'
+#   SUBTITLE_HIGHLIGHT_WORDS: 'false'
+#   HF_TOKEN: 'your_token_here'
+#   ASR_ENGINE: whisperx
+#   ASR_MODEL: distil-large-v3
+  
+# -- Configures service settings for the chart.
+# @default -- See values.yaml
+service:
+  main:
+    ports:
+      http:
+        port: 5000
+
+ingress:
+  main:
+    enabled: true
+    labels: {}
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production-dns
+    ingressClassName: "traefik"
+    hosts: 
+       - host: whisperx.p.zacharie.org
+         paths:
+           - path: /
+             pathType: Prefix
+    tls:
+      - secretName: whisperx.p.zacharie.org-tls
+        hosts:
+          - whisperx.p.zacharie.org
+
+persistence:
+  data:
+    enabled: false
+    mountPath: /data
