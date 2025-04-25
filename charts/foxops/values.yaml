@@ -22,20 +22,21 @@ service:
         port: 8000
 
 ingress:
-  enabled: true
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: foxops.p.zacharie.org
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls:
-    - hosts:
-        - foxops.p.zacharie.org
-      secretName: wildcard-zacharie-org-certificate-secret
+  main:
+    enabled: true
+    className: ""
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: foxops.p.zacharie.org
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls:
+      - hosts:
+          - foxops.p.zacharie.org
+        secretName: wildcard-zacharie-org-certificate-secret
 
 # -- Configure persistence settings for the chart under this key.
 # @default -- See values.yaml
