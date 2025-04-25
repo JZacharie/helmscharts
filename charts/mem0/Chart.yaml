@@ -22,4 +22,4 @@ name: mem0
 sources:
   - https://github.com/mem0co/mem0
   - https://github.com/zekker6/helm-charts/tree/master/charts/apps/mem0
-version: 8.0.1
+version: v0.1.93
