@@ -276,6 +276,36 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/linkwarden-2.9.4/linkwarden-2.9.4.tgz
     version: 2.9.4
+  mem0:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update mem0/mem0 docker tag to v2.9.3
+    apiVersion: v2
+    appVersion: 8.0.1
+    created: "2025-04-25T16:29:52.817736457Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: mem0 helm package
+    digest: 54ce04c23c7ad16a595192f3752c5c560431c08da778bf455ce9e84549affac5
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/mem0
+    icon: https://www.mem0.co/favicon-32x32.png
+    keywords:
+    - docker
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: mem0
+    sources:
+    - https://github.com/mem0co/mem0
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/mem0
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/mem0-v0.1.93/mem0-v0.1.93.tgz
+    version: v0.1.93
   openai-whisper-asr-webservice:
   - apiVersion: v2
     appVersion: 1.7.0
@@ -595,4 +625,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-03-28T08:36:45.400695551Z"
+generated: "2025-04-25T16:29:52.817752216Z"
