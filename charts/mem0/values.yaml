@@ -1,0 +1,74 @@
+image:
+  # -- image repository
+  repository: jzachrarie/mem0
+  # -- image tag
+  tag: "v0.1.93"
+  # -- image pull policy
+  pullPolicy: IfNotPresent
+
+# -- environment variables. See more environment variables in the [linkwarden documentation](https://github.com/linkwardenco/linkwarden).
+# @default -- See below
+env: 
+  PYTHONDONTWRITEBYTECODE: "1" 
+  PYTHONUNBUFFERED: "1"
+  OPENAI_API_KEY: ""
+  NEO4J_URI: ""
+  NEO4J_USERNAME: ""
+  NEO4J_PASSWORD: ""
+  POSTGRES_HOST: ""
+  POSTGRES_PORT: ""
+  POSTGRES_DB: ""
+  POSTGRES_USER: ""
+  POSTGRES_PASSWORD: ""
+  POSTGRES_COLLECTION_NAME: ""
+# -- Configures service settings for the chart.
+# @default -- See values.yaml
+service:
+  main:
+    ports:
+      http:
+        port: 8000
+
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: mem0.p.zacharie.org
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - mem0.p.zacharie.org
+      secretName: wildcard-zacharie-org-certificate-secret
+
+# -- Configure persistence settings for the chart under this key.
+# @default -- See values.yaml
+persistence:
+  history:
+    enabled: true
+    mountPath: /app/history
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: "longhorn"
+    matchLabels: {}
+    matchExpressions: {}        
+  app:
+    enabled: true
+    mountPath: /app
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: "longhorn"
+    matchLabels: {}
+    matchExpressions: {}        
+  mem0:
+    enabled: true
+    mountPath: /app/packages/mem0 
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: "longhorn"
+    matchLabels: {}
+    matchExpressions: {}         

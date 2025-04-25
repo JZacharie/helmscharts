@@ -1,0 +1,58 @@
+image:
+  # -- image repository
+  repository: jzachrarie/foxops
+  # -- image tag
+  tag: "v2.5.0"
+  # -- image pull policy
+  pullPolicy: IfNotPresent
+
+# -- environment variables. See more environment variables in the [linkwarden documentation](https://github.com/linkwardenco/linkwarden).
+# @default -- See below
+env: 
+  FOXOPS_DATABASE_URL: sqlite+aiosqlite:////app/database/foxops.db
+  FOXOPS_HOSTER_TYPE: local
+  FOXOPS_HOSTER_LOCAL_DIRECTORY: /app/hoster
+  FOXOPS_STATIC_TOKEN: dummy
+# -- Configures service settings for the chart.
+# @default -- See values.yaml
+service:
+  main:
+    ports:
+      http:
+        port: 8000
+
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: foxops.p.zacharie.org
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - foxops.p.zacharie.org
+      secretName: wildcard-zacharie-org-certificate-secret
+
+# -- Configure persistence settings for the chart under this key.
+# @default -- See values.yaml
+persistence:
+  database:
+    enabled: true
+    mountPath: /app/database
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: "longhorn"
+    matchLabels: {}
+    matchExpressions: {}        
+  hoster:
+    enabled: true
+    mountPath: /app/hoster
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    storageClass: "longhorn"
+    matchLabels: {}
+    matchExpressions: {}        
