@@ -233,6 +233,36 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/faster-whisper-2.4.2/faster-whisper-2.4.2.tgz
     version: 2.4.2
+  foxops:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update foxops/foxops docker tag to v2.9.3
+    apiVersion: v2
+    appVersion: 8.0.1
+    created: "2025-04-25T16:30:48.251355096Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: foxops helm package
+    digest: 8b3ed669012564987bb26aca7f1daf2324ecc03188694bb46ead6404d5afccca
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/foxops
+    icon: https://www.foxops.co/favicon-32x32.png
+    keywords:
+    - docker
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: foxops
+    sources:
+    - https://github.com/foxopsco/foxops
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/foxops
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/foxops-1.0.0/foxops-1.0.0.tgz
+    version: 1.0.0
   itop:
   - apiVersion: v2
     appVersion: 3.0.1
@@ -625,4 +655,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-04-25T16:29:52.817752216Z"
+generated: "2025-04-25T16:30:48.251381295Z"
