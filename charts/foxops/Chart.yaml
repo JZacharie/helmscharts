@@ -22,4 +22,4 @@ name: foxops
 sources:
   - https://github.com/foxopsco/foxops
   - https://github.com/zekker6/helm-charts/tree/master/charts/apps/foxops
-version: 1.0.0
+version: 1.0.1
