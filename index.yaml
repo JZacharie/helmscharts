@@ -451,6 +451,21 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/paperless-gpt-0.1.0/paperless-gpt-0.1.0.tgz
     version: 0.1.0
+  polaris:
+  - apiVersion: v2
+    appVersion: 1.7.0
+    created: "2025-06-01T17:18:05.809521422Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: polaris helm package
+    digest: 6e6b79c3d9574957c3bf7fd56cd89d508dd5d63bb3869cba8280048abb0e57f0
+    kubeVersion: '>=1.16.0-0'
+    name: polaris
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/polaris-0.1.2/polaris-0.1.2.tgz
+    version: 0.1.2
   speaches:
   - annotations:
       artifacthub.io/changes: |-
@@ -713,4 +728,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-04-26T04:30:02.136055998Z"
+generated: "2025-06-01T17:18:05.809544077Z"
