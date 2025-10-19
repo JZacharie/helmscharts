@@ -20,4 +20,4 @@ name: bolt-diy
 sources:
   - https://github.com/bolt-diyco/bolt-diy
   - https://github.com/zekker6/helm-charts/tree/master/charts/apps/bolt-diy
-version: 0.1.1
+version: 0.1.2
