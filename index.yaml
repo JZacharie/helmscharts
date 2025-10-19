@@ -320,6 +320,26 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/foxops-1.0.0/foxops-1.0.0.tgz
     version: 1.0.0
+  garage:
+  - apiVersion: v2
+    appVersion: v1.3.0
+    created: "2025-10-19T05:48:23.526752144Z"
+    description: S3-compatible object store for small self-hosted geo-distributed
+      deployments
+    digest: e663564514aa20d2f6021bb3061b7d0c7b25ed273f065efb7674c6e96ec3c153
+    home: https://garagehq.deuxfleurs.fr/
+    icon: https://garagehq.deuxfleurs.fr/images/garage-logo.svg
+    keywords:
+    - geo-distributed
+    - read-after-write-consistency
+    - s3-compatible
+    name: garage
+    sources:
+    - https://git.deuxfleurs.fr/Deuxfleurs/garage.git
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/garage-0.7.2-rc/garage-0.7.2-rc.tgz
+    version: 0.7.2-rc
   itop:
   - apiVersion: v2
     appVersion: 3.0.1
@@ -756,4 +776,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-10-19T05:47:20.270953114Z"
+generated: "2025-10-19T05:48:23.526775867Z"
