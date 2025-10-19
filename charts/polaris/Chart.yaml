@@ -7,4 +7,4 @@ dependencies:
 description: polaris helm package
 kubeVersion: ">=1.16.0-0"
 name: polaris
-version: 0.1.2
+version: 0.1.3
