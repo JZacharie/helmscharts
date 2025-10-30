@@ -1,5 +1,16 @@
 apiVersion: v1
 entries:
+  appflowy-cloud:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2025-10-30T07:58:35.482874976Z"
+    description: Helm chart for AppFlowy Cloud
+    digest: 6659d4d209ce17f17b30711d92e94f15d447fbb81a761149750490c8882b51b5
+    name: appflowy-cloud
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/appflowy-cloud-0.1.0/appflowy-cloud-0.1.0.tgz
+    version: 0.1.0
   bolt-diy:
   - annotations:
       artifacthub.io/changes: |-
@@ -776,4 +787,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-10-19T05:48:23.526775867Z"
+generated: "2025-10-30T07:58:35.482915632Z"
