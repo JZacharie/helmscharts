@@ -1,0 +1,42 @@
+global:
+  domain: "appflowy.example.com"
+
+externalServices:
+  postgres:
+    host: "postgres.my-cluster.local"
+    port: 5432
+    database: "appflowy"
+    user: "postgres"
+    password: "changeme"   # option: could be secretRefLater
+
+  redis:
+    url: "redis://redis.my-cluster.local:6379"
+
+  minio:
+    url: "https://minio.my-cluster.local"
+    accessKey: "myMinioKey"
+    secretKey: "myMinioSecret"
+    bucket: "appflowy"
+    region: "eu-central-1"
+    createBucket: false # On ne gère pas la création ici
+    
+ingress:
+  enabled: true
+  className: "traefik"
+  tls:
+    enabled: true
+    clusterIssuer: "letsencrypt-prod"
+
+secrets:
+  postgresPassword: "changeMe123"
+  minioAccessKey: "minioadmin"
+  minioSecretKey: "minioadmin"
+  gotrueAdminEmail: "admin@example.com"
+  gotrueAdminPassword: "changeMe!456"
+  gotrueJwtSecret: "SuperSecretJWTKey"
+  smtp:
+    host: ""
+    port: ""
+    user: ""
+    pass: ""
+    email: ""
