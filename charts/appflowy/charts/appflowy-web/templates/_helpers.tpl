@@ -68,3 +68,7 @@ Create the name of the service account to use
 {{- define "appflowy-web.appflowyCloud.externalUrl" -}}
 {{- printf "%s://%s:%d" .Values.global.scheme .Values.global.externalHost (.Values.global.externalPort | int) }}
 {{- end }}
+
+{{- define "appflowy-web.appflowyCloud.wsexternalUrl" -}}
+{{- printf "wss://%s/ws/v2" .Values.global.externalHost }}
+{{- end }}
