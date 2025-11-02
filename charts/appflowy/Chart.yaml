@@ -8,10 +8,10 @@ dependencies:
   #   condition: redis.enabled
   #   version: 20.0.3
   #   repository: https://charts.bitnami.com/bitnami
-  - name: postgresql
-    condition: postgresql.enabled
-    version: 15.5.24
-    repository: https://charts.bitnami.com/bitnami
+  # - name: postgresql
+  #   condition: postgresql.enabled
+  #   version: 15.5.24
+  #   repository: https://charts.bitnami.com/bitnami
   # - name: minio
   #   condition: minio.enabled
   #   version: 14.7.14
