@@ -2,6 +2,40 @@ apiVersion: v1
 entries:
   appflowy:
   - apiVersion: v2
+    created: "2025-11-02T09:04:01.264084372Z"
+    dependencies:
+    - condition: appflowy-cloud.enabled
+      name: appflowy-cloud
+      repository: ""
+      version: 0.1.1
+    - condition: appflowy-gotrue.enabled
+      name: appflowy-gotrue
+      repository: ""
+      version: 0.1.1
+    - condition: appflowy-admin.enabled
+      name: appflowy-admin
+      repository: ""
+      version: 0.1.1
+    - condition: appflowy-worker.enabled
+      name: appflowy-worker
+      repository: ""
+      version: 0.1.1
+    - condition: appflowy-web.enabled
+      name: appflowy-web
+      repository: ""
+      version: 0.1.1
+    - condition: global.ai.enabled
+      name: appflowy-ai
+      repository: ""
+      version: 0.1.1
+    description: AppFlowy Cloud Helm Chart
+    digest: 893b2a6f88058bedc5ddf6c455552f301799a047985591d9cefffe5ad9b211fe
+    name: appflowy
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.2.4/appflowy-0.2.4.tgz
+    version: 0.2.4
+  - apiVersion: v2
     created: "2025-11-02T09:01:32.243348221Z"
     dependencies:
     - condition: appflowy-cloud.enabled
@@ -890,4 +924,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-11-02T09:01:32.243378087Z"
+generated: "2025-11-02T09:04:01.264126641Z"
