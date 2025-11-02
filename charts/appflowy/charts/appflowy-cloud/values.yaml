@@ -1,0 +1,74 @@
+# Default values for appflowy-cloud.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+
+image:
+  repository: appflowyinc/appflowy_cloud
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+podLabels: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+# -- Stdout log level
+logLevel: "info"
+accessControl:
+  # -- Enable access control
+  enabled: true
+collab:
+  # -- Maximum number of inactive collab group to be removed at the same time
+  removeBatchSize: 100
+  # -- Interval in seconds to persist in-memory collab to persistent storage
+  groupPersistenceInterval: 60
+  # -- Old messages to be removed from Redis stream after the collab is persist
+  groupGracePeriodSecs: 60
+indexer:
+  # -- Enable embeddings generation for collab documents. This value is ignored if AI is not enabled.
+  enabled: true
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+readinessProbe:
+  httpGet:
+    path: /metrics
+    port: http
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+ingress:
+  nginx:
+    # Extra annotations for the Nginx Ingress
+    extraAnnotions: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

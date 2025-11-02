@@ -1,42 +1,270 @@
 global:
-  domain: "appflowy.example.com"
-
-externalServices:
-  postgres:
-    host: "postgres.my-cluster.local"
+  # -- Accepted values: "http" or "https"
+  scheme: "http"
+  # -- The host name which can be used for the AppFlowy client to reach the API server
+  externalHost: "appflowy.mydomain.com"
+  # -- The port number which can be used for the AppFlowy client to reach the API server
+  externalPort: 80
+  ingress:
+    nginx:
+      # -- Enable to create ingress for NGINX Ingress Controller
+      enabled: true
+      # -- The class name of the NGINX Ingress Controller ingress
+      className: nginx
+      tls:
+        # -- Add TLS to the NGINX Ingress
+        enabled: false
+        # -- Nginx TLS secret name if using https
+        secretName: ""
+      # -- Nginx extra annotations
+      extraAnnotations: {}
+    traefik:
+      # -- Enable to create IngressRoute for Traefik Ingress Controller
+      enabled: false
+      # -- The entry point for the Traefik Ingress Controller if the scheme is "http"
+      entryPoint: web
+      # -- The entry point for the Traefik Ingress Controller if the scheme is "https"
+      secureEntryPoint: websecure
+      # -- Traefik extra middlewares
+      # extraMiddlewares:
+      # - name: "example-middleware"
+      #   namespace: "default"
+      extraMiddlewares: []
+    websocket:
+      # -- Define timeout for websocket connection. Currently only used for the Nginx ingress.
+      timeout: 86400
+  appflowyCloud:
+    # -- The url which can be used withib Kubernetes to reach the AppFlowy Cloud service
+    baseUrl: "http://appflowy-cloud"
+  gotrue:
+    # -- The url which can be used withib Kubernetes to reach the Gotrue service
+    baseUrl: "http://appflowy-gotrue"
+    # -- Gotrue admin user to be created when Gotrue is deployed for the first time
+    adminEmail: "admin@example.com"
+  database:
+    # -- Database host name
+    host: appflowy-postgres
+    # -- Database name
+    name: appflowy
+    # -- Database port
     port: 5432
-    database: "appflowy"
-    user: "postgres"
-    password: "changeme"   # option: could be secretRefLater
-
+    # -- Postgres user, to be used by the AppFlowy API server
+    username: appflowy
+    # -- Postgres admin user
+    adminUsername: postgres
   redis:
-    url: "redis://redis.my-cluster.local:6379"
-
-  minio:
-    url: "https://minio.my-cluster.local"
-    accessKey: "myMinioKey"
-    secretKey: "myMinioSecret"
+    # -- Redis URI
+    uri: "redis://appflowy-redis-headless:6379"
+  s3:
+    # -- Create bucket on startup. If false, bucket must be created manually.
+    createBucket: "true"
+    # -- Set this to true when using Minio or other S3-compatible services.
+    useMinio: "true"
+    # -- S3 Bucket name
     bucket: "appflowy"
-    region: "eu-central-1"
-    createBucket: false # On ne gère pas la création ici
-    
-ingress:
-  enabled: true
-  className: "traefik"
-  tls:
-    enabled: true
-    clusterIssuer: "letsencrypt-prod"
-
-secrets:
-  postgresPassword: "changeMe123"
-  minioAccessKey: "minioadmin"
-  minioSecretKey: "minioadmin"
-  gotrueAdminEmail: "admin@example.com"
-  gotrueAdminPassword: "changeMe!456"
-  gotrueJwtSecret: "SuperSecretJWTKey"
+    # -- Url for the S3-compatible service
+    minioUrl: "http://appflowy-minio:9000"
+    # -- S3 access key
+    accessKey: "minioadmin"
+    # -- S3 region. Not used for Minio.
+    region: "us-east-1"
   smtp:
-    host: ""
-    port: ""
-    user: ""
-    pass: ""
-    email: ""
+    # -- SMTP host name, required for sending invitation emails and magic links.
+    host: "smtp.gmail.com"
+    # -- SMTP port number. By default, only TLS is supported. STARTTLS, such as port 587 for gmail and mailgun, is only supported if you change tls kind to opportunistic.
+    port: 465
+    # -- SMTP user name
+    user: user@gmail.com
+    # -- SMTP email
+    email: user@gmail.com
+    # -- SMTP TLS kind. Accepted values: "none", "wrapper", "required", "opportunistic"
+    tlsKind: "wrapper"
+  ai:
+    # -- Enable AI related functionalities. Require OpenAI API key to be set under secret.
+    enabled: false
+    # -- Hostname that appflowy-cloud will use when connecting to the Appflowy AI service
+    host: appflowy-ai
+    # -- Port number that appflowy-cloud will use when connecting to the Appflowy AI service
+    port: 5001
+  secret:
+    # -- Name of the secret which stores all the sensitive information required for AppFlowy
+    name: appflowy
+    # -- Create or update the Kubernetes secret. If set to false, the secret must be created manually, and the name should be adjusted accordingly. Otherwise, a new
+    # -- secret will be created with the values specified in helm values.
+    create: true
+    postgres:
+      adminPassword:
+        # -- Secret key name for the Postgres admin password
+        key: postgresAdminPassword
+        # -- Secret value for the Postgres admin password.
+        value: password
+      gotrue:
+        postgresPassword:
+          # -- Secret key name for the password of the gotrue postgres user (supabase_admin_auth)
+          key: gotruePostgresPassword
+          # -- Secret value for the password of the gotrue postgres user (supabase_admin_auth).
+          value: password
+        databaseUrl:
+          # -- Database url, as inferred from the postgres credentials. Takes the form of: postgres://<user>:<password>@<host>:<port>/<database name>?search_path=auth
+          key: gotrueDatabaseUrl
+      appflowy:
+        postgresPassword:
+          # -- Secret key name for the password of the appflowy postgres user
+          key: postgresPassword
+          # -- Secret value for the password of the appflowy postgres user
+          value: password
+        databaseUrl:
+          # -- Database url, as inferred from the postgres credentials. Takes the form of: postgres://<appflowy user>:<password>@<host>:<port>/<database name>
+          key: appflowyDatabaseUrl
+      ai:
+        databaseUrl:
+          # -- Database url, as inferred from the postgres credentials. Takes the form of: postgresql+psycopg://<appflowy user>:<password>@<host>:<port>/<database name>
+          key: aiDatabaseUrl
+    gotrue:
+      adminPassword:
+        # -- Secret key name for the Gotrue admin password
+        key: gotrueAdminPassword
+        # -- Secret value for the Gotrue admin password
+        value: password
+    oauth:
+      googleClientSecret:
+        # -- Secret key name for the Google OAuth client secret
+        key: oauthGoogleClientSecret
+        # -- Secret value for the Google OAuth client secret
+        value: ""
+      discordClientSecret:
+        # -- Secret key name for the Discord OAuth client secret
+        key: oauthDiscordClientSecret
+        # -- Secret value for the Discord OAuth client secret
+        value: ""
+      githubClientSecret:
+        # -- Secret key name for the Github OAuth client secret
+        key: oauthGithubClientSecret
+        # -- Secret value for the Github OAuth client secret
+        value: ""
+      appleClientSecret:
+        # -- Secret key name for the Apple OAuth client secret
+        key: oauthAppleClientSecret
+        # -- Secret value for the Apple OAuth client secret
+        value: ""
+      samlPrivateKey:
+        # -- Secret key name for the SAML private key
+        key: oauthSAMLPrivateKey
+        # -- Secret value for the SAML private key
+        value: ""
+    jwt:
+      secret:
+        # -- Secret key name for the JWT secret
+        key: jwtSecret
+        # -- Secret value for the JWT secret
+        value: hello456
+    smtp:
+      password:
+        # -- Secret key name for the SMTP password
+        key: smtpPassword
+        # -- Secret value for the SMTP password. For gmail, make sures to use an app password instead of the regular user password.
+        value: password
+    s3:
+      secret:
+        # -- Secret key name for the S3 secret
+        key: s3Secret
+        # -- Secret value for the S3 secret
+        value: "password"
+    ai:
+      openAIAPIKey:
+        # -- Secret key name for the OpenAI API key
+        key: openAIAPIKey
+        # -- Secret value for the OpenAI API key. Leave this empty if you don't wish to use OpenAI.
+        value: ""
+
+nameOverride: ""
+# -- Override the name of the resources created by the chart
+fullnameOverride: appflowy
+
+postgresql:
+  enabled: true
+  fullnameOverride: appflowy-postgres
+  image:
+    repository: zmegalodon/appflowy-postgres
+    tag: 0.1.0
+  auth:
+    username: appflowy
+    database: appflowy
+    existingSecret: "appflowy"
+    secretKeys:
+      adminPasswordKey: postgresAdminPassword
+      userPasswordKey: postgresPassword
+  primary:
+    persistence:
+      enabled: true
+      size: 1Gi
+
+appflowy-admin:
+  enabled: true
+  fullnameOverride: appflowy-admin
+
+appflowy-gotrue:
+  enabled: true
+  fullnameOverride: appflowy-gotrue
+  mailer:
+    enabled: true
+    # -- Set true if you want the users to sign up without confirmation email
+    autoConfirm: false
+    # -- Email address for gotrue email links
+    adminEmail: user@gmail.com
+  extraEnv: []
+
+appflowy-cloud:
+  enabled: true
+  fullnameOverride: appflowy-cloud
+  gotrue:
+    baseUrl: "http://appflowy-gotrue"
+  accessControl:
+    enabled: true
+  ingress:
+    enabled: true
+
+appflowy-web:
+  enabled: true
+  fullnameOverride: appflowy-web
+  ingress:
+    enabled: true
+
+appflowy-ai:
+  fullnameOverride: appflowy-ai
+  ingress:
+    enabled: true
+
+redis:
+  enabled: true
+  auth:
+    enabled: false
+  architecture: standalone
+  fullnameOverride: appflowy-redis
+  master:
+    persistence:
+      enabled: false
+
+minio:
+  enabled: true
+  auth:
+    rootPassword: password
+    rootUser: minioadmin
+  persistence:
+    size: 1Gi
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 10m
+      memory: 256Mi
+
+setupJob:
+  # -- Required for enabling pgvector for database. This is optional if the postgres user for appflowy is already a superadmin, or the extension is already enabled.
+  enabled: true
+  postgresConnectTimeout: 60
+  backoffLimit: 5
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}

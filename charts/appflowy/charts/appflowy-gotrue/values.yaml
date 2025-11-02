@@ -1,0 +1,83 @@
+# Default values for appflowy-gotrue.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+
+image:
+  repository: appflowyinc/gotrue
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+podLabels: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+jwt:
+  # -- Access token expiry time
+  expiry: 3600
+
+oauth:
+  google:
+    enabled: false
+    clientId: ""
+  discord:
+    enabled: false
+    clientId: ""
+  github:
+    enabled: false
+    clientId: ""
+  apple:
+    enabled: false
+    clientId: ""
+  saml:
+    enabled: false
+
+# -- If set to true, admin will need to manually create user accounts
+disableSignUp: false
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: http
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+ingress:
+  nginx:
+    # Extra annotations for the Nginx Ingress
+    extraAnnotions: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+extraEnv: []

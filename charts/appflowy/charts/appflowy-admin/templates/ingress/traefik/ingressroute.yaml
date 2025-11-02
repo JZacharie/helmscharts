@@ -1,0 +1,23 @@
+{{- if .Values.global.ingress.traefik.enabled -}}
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "appflowy-admin.fullname" . }}
+spec:
+  entryPoints:
+    - {{ if eq .Values.global.scheme "https" }}{{ .Values.global.ingress.traefik.secureEntryPoint }}{{ else }}{{ .Values.global.ingress.traefik.entryPoint }}{{ end }}
+  routes:
+    - match: Host(`{{ .Values.global.externalHost }}`) && PathPrefix(`/console`)
+      kind: Rule
+      services:
+        - name: {{ include "appflowy-admin.fullname" . }}
+          port: {{ .Values.service.port }}
+      {{- with .Values.global.ingress.traefik.extraMiddlewares }}
+      middlewares:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  {{- with .Values.global.ingress.traefik.tlsSecretName }}
+  tls:
+    secretName: {{ . }}
+  {{- end }}
+{{- end }}

@@ -1,6 +1,36 @@
 apiVersion: v2
-name: appflowy-cloud
-description: Helm chart for AppFlowy Cloud
+name: appflowy
+description: AppFlowy Cloud Helm Chart
 type: application
-version: 0.1.0
-appVersion: "latest"
+version: 0.2.1
+dependencies:
+  - name: redis
+    condition: redis.enabled
+    version: 20.0.3
+    repository: https://charts.bitnami.com/bitnami
+  - name: postgresql
+    condition: postgresql.enabled
+    version: 15.5.24
+    repository: https://charts.bitnami.com/bitnami
+  - name: minio
+    condition: minio.enabled
+    version: 14.7.14
+    repository: https://charts.bitnami.com/bitnami
+  - name: appflowy-cloud
+    condition: appflowy-cloud.enabled
+    version: 0.1.0
+  - name: appflowy-gotrue
+    condition: appflowy-gotrue.enabled
+    version: 0.1.0
+  - name: appflowy-admin
+    condition: appflowy-admin.enabled
+    version: 0.1.0
+  - name: appflowy-worker
+    condition: appflowy-worker.enabled
+    version: 0.1.0
+  - name: appflowy-web
+    condition: appflowy-web.enabled
+    version: 0.1.0
+  - name: appflowy-ai
+    condition: global.ai.enabled
+    version: 0.1.0

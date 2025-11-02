@@ -1,0 +1,182 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "appflowy-gotrue.fullname" . }}
+  labels:
+    {{- include "appflowy-gotrue.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "appflowy-gotrue.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "appflowy-gotrue.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 9999
+              protocol: TCP
+          env:
+            - name: PORT
+              value: "9999"
+            - name: GOTRUE_LOG_LEVEL
+              value: "debug"
+            - name: API_EXTERNAL_URL
+              value: {{ printf "%s://%s:%d/gotrue" .Values.global.scheme .Values.global.externalHost (.Values.global.externalPort | int) }}
+            - name: GOTRUE_DB_DRIVER
+              value: postgres
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.global.secret.name }}
+                  key: {{ .Values.global.secret.postgres.gotrue.databaseUrl.key }}
+            - name: GOTRUE_SITE_URL
+              value: appflowy-flutter://
+            - name: GOTRUE_URI_ALLOW_LIST
+              value: "**"
+            - name: GOTRUE_DISABLE_SIGNUP
+              value: {{ .Values.disableSignUp | quote }}
+            - name: GOTRUE_ADMIN_EMAIL
+              value: {{ .Values.global.gotrue.adminEmail }}
+            - name: GOTRUE_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.global.secret.name }}
+                  key: {{ .Values.global.secret.gotrue.adminPassword.key }}
+            - name: GOTRUE_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.global.secret.name }}
+                  key: {{ .Values.global.secret.jwt.secret.key }}
+            - name: GOTRUE_JWT_EXP
+              value: {{ .Values.jwt.expiry | quote }}
+            - name: GOTRUE_JWT_ADMIN_GROUP_NAME
+              value: supabase_admin
+            {{- if .Values.oauth.google.enabled }}
+            - name: GOTRUE_EXTERNAL_GOOGLE_ENABLED
+              value: {{ .Values.oauth.google.enabled | quote }}
+            - name: GOTRUE_EXTERNAL_GOOGLE_CLIENT_ID
+              value: {{ .Values.oauth.google.clientId | required "oauth.google.clientId is required when oauth.google.enabled is true" }}
+            - name: GOTRUE_EXTERNAL_GOOGLE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.global.secret.name }}
+                  key: {{ .Values.global.secret.oauth.googleClientSecret.key }}
+            - name: GOTRUE_EXTERNAL_GOOGLE_REDIRECT_URI
+              value: {{ include "appflowy-gotrue.callback" . }}
+            {{- end }}
+            {{- if .Values.oauth.discord.enabled }}
+            - name: GOTRUE_EXTERNAL_DISCORD_ENABLED
+              value: {{ .Values.oauth.discord.enabled | quote }}
+            - name: GOTRUE_EXTERNAL_DISCORD_CLIENT_ID
+              value: {{ .Values.oauth.discord.clientId | required "oauth.discord.clientId is required when oauth.discord.enabled is true" }}
+            - name: GOTRUE_EXTERNAL_DISCORD_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.global.secret.name }}
+                  key: {{ .Values.global.secret.oauth.discordClientSecret.key }}
+            - name: GOTRUE_EXTERNAL_DISCORD_REDIRECT_URI
+              value: {{ include "appflowy-gotrue.callback" . }}
+            {{- end }}
+            {{- if .Values.oauth.github.enabled }}
+            - name: GOTRUE_EXTERNAL_GITHUB_ENABLED
+              value: {{ .Values.oauth.github.enabled | quote }}
+            - name: GOTRUE_EXTERNAL_GITHUB_CLIENT_ID
+              value: {{ .Values.oauth.github.clientId | required "oauth.github.clientId is required when oauth.github.enabled is true" }}
+            - name: GOTRUE_EXTERNAL_GITHUB_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.global.secret.name }}
+                  key: {{ .Values.global.secret.oauth.githubClientSecret.key }}
+            - name: GOTRUE_EXTERNAL_GITHUB_REDIRECT_URI
+              value: {{ include "appflowy-gotrue.callback" . }}
+            {{- end }}
+            {{- if .Values.oauth.apple.enabled }}
+            - name: GOTRUE_EXTERNAL_APPLE_ENABLED
+              value: {{ .Values.oauth.apple.enabled | quote }}
+            - name: GOTRUE_EXTERNAL_APPLE_CLIENT_ID
+              value: {{ .Values.oauth.apple.clientId | required "oauth.apple.clientId is required when oauth.apple.enabled is true" }}
+            - name: GOTRUE_EXTERNAL_APPLE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.global.secret.name }}
+                  key: {{ .Values.global.secret.oauth.appleClientSecret.key }}
+            - name: GOTRUE_EXTERNAL_APPLE_REDIRECT_URI
+              value: {{ include "appflowy-gotrue.callback" . }}
+            {{- end }}
+            {{- if .Values.oauth.saml.enabled }}
+            - name: GOTRUE_SAML_ENABLED
+              value: {{ .Values.oauth.saml.enabled | quote }}
+            - name: GOTRUE_SAML_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.global.secret.name }}
+                  key: {{ .Values.global.secret.oauth.samlPrivateKey.key }}
+            {{- end }}
+            - name: GOTRUE_SMTP_HOST
+              value: {{ .Values.global.smtp.host }}
+            - name: GOTRUE_SMTP_PORT
+              value: {{ .Values.global.smtp.port | quote }}
+            - name: GOTRUE_SMTP_USER
+              value: {{ .Values.global.smtp.user }}
+            - name: GOTRUE_SMTP_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.global.secret.name }}
+                  key: {{ .Values.global.secret.smtp.password.key }}
+            - name: GOTRUE_SMTP_ADMIN_EMAIL
+              value: {{ .Values.mailer.adminEmail }}
+            - name: GOTRUE_MAILER_AUTOCONFIRM
+              value: {{ .Values.mailer.autoConfirm | quote }}
+            - name: GOTRUE_MAILER_URLPATHS_CONFIRMATION
+              value: /gotrue/verify
+            - name: GOTRUE_MAILER_URLPATHS_INVITE
+              value: /gotrue/verify
+            - name: GOTRUE_MAILER_URLPATHS_RECOVERY
+              value: /gotrue/verify
+            - name: GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE
+              value: /gotrue/verify
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
