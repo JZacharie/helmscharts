@@ -1,0 +1,22 @@
+namespace: default
+
+pvc:
+  name: scale-status-pvc
+  storage: 1Gi
+
+config:
+  labelSelector: "suspend.teamwork.io/allowed=true"
+  backupPath: "/data/scale.json"
+  excludeList: []
+
+cronjobs:
+  scaleDown:
+    schedule: "0 3 * * *"
+    suspend: true
+    activeDeadlineSeconds: 600
+    backoffLimit: 1
+  scaleRestore:
+    schedule: "0 4 * * *"
+    suspend: true
+    activeDeadlineSeconds: 600
+    backoffLimit: 1

@@ -1,0 +1,80 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scale-down
+  namespace: {{ .Values.namespace }}
+spec:
+  schedule: "{{ .Values.cronjobs.scaleDown.schedule }}"
+  suspend: {{ .Values.cronjobs.scaleDown.suspend }}
+  jobTemplate:
+    spec:
+      backoffLimit: {{ .Values.cronjobs.scaleDown.backoffLimit }}
+      template:
+        spec:
+          activeDeadlineSeconds: {{ .Values.cronjobs.scaleDown.activeDeadlineSeconds }}
+          restartPolicy: Never
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: {{ .Values.pvc.name }}
+          containers:
+            - name: scaler
+              image: bitnami/kubectl:latest
+              volumeMounts:
+                - name: data
+                  mountPath: /data
+              env:
+                - name: LABEL_SELECTOR
+                  valueFrom:
+                    configMapKeyRef:
+                      name: scale-config
+                      key: LABEL_SELECTOR
+                - name: BACKUP_PATH
+                  valueFrom:
+                    configMapKeyRef:
+                      name: scale-config
+                      key: BACKUP_PATH
+                - name: NAMESPACE
+                  valueFrom:
+                    configMapKeyRef:
+                      name: scale-config
+                      key: NAMESPACE
+                - name: EXCLUDE_LIST
+                  valueFrom:
+                    configMapKeyRef:
+                      name: scale-config
+                      key: EXCLUDE_LIST
+              command: ["/bin/bash", "-c"]
+              args:
+                - |
+                  echo "Collecting current scale values in namespace $NAMESPACE with selector $LABEL_SELECTOR ..."
+                  
+                  EXCLUDE_ARR=(${EXCLUDE_LIST//,/ })
+                  FILTER_CMD=""
+
+                  for name in "${EXCLUDE_ARR[@]}"; do
+                    FILTER_CMD="$FILTER_CMD | select(.name != \"$name\")"
+                  done
+
+                  jq_filter=".items[] $FILTER_CMD | {kind: .kind, name: .metadata.name, replicas: .spec.replicas}"
+
+                  kubectl get deploy,statefulset -n $NAMESPACE -l $LABEL_SELECTOR -o json                     | jq "$jq_filter" > $BACKUP_PATH
+
+                  echo "Scaling selected Deployments & StatefulSets to 0 replicas..."
+                  for obj in $(kubectl get deploy,statefulset -n $NAMESPACE -l $LABEL_SELECTOR -o name); do
+                    skip=false
+                    for excl in "${EXCLUDE_ARR[@]}"; do
+                      if [[ "$obj" == *"$excl"* ]]; then
+                        skip=true
+                        break
+                      fi
+                    done
+                    if [ "$skip" = false ]; then
+                      kubectl scale -n $NAMESPACE $obj --replicas=0
+                      echo "Scaled $obj to 0"
+                    else
+                      echo "Skipping excluded $obj"
+                    fi
+                  done
+
+                  echo "Scale-down completed."
