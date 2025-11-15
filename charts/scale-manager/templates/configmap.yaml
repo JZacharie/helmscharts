@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: scale-config
-  namespace: {{ .Values.namespace }}
+  
 data:
   LABEL_SELECTOR: "{{ .Values.config.labelSelector }}"
   BACKUP_PATH: "{{ .Values.config.backupPath }}"
