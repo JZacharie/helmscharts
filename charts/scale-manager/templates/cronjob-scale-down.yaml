@@ -11,6 +11,8 @@ spec:
       backoffLimit: {{ .Values.cronjobs.scaleDown.backoffLimit }}
       template:
         spec:
+          securityContext:
+            fsGroup: 0        
           activeDeadlineSeconds: {{ .Values.cronjobs.scaleDown.activeDeadlineSeconds }}
           restartPolicy: Never
           serviceAccountName: {{ include "scale-manager.fullname" . }}
@@ -21,6 +23,9 @@ spec:
           containers:
             - name: scaler
               image: bitnami/kubectl:latest
+              securityContext:
+                runAsUser: 0
+                runAsGroup: 0
               volumeMounts:
                 - name: data
                   mountPath: /data

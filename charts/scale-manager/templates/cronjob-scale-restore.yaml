@@ -18,9 +18,14 @@ spec:
             - name: data
               persistentVolumeClaim:
                 claimName: {{ .Values.pvc.name }}
+          securityContext:
+            fsGroup: 0          
           containers:
             - name: restorer
               image: bitnami/kubectl:latest
+              securityContext:
+                runAsUser: 0
+                runAsGroup: 0              
               volumeMounts:
                 - name: data
                   mountPath: /data
