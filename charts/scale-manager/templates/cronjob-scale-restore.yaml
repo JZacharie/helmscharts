@@ -11,53 +11,37 @@ spec:
       backoffLimit: {{ .Values.cronjobs.scaleRestore.backoffLimit }}
       template:
         spec:
-          activeDeadlineSeconds: {{ .Values.cronjobs.scaleRestore.activeDeadlineSeconds }}
           restartPolicy: Never
+          securityContext:
+            fsGroup: 0
           serviceAccountName: {{ include "scale-manager.fullname" . }}
-          nodeSelector: 
-            kubernetes.io/hostname: vm167-9fca2980          
           volumes:
             - name: data
               persistentVolumeClaim:
                 claimName: {{ .Values.pvc.name }}
-          securityContext:
-            fsGroup: 0          
           containers:
             - name: restorer
               image: bitnami/kubectl:latest
               securityContext:
                 runAsUser: 0
-                runAsGroup: 0              
+                runAsGroup: 0
               volumeMounts:
                 - name: data
                   mountPath: /data
-              env:
-                - name: BACKUP_PATH
-                  valueFrom:
-                    configMapKeyRef:
-                      name: scale-config
-                      key: BACKUP_PATH
-                - name: NAMESPACE
-                  valueFrom:
-                    configMapKeyRef:
-                      name: scale-config
-                      key: NAMESPACE
               command: ["/bin/bash", "-c"]
               args:
                 - |
-                  echo "Restoring scale values from $BACKUP_PATH ..."
+                  echo "Restoring scale values from /data/scale.json ..."
 
-                  cat $BACKUP_PATH | jq -c '.' |
+                  cat /data/scale.json | jq -c '.[]' |
                   while read entry; do
                     KIND=$(echo "$entry" | jq -r '.kind')
                     NAME=$(echo "$entry" | jq -r '.name')
                     REPLICAS=$(echo "$entry" | jq -r '.replicas')
 
                     if kubectl get -n $NAMESPACE "$KIND/$NAME" >/dev/null 2>&1; then
-                      echo "Restoring $KIND/$NAME to $REPLICAS replicas"
                       kubectl scale -n $NAMESPACE "$KIND/$NAME" --replicas="$REPLICAS"
-                    else
-                      echo "Skipping missing $KIND/$NAME"
+                      echo "Restored $KIND/$NAME to $REPLICAS replicas"
                     fi
                   done
 
