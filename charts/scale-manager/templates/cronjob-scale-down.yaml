@@ -15,6 +15,8 @@ spec:
           securityContext:
             fsGroup: 0
           serviceAccountName: {{ include "scale-manager.fullname" . }}
+          nodeSelector:
+            kubernetes.io/hostname: vm167-9fca2980
           volumes:
             - name: data
               persistentVolumeClaim:
@@ -32,7 +34,6 @@ spec:
               args:
                 - |
                   echo "Collecting current scale values in namespace $NAMESPACE ..."
-
                   kubectl get deploy,statefulset -n $NAMESPACE -o json \
                     | jq '.items | map({kind: .kind, name: .metadata.name, replicas: .spec.replicas})' \
                     > /data/scale.json

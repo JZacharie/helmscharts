@@ -15,6 +15,8 @@ spec:
           securityContext:
             fsGroup: 0
           serviceAccountName: {{ include "scale-manager.fullname" . }}
+          nodeSelector:
+            kubernetes.io/hostname: vm167-9fca2980
           volumes:
             - name: data
               persistentVolumeClaim:
@@ -32,7 +34,6 @@ spec:
               args:
                 - |
                   echo "Restoring scale values from /data/scale.json ..."
-
                   cat /data/scale.json | jq -c '.[]' |
                   while read entry; do
                     KIND=$(echo "$entry" | jq -r '.kind')
