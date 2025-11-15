@@ -698,6 +698,16 @@ entries:
     version: 0.1.2
   scale-manager:
   - apiVersion: v2
+    appVersion: "1.4"
+    created: "2025-11-15T04:19:37.819044517Z"
+    description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
+    digest: a923d4410f4a139cd49715ec8ac6f6192709c372fd32ee46cf15c7dba5518785
+    name: scale-manager
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/scale-manager-0.6.0/scale-manager-0.6.0.tgz
+    version: 0.6.0
+  - apiVersion: v2
     appVersion: "1.3"
     created: "2025-11-15T04:13:35.165580471Z"
     description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
@@ -999,4 +1009,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-11-15T04:13:35.16562858Z"
+generated: "2025-11-15T04:19:37.81911037Z"
