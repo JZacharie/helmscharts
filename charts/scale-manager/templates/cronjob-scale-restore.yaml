@@ -40,8 +40,8 @@ spec:
                     NAME=$(echo "$entry" | jq -r '.name')
                     REPLICAS=$(echo "$entry" | jq -r '.replicas')
 
-                    if kubectl get -n $NAMESPACE "$KIND/$NAME" >/dev/null 2>&1; then
-                      kubectl scale -n $NAMESPACE "$KIND/$NAME" --replicas="$REPLICAS"
+                    if kubectl get -n {{ .Values.namespace }} "$KIND/$NAME" >/dev/null 2>&1; then
+                      kubectl scale -n {{ .Values.namespace }} "$KIND/$NAME" --replicas="$REPLICAS"
                       echo "Restored $KIND/$NAME to $REPLICAS replicas"
                     fi
                   done

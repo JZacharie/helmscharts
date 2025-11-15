@@ -33,14 +33,14 @@ spec:
               command: ["/bin/bash", "-c"]
               args:
                 - |
-                  echo "Collecting current scale values in namespace $NAMESPACE ..."
-                  kubectl get deploy,statefulset -n $NAMESPACE -o json \
+                  echo "Collecting current scale values in namespace {{ .Values.namespace }} ..."
+                  kubectl get deploy,statefulset -n {{ .Values.namespace }} -o json \
                     | jq '.items | map({kind: .kind, name: .metadata.name, replicas: .spec.replicas})' \
                     > /data/scale.json
 
                   echo "Scaling all Deployments & StatefulSets to 0 replicas..."
-                  for obj in $(kubectl get deploy,statefulset -n $NAMESPACE -o name); do
-                    kubectl scale -n $NAMESPACE $obj --replicas=0
+                  for obj in $(kubectl get deploy,statefulset -n {{ .Values.namespace }} -o name); do
+                    kubectl scale -n {{ .Values.namespace }} $obj --replicas=0
                     echo "Scaled $obj to 0"
                   done
 
