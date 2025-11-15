@@ -7,4 +7,4 @@ data:
   LABEL_SELECTOR: "{{ .Values.config.labelSelector }}"
   BACKUP_PATH: "{{ .Values.config.backupPath }}"
   NAMESPACE: "{{ .Values.namespace }}"
-  EXCLUDE_LIST: {{ .Values.config.excludeList | join "," }}
+  EXCLUDE_LIST: "{{ .Values.config.excludeList | join "," }}"
