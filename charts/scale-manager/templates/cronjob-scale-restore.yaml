@@ -13,6 +13,7 @@ spec:
         spec:
           activeDeadlineSeconds: {{ .Values.cronjobs.scaleRestore.activeDeadlineSeconds }}
           restartPolicy: Never
+          serviceAccountName: {{ include "scale-manager.fullname" . }}
           volumes:
             - name: data
               persistentVolumeClaim:

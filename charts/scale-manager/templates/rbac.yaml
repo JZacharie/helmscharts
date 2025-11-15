@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "scale-manager.fullname" . }}
+  labels:
+    {{- include "scale-manager.labels" . | nindent 4 }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "scale-manager.fullname" . }}
+  labels:
+    {{- include "scale-manager.labels" . | nindent 4 }}
+rules:
+  - apiGroups: ["apps"]
+    resources:
+      - deployments
+      - deployments/scale
+      - statefulsets
+      - statefulsets/scale
+    verbs: ["get", "list", "watch", "patch"]
+
+  - apiGroups: [""]
+    resources:
+      - configmaps
+    verbs: ["get", "list", "create", "update", "patch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "scale-manager.fullname" . }}
+  labels:
+    {{- include "scale-manager.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "scale-manager.fullname" . }}
+roleRef:
+  kind: Role
+  name: {{ include "scale-manager.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io

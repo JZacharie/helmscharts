@@ -3,10 +3,6 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ .Values.pvc.name }}
   namespace: {{ .Values.namespace }}
-  annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "0"
-    "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   accessModes:
     - ReadWriteOnce
