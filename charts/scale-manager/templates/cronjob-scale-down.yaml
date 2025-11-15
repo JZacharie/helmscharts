@@ -16,6 +16,8 @@ spec:
           activeDeadlineSeconds: {{ .Values.cronjobs.scaleDown.activeDeadlineSeconds }}
           restartPolicy: Never
           serviceAccountName: {{ include "scale-manager.fullname" . }}
+          nodeSelector: 
+            kubernetes.io/hostname: vm167-9fca2980
           volumes:
             - name: data
               persistentVolumeClaim:
