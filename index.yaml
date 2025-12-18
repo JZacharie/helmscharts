@@ -696,6 +696,42 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/polaris-0.1.2/polaris-0.1.2.tgz
     version: 0.1.2
+  readur:
+  - annotations:
+      category: Document Management
+    apiVersion: v2
+    appVersion: latest
+    created: "2025-12-18T04:35:43.440173439Z"
+    dependencies:
+    - name: common
+      repository: https://bjw-s-labs.github.io/helm-charts
+      version: 4.5.0
+    description: Readur is a document management and OCR processing service that automatically
+      processes uploaded documents, extracts text using OCR, and makes content searchable.
+    digest: 36e5c51596ad4d25b3e30331b7e8007a05ab09ee9c6e27154921e878aba49a0c
+    home: https://github.com/readur/readur
+    icon: https://github.com/readur/readur/blob/main/assets/icon.png
+    keywords:
+    - document-management
+    - ocr
+    - text-extraction
+    - file-processing
+    - rust
+    - self-hosted
+    - document-search
+    - pdf
+    - tesseract
+    kubeVersion: '>= 1.19'
+    maintainers:
+    - name: readur
+      url: https://github.com/readur/readur
+    name: readur
+    sources:
+    - https://github.com/readur/readur
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/readur-0.2.6/readur-0.2.6.tgz
+    version: 0.2.6
   scale-manager:
   - apiVersion: v2
     appVersion: "1.5"
@@ -981,6 +1017,27 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/watchyourlan-2.0.4/watchyourlan-2.0.4.tgz
     version: 2.0.4
+  wh2pg:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-12-18T04:35:43.564818285Z"
+    description: Webhook to PostgreSQL - Service to receive webhooks and store them
+      in PostgreSQL
+    digest: 99af8775025fb0d75219dfa27bf59af52bc86b84117cf4bc7966e40dd76da555
+    home: https://github.com/JZacharie/wh2pg
+    keywords:
+    - webhook
+    - postgresql
+    - rust
+    maintainers:
+    - name: Joseph
+    name: wh2pg
+    sources:
+    - https://github.com/JZacharie/wh2pg
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/wh2pg-1.0.0/wh2pg-1.0.0.tgz
+    version: 1.0.0
   whisper-cpp:
   - annotations:
       artifacthub.io/changes: |-
@@ -1089,4 +1146,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-12-17T17:35:58.749664292Z"
+generated: "2025-12-18T04:35:43.564933951Z"
