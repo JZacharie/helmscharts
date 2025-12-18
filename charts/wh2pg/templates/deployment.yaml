@@ -1,0 +1,130 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "wh2pg.fullname" . }}
+  labels:
+    {{- include "wh2pg.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "wh2pg.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "wh2pg.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "wh2pg.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: {{ .Chart.Name }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.config.serverPort }}
+          protocol: TCP
+        {{- if .Values.config.enableMetrics }}
+        - name: metrics
+          containerPort: {{ .Values.config.metricsPort }}
+          protocol: TCP
+        {{- end }}
+        env:
+        # PostgreSQL configuration
+        - name: DB_HOST
+          value: {{ include "wh2pg.postgresql.host" . | quote }}
+        - name: DB_PORT
+          value: {{ include "wh2pg.postgresql.port" . | quote }}
+        - name: DB_NAME
+          value: {{ include "wh2pg.postgresql.database" . | quote }}
+        - name: DB_USER
+          value: {{ include "wh2pg.postgresql.username" . | quote }}
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "wh2pg.postgresql.secretName" . }}
+              key: {{ .Values.postgresql.external.existingSecretPasswordKey | default "password" }}
+        - name: DB_SSL_MODE
+          value: {{ .Values.postgresql.external.sslMode | default "require" | quote }}
+        - name: DB_POOL_SIZE
+          value: {{ .Values.postgresql.external.poolSize | default 10 | quote }}
+        
+        # Server configuration from ConfigMap
+        - name: SERVER_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "wh2pg.fullname" . }}
+              key: SERVER_HOST
+        - name: SERVER_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "wh2pg.fullname" . }}
+              key: SERVER_PORT
+        - name: WORKERS
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "wh2pg.fullname" . }}
+              key: WORKERS
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "wh2pg.fullname" . }}
+              key: LOG_LEVEL
+        - name: LOG_FORMAT
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "wh2pg.fullname" . }}
+              key: LOG_FORMAT
+        - name: MAX_PAYLOAD_SIZE
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "wh2pg.fullname" . }}
+              key: MAX_PAYLOAD_SIZE
+        - name: ENABLE_METRICS
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "wh2pg.fullname" . }}
+              key: ENABLE_METRICS
+        
+        # Optional webhook secret
+        {{- if .Values.secrets.webhookSecret }}
+        - name: WEBHOOK_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "wh2pg.fullname" . }}
+              key: webhook-secret
+        {{- end }}
+        
+        livenessProbe:
+          {{- toYaml .Values.livenessProbe | nindent 12 }}
+        readinessProbe:
+          {{- toYaml .Values.readinessProbe | nindent 12 }}
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

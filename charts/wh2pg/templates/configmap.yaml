@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "wh2pg.fullname" . }}
+  labels:
+    {{- include "wh2pg.labels" . | nindent 4 }}
+data:
+  SERVER_HOST: {{ .Values.config.serverHost | quote }}
+  SERVER_PORT: {{ .Values.config.serverPort | quote }}
+  WORKERS: {{ .Values.config.workers | quote }}
+  LOG_LEVEL: {{ .Values.config.logLevel | quote }}
+  LOG_FORMAT: {{ .Values.config.logFormat | quote }}
+  MAX_PAYLOAD_SIZE: {{ .Values.config.maxPayloadSize | quote }}
+  ENABLE_METRICS: {{ .Values.config.enableMetrics | quote }}

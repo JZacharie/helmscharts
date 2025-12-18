@@ -1,0 +1,15 @@
+apiVersion: v2
+name: wh2pg
+description: Webhook to PostgreSQL - Service to receive webhooks and store them in PostgreSQL
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - webhook
+  - postgresql
+  - rust
+maintainers:
+  - name: Joseph
+home: https://github.com/JZacharie/wh2pg
+sources:
+  - https://github.com/JZacharie/wh2pg

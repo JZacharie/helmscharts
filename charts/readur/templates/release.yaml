@@ -1,0 +1,104 @@
+{{- define "readur.hardcodedValues" -}}
+controllers:
+  main:
+    initContainers:
+      fixperms:
+        image:
+          repository: busybox
+          tag: latest
+        command:
+          - sh
+          - -c
+          - |
+            echo "Fixing permissions for Readur directories, this may take some time..."
+            chown -R 1000:1000 /app/uploads /app/watch
+            chmod -R 755 /app/uploads /app/watch
+            echo "Permissions fixed successfully"
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          runAsNonRoot: false
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: true
+          capabilities:
+            add:
+              - CHOWN
+              - FOWNER
+    containers:
+      readur:
+        image:
+          repository: readur/readur
+          tag: latest
+          pullPolicy: IfNotPresent
+        
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+          runAsNonRoot: true
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+
+        probes:
+          startup:
+            enabled: true
+            custom: true
+            type: HTTP
+            spec:
+              initialDelaySeconds: 5
+              periodSeconds: 5
+              timeoutSeconds: 5
+              failureThreshold: 30
+              httpGet: &probesPath
+                path: /api/health
+                port: 8000
+          readiness: &probes
+            enabled: true
+            custom: true
+            spec:
+              initialDelaySeconds: 5
+              periodSeconds: 5
+              timeoutSeconds: 5
+              failureThreshold: 10
+              httpGet: *probesPath
+          liveness: *probes
+
+persistence:
+  uploads:
+    enabled: true
+    type: persistentVolumeClaim
+    size: 10Gi
+    retain: true
+    accessMode: ReadWriteOnce
+    globalMounts:
+      - path: /app/uploads
+        readOnly: false
+  
+  watch:
+    enabled: true
+    type: persistentVolumeClaim
+    size: 5Gi
+    retain: true
+    accessMode: ReadWriteOnce
+    globalMounts:
+      - path: /app/watch
+        readOnly: false
+
+service:
+  main:
+    controller: main
+    enabled: true
+    ports:
+      http:
+        port: 8000
+        targetPort: 8000
+
+{{ end }}
+
+{{- $ctx := deepCopy . -}}
+# Merge with ALL the values in `values.yaml`
+{{- $_ := mergeOverwrite .Values $ctx.Values -}}
+{{- $_ = include "readur.hardcodedValues" . | fromYaml | merge $ctx.Values -}}
+{{- include "bjw-s.common.loader.all" $ctx }}
