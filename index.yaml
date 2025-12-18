@@ -863,6 +863,34 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/scale-manager-0.2.0/scale-manager-0.2.0.tgz
     version: 0.2.0
+  sim:
+  - annotations:
+      category: AI/ML Platform
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-12-18T22:41:18.541889616Z"
+    description: A Helm chart for Sim - AI agent workflow platform
+    digest: 588be397961a90af93353fb133c23672b00e66fcdab1dcccd0c461bf76346001
+    home: https://sim.ai
+    icon: https://raw.githubusercontent.com/simstudioai/sim/main/apps/sim/public/sim.svg
+    keywords:
+    - ai
+    - workflow
+    - automation
+    - agents
+    - nextjs
+    maintainers:
+    - email: help@sim.ai
+      name: Sim Team
+      url: https://sim.ai
+    name: sim
+    sources:
+    - https://github.com/simstudioai/sim
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/sim-0.1.0/sim-0.1.0.tgz
+    version: 0.1.0
   speaches:
   - annotations:
       artifacthub.io/changes: |-
@@ -1206,4 +1234,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-12-18T10:13:15.092514077Z"
+generated: "2025-12-18T22:41:18.541956241Z"
