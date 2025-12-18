@@ -113,7 +113,7 @@ postgresql:
     # Password should be set in secret
     existingSecret: "wh2pg-postgresql"
     existingSecretPasswordKey: "password"
-    sslMode: "require"
+    sslMode: "prefer"
     poolSize: 10
 
 # Secrets (will be created if not using existingSecret)
