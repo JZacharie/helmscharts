@@ -33,6 +33,7 @@ data:
         timeout: 1s
         send_batch_size: 1024
       memory_limiter:
+        check_interval: 1s
         limit_mib: 512
       
     exporters:
