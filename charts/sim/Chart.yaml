@@ -2,7 +2,7 @@ apiVersion: v2
 name: sim
 description: A Helm chart for Sim - AI agent workflow platform
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "1.0.0"
 home: https://sim.ai
 icon: https://raw.githubusercontent.com/simstudioai/sim/main/apps/sim/public/sim.svg
