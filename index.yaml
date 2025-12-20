@@ -869,6 +869,33 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-12-20T19:45:21.842128529Z"
+    description: A Helm chart for Sim - AI agent workflow platform
+    digest: 8e7d1fe8d53ee3242ac109ced14c9f40f1baab9e13ee8ff22eccbe15314ae150
+    home: https://sim.ai
+    icon: https://raw.githubusercontent.com/simstudioai/sim/main/apps/sim/public/sim.svg
+    keywords:
+    - ai
+    - workflow
+    - automation
+    - agents
+    - nextjs
+    maintainers:
+    - email: help@sim.ai
+      name: Sim Team
+      url: https://sim.ai
+    name: sim
+    sources:
+    - https://github.com/simstudioai/sim
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/sim-0.1.1/sim-0.1.1.tgz
+    version: 0.1.1
+  - annotations:
+      category: AI/ML Platform
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-12-18T22:41:18.541889616Z"
     description: A Helm chart for Sim - AI agent workflow platform
     digest: 588be397961a90af93353fb133c23672b00e66fcdab1dcccd0c461bf76346001
@@ -1234,4 +1261,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-12-18T22:41:18.541956241Z"
+generated: "2025-12-20T19:45:21.842202267Z"
