@@ -157,6 +157,8 @@ spec:
           env:
             - name: GOGC
               value: "80"
+            - name: GOMEMLIMIT
+              value: "460MiB"
           volumeMounts:
             - name: otel-config
               mountPath: /etc/otel-collector-config
