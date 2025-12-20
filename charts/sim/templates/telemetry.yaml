@@ -35,6 +35,7 @@ data:
       memory_limiter:
         check_interval: 1s
         limit_mib: 512
+        spike_limit_mib: 128
       
     exporters:
       {{- if .Values.telemetry.jaeger.enabled }}
@@ -56,7 +57,7 @@ data:
           insecure: {{ not .Values.telemetry.otlp.tls.enabled }}
       {{- end }}
       logging:
-        loglevel: info
+        verbosity: normal
     
     extensions:
       health_check:
