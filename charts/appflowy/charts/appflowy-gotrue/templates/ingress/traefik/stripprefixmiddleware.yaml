@@ -1,4 +1,4 @@
-{{- if .Values.global.ingress.traefik.enabled -}}
+{{- if or .Values.global.ingress.traefik.enabled .Values.global.ingress.nginx.enabled -}}
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
