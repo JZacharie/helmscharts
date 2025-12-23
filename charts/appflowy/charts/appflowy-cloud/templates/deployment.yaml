@@ -47,6 +47,8 @@ spec:
                   key: {{ .Values.global.secret.postgres.appflowy.databaseUrl.key }}
             - name: APPFLOWY_REDIS_URI
               value: {{ .Values.global.redis.uri }}
+            - name: AF_BASE_URL
+              value: {{ .Values.global.appflowyCloud.baseUrl }}
             - name: APPFLOWY_GOTRUE_JWT_SECRET
               valueFrom:
                 secretKeyRef:
