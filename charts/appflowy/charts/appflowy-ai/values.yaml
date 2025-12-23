@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: appflowyinc/appflowy_ai
   pullPolicy: IfNotPresent
-  tag: ""
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""

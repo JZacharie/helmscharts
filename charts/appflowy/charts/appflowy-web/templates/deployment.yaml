@@ -38,7 +38,11 @@ spec:
               value: {{ include "appflowy-web.appflowyCloud.externalUrl" . }}
             - name: APPFLOWY_GOTRUE_BASE_URL
               value: {{ include "appflowy-web.gotrue.externalUrl" . }}
+            - name: APPFLOWY_WEB_URL
+              value: {{ include "appflowy-web.appflowyCloud.externalUrl" . }}
             - name: APPFLOWY_WS_BASE_URL 
+              value: {{ include "appflowy-web.appflowyCloud.wsexternalUrl" . }}
+            - name: APPFLOWY_WEBSOCKET_BASE_URL
               value: {{ include "appflowy-web.appflowyCloud.wsexternalUrl" . }}
           {{- with .Values.resources }}
           resources:
