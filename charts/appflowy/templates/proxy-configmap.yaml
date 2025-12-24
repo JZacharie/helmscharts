@@ -55,6 +55,14 @@ data:
             }
 
             # GoTrue
+            # Admin Console
+            location /console {
+                proxy_pass http://{{ include "appflowy.fullname" . }}-admin.{{ .Release.Namespace }}.svc:3000;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            }
+
             location /gotrue/ {
                 rewrite ^/gotrue/(.*) /$1 break;
                 proxy_pass http://{{ include "appflowy.fullname" . }}-gotrue.{{ .Release.Namespace }}.svc:9999;

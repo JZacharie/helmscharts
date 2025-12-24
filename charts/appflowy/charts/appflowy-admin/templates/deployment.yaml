@@ -41,6 +41,9 @@ spec:
             - name: ADMIN_FRONTEND_APPFLOWY_CLOUD_URL
               value: {{ .Values.global.appflowyCloud.baseUrl }}
             - name: ADMIN_FRONTEND_PATH_PREFIX
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
               value: /console
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
