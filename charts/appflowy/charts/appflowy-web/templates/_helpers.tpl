@@ -14,11 +14,11 @@ the resource name from the full name with suffix.
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 50 | trimSuffix "-" }}
 {{- else }}
-{{-  := default .Chart.Name .Values.nameOverride }}
-{{- if contains  .Release.Name }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- if contains $name .Release.Name }}
 {{- .Release.Name | trunc 50 | trimSuffix "-" }}
 {{- else }}
-{{- printf "%s-%s" .Release.Name  | trunc 50 | trimSuffix "-" }}
+{{- printf "%s-%s" .Release.Name $name | trunc 50 | trimSuffix "-" }}
 {{- end }}
 {{- end }}
 {{- end }}
