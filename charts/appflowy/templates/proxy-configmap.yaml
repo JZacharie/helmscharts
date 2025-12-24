@@ -7,7 +7,7 @@ metadata:
     {{- include "appflowy.labels" . | nindent 4 }}
 data:
   nginx.conf: |
-    user  nginx;
+    user  root;
     worker_processes  auto;
     error_log  /var/log/nginx/error.log notice;
     pid        /var/run/nginx.pid;
