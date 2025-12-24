@@ -17,6 +17,7 @@ podAnnotations: {}
 podLabels: {}
 
 service:
+  annotations: {}
   type: ClusterIP
   port: 80
 
