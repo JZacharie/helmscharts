@@ -55,3 +55,4 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+extraEnv: []
