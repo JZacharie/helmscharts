@@ -35,7 +35,7 @@ spec:
               protocol: TCP
           env:
             - name: APPFLOWY_BASE_URL
-              value: {{ include "appflowy-web.appflowyCloud.externalUrl" . }}/api
+              value: {{ include "appflowy-web.appflowyCloud.externalUrl" . }}
             - name: APPFLOWY_GOTRUE_BASE_URL
               value: {{ include "appflowy-web.gotrue.externalUrl" . }}
             - name: APPFLOWY_WEB_URL
