@@ -147,6 +147,8 @@ metadata:
   labels:
     {{- include "appflowy-sbx.labels" . | nindent 4 }}
     app.kubernetes.io/component: proxy
+  annotations:
+    io.cilium/lb-ipam-ips: "192.168.0.197"
 spec:
   type: {{ .Values.proxy.service.type }}
   {{- if .Values.proxy.service.loadBalancerIP }}

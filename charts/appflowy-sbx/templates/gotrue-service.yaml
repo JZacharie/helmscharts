@@ -6,8 +6,10 @@ metadata:
   labels:
     {{- include "appflowy-sbx.labels" . | nindent 4 }}
     app.kubernetes.io/component: gotrue
+  annotations:
+    io.cilium/lb-ipam-ips: "192.168.0.197"
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - port: 9999
       targetPort: http
