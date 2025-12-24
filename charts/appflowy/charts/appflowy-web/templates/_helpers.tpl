@@ -14,11 +14,11 @@ the resource name from the full name with suffix.
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 50 | trimSuffix "-" }}
 {{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
+{{-  := default .Chart.Name .Values.nameOverride }}
+{{- if contains  .Release.Name }}
 {{- .Release.Name | trunc 50 | trimSuffix "-" }}
 {{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 50 | trimSuffix "-" }}
+{{- printf "%s-%s" .Release.Name  | trunc 50 | trimSuffix "-" }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -70,5 +70,9 @@ Create the name of the service account to use
 {{- end }}
 
 {{- define "appflowy-web.appflowyCloud.wsexternalUrl" -}}
+{{- if eq .Values.global.scheme "https" -}}
 {{- printf "wss://%s/ws/v1" .Values.global.externalHost }}
+{{- else -}}
+{{- printf "ws://%s:%d/ws/v1" .Values.global.externalHost (.Values.global.externalPort | int) }}
+{{- end -}}
 {{- end }}
