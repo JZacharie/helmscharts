@@ -132,8 +132,9 @@ web:
   resources: {}
 
 # AppFlowy AI configuration
+# Note: AppFlowy AI currently only supports OpenAI or Azure OpenAI, not Ollama
 appflowyAi:
-  enabled: true
+  enabled: false  # Disabled - requires OpenAI/Azure API key
   image:
     repository: appflowyinc/appflowy_ai
     tag: latest
