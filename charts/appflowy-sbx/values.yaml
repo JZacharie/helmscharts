@@ -153,7 +153,7 @@ proxy:
   
   service:
     type: LoadBalancer
-    loadBalancerIP: "192.168.0.196"
+    loadBalancerIP: "192.168.0.197"
     port: 80
   
   replicas: 1
