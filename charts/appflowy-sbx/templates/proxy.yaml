@@ -56,6 +56,9 @@ data:
             
             # AppFlowy API endpoints
             location /api {
+                # Rewrite gotrue-profile to profile for admin console compatibility
+                rewrite ^/api/user/gotrue-profile$ /api/user/profile break;
+                
                 proxy_pass http://appflowy_cloud;
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;
