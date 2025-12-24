@@ -11,7 +11,7 @@ externalPort: 80
 
 # Database configuration (external PostgreSQL pg-sbx)
 database:
-  host: "cluster-pg-rw.pg-sbx.svc"
+  host: "cluster-pg-sbx-rw.pg-sbx.svc"
   port: 5432
   name: "appflowy_sbx"
   username: "postgres"
