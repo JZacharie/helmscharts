@@ -1,0 +1,64 @@
+{{- if .Values.web.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "appflowy-sbx.fullname" . }}-web
+  labels:
+    {{- include "appflowy-sbx.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+spec:
+  replicas: {{ .Values.web.replicas }}
+  selector:
+    matchLabels:
+      {{- include "appflowy-sbx.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: web
+  template:
+    metadata:
+      labels:
+        {{- include "appflowy-sbx.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: web
+    spec:
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: web
+        image: "{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}"
+        imagePullPolicy: {{ .Values.web.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 3000
+          protocol: TCP
+        env:
+          - name: APPFLOWY_BASE_URL
+            value: {{ .Values.baseUrl | quote }}
+          - name: APPFLOWY_GOTRUE_BASE_URL
+            value: "{{ .Values.baseUrl }}/gotrue"
+          - name: APPFLOWY_WS_BASE_URL
+            value: {{ .Values.baseUrl | quote }}
+        {{- with .Values.web.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+{{- end }}
+---
+{{- if .Values.web.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "appflowy-sbx.fullname" . }}-web
+  labels:
+    {{- include "appflowy-sbx.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "appflowy-sbx.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+{{- end }}

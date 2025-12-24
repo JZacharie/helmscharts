@@ -1,0 +1,128 @@
+{{- if .Values.gotrue.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "appflowy-sbx.fullname" . }}-gotrue
+  labels:
+    {{- include "appflowy-sbx.labels" . | nindent 4 }}
+    app.kubernetes.io/component: gotrue
+spec:
+  replicas: {{ .Values.gotrue.replicas }}
+  selector:
+    matchLabels:
+      {{- include "appflowy-sbx.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: gotrue
+  template:
+    metadata:
+      labels:
+        {{- include "appflowy-sbx.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: gotrue
+    spec:
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: gotrue
+        image: "{{ .Values.gotrue.image.repository }}:{{ .Values.gotrue.image.tag }}"
+        imagePullPolicy: {{ .Values.gotrue.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 9999
+          protocol: TCP
+        env:
+          # Admin configuration
+          - name: GOTRUE_ADMIN_EMAIL
+            value: {{ .Values.gotrue.adminEmail | quote }}
+          - name: GOTRUE_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                key: GOTRUE_ADMIN_PASSWORD
+          
+          # Basic configuration
+          - name: GOTRUE_DISABLE_SIGNUP
+            value: {{ .Values.gotrue.disableSignup | quote }}
+          - name: GOTRUE_SITE_URL
+            value: {{ .Values.gotrue.siteUrl | quote }}
+          - name: GOTRUE_URI_ALLOW_LIST
+            value: {{ .Values.gotrue.uriAllowList | quote }}
+          
+          # JWT configuration
+          - name: GOTRUE_JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                key: GOTRUE_JWT_SECRET
+          - name: GOTRUE_JWT_EXP
+            value: {{ .Values.jwt.exp | quote }}
+          - name: GOTRUE_JWT_ADMIN_GROUP_NAME
+            value: "supabase_admin"
+          
+          # Database configuration
+          - name: GOTRUE_DB_DRIVER
+            value: "postgres"
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                key: GOTRUE_DATABASE_URL
+          - name: API_EXTERNAL_URL
+            value: {{ .Values.baseUrl | quote }}
+          - name: PORT
+            value: "9999"
+          
+          # SMTP configuration
+          - name: GOTRUE_SMTP_HOST
+            value: {{ .Values.smtp.host | quote }}
+          - name: GOTRUE_SMTP_PORT
+            value: {{ .Values.smtp.port | quote }}
+          - name: GOTRUE_SMTP_USER
+            value: {{ .Values.smtp.username | quote }}
+          - name: GOTRUE_SMTP_PASS
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                key: GOTRUE_SMTP_PASS
+          - name: GOTRUE_SMTP_ADMIN_EMAIL
+            value: {{ .Values.smtp.email | quote }}
+          - name: GOTRUE_SMTP_MAX_FREQUENCY
+            value: "1ns"
+          - name: GOTRUE_RATE_LIMIT_EMAIL_SENT
+            value: "100"
+          - name: GOTRUE_MAILER_AUTOCONFIRM
+            value: {{ .Values.gotrue.autoConfirm | quote }}
+          
+          # URL paths for email links
+          - name: GOTRUE_MAILER_URLPATHS_CONFIRMATION
+            value: "/gotrue/verify"
+          - name: GOTRUE_MAILER_URLPATHS_INVITE
+            value: "/gotrue/verify"
+          - name: GOTRUE_MAILER_URLPATHS_RECOVERY
+            value: "/gotrue/verify"
+          - name: GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE
+            value: "/gotrue/verify"
+        
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        
+        {{- with .Values.gotrue.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+{{- end }}

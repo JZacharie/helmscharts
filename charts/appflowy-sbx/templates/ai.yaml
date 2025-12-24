@@ -1,0 +1,130 @@
+{{- if .Values.appflowyAi.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "appflowy-sbx.fullname" . }}-ai
+  labels:
+    {{- include "appflowy-sbx.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ai
+spec:
+  replicas: {{ .Values.appflowyAi.replicas }}
+  selector:
+    matchLabels:
+      {{- include "appflowy-sbx.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: ai
+  template:
+    metadata:
+      labels:
+        {{- include "appflowy-sbx.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: ai
+    spec:
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: ai
+        image: "{{ .Values.appflowyAi.image.repository }}:{{ .Values.appflowyAi.image.tag }}"
+        imagePullPolicy: {{ .Values.appflowyAi.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 5001
+          protocol: TCP
+        env:
+          - name: AI_SERVER_PORT
+            value: "5001"
+          
+          {{- if .Values.ai.enabled }}
+          # Ollama configuration
+          - name: DEFAULT_AI_MODEL
+            value: {{ .Values.ai.model | quote }}
+          - name: DEFAULT_AI_COMPLETION_MODEL
+            value: {{ .Values.ai.model | quote }}
+          - name: OLLAMA_API_BASE
+            value: "http://{{ .Values.ai.serverHost }}:{{ .Values.ai.serverPort }}"
+          {{- else }}
+          # OpenAI configuration (if OpenAI is used)
+          {{- if .Values.ai.openaiApiKey }}
+          - name: OPENAI_API_KEY
+            value: {{ .Values.ai.openaiApiKey | quote }}
+          {{- end }}
+          {{- end }}
+          
+          # S3 Configuration
+          - name: APPFLOWY_S3_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                key: S3_ACCESS_KEY
+          - name: APPFLOWY_S3_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                key: S3_SECRET_KEY
+          - name: APPFLOWY_S3_BUCKET
+            value: {{ .Values.s3.bucket | quote }}
+          - name: APPFLOWY_S3_REGION
+            value: {{ .Values.s3.region | quote }}
+          
+          # Database
+          - name: AI_DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                key: DATABASE_URL
+          
+          # Redis
+          - name: AI_REDIS_URL
+            value: {{ .Values.redis.uri | quote }}
+          
+          # MinIO
+          - name: AI_USE_MINIO
+            value: {{ .Values.s3.useMinio | quote }}
+          - name: AI_MINIO_URL
+            value: {{ .Values.s3.url | quote }}
+          
+          # AppFlowy Host
+          - name: AI_APPFLOWY_HOST
+            value: {{ .Values.baseUrl | quote }}
+          
+          # JWT
+          - name: APPFLOWY_GOTRUE_JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                key: GOTRUE_JWT_SECRET
+        
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        
+        {{- with .Values.appflowyAi.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+{{- end }}
+---
+{{- if .Values.appflowyAi.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "appflowy-sbx.fullname" . }}-ai
+  labels:
+    {{- include "appflowy-sbx.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ai
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5001
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "appflowy-sbx.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: ai
+{{- end }}

@@ -1,0 +1,180 @@
+# Default values for appflowy-sbx
+# This is a YAML-formatted file based on docker-compose.yml
+
+nameOverride: ""
+fullnameOverride: "appflowy-sbx"
+
+# Base configuration
+baseUrl: "http://192.168.0.196"
+externalHost: "192.168.0.196"
+externalPort: 80
+
+# Database configuration (external PostgreSQL pg-sbx)
+database:
+  host: "cluster-pg-rw.pg-sbx.svc"
+  port: 5432
+  name: "appflowy_sbx"
+  username: "postgres"
+  password: "g1bM7akRnGnjodKHk6rzxTZTCZVOpfShAg4cLA2MhitDDcmMooJFsoz7V1U0a32R"
+
+# Redis configuration (external Redis)
+redis:
+  uri: "redis://:f35be7e8d52bf5d7dedd9929673467e8a8454e7221335262d20ad81430c7a2da@redis.redis.svc:6379"
+
+# S3/MinIO configuration (external MinIO at 192.168.0.170:9010)
+s3:
+  url: "http://192.168.0.170:9010"
+  bucket: "appflowy-sbx"
+  accessKey: "appflowy-sbx"
+  secretKey: "yUUJPcyXhJ2tANXWQa58vaO7fFRAse0By4undC09"
+  region: "us-east-1"
+  useMinio: true
+  createBucket: true
+
+# SMTP configuration
+smtp:
+  host: "smtp.gmail.com"
+  port: 587
+  username: "services@zacharie.org"
+  email: "services@zacharie.org"
+  password: "uyganzjkaqdfazfa"
+  tlsKind: "opportunistic"  # none, wrapper, required, opportunistic
+
+# JWT configuration
+jwt:
+  secret: "hello456sbx"
+  exp: "7200"  # 2 hours
+
+# AI Configuration with Ollama
+ai:
+  enabled: true
+  serverHost: "192.168.0.52"
+  serverPort: 11434
+  model: "ministral-3:14b"
+  # For Ollama, we don't need OpenAI API key
+  openaiApiKey: ""
+
+# GoTrue configuration
+gotrue:
+  enabled: true
+  image:
+    repository: appflowyinc/gotrue
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  adminEmail: "joseph@zacharie.org"
+  adminPassword: "Superman69230"
+  
+  disableSignup: false
+  autoConfirm: true  # Skip email confirmation
+  
+  # Site URL for redirects
+  siteUrl: "appflowy-flutter://"
+  uriAllowList: "**"
+  
+  mailer:
+    adminEmail: "services@zacharie.org"
+    autoconfirm: true
+    templatesDir: ""
+  
+  replicas: 1
+  resources: {}
+
+# AppFlowy Cloud configuration
+cloud:
+  enabled: true
+  image:
+    repository: appflowyinc/appflowy_cloud
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  logLevel: "info"  # debug, info, warn, error
+  accessControl: true
+  databaseMaxConnections: 40
+  
+  replicas: 1
+  resources: {}
+
+# Admin Frontend configuration
+admin:
+  enabled: true
+  image:
+    repository: appflowyinc/admin_frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  replicas: 1
+  resources: {}
+
+# AppFlowy Worker configuration
+worker:
+  enabled: true
+  image:
+    repository: appflowyinc/appflowy_worker
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  importTickInterval: 30
+  databaseName: "appflowy_sbx"
+  
+  replicas: 1
+  resources: {}
+
+# AppFlowy Web configuration
+web:
+  enabled: true
+  image:
+    repository: appflowyinc/appflowy_web
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  replicas: 1
+  resources: {}
+
+# AppFlowy AI configuration
+appflowyAi:
+  enabled: true
+  image:
+    repository: appflowyinc/appflowy_ai
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  replicas: 1
+  resources: {}
+
+# NGINX Proxy configuration
+proxy:
+  enabled: true
+  image:
+    repository: nginx
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  service:
+    type: LoadBalancer
+    loadBalancerIP: "192.168.0.196"
+    port: 80
+  
+  replicas: 1
+  resources: {}
+
+# Setup Job configuration
+setupJob:
+  enabled: true
+  image:
+    repository: postgres
+    tag: "16"
+    pullPolicy: IfNotPresent
+  
+  backoffLimit: 5
+  resources: {}
+
+# Node selector for all pods
+nodeSelector:
+  proxmox: aquabot
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity: {}

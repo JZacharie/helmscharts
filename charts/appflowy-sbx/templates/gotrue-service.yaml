@@ -1,0 +1,19 @@
+{{- if .Values.gotrue.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "appflowy-sbx.fullname" . }}-gotrue
+  labels:
+    {{- include "appflowy-sbx.labels" . | nindent 4 }}
+    app.kubernetes.io/component: gotrue
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9999
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "appflowy-sbx.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: gotrue
+{{- end }}

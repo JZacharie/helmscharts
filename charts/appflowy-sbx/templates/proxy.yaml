@@ -1,0 +1,159 @@
+{{- if .Values.proxy.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "appflowy-sbx.fullname" . }}-nginx-config
+  labels:
+    {{- include "appflowy-sbx.labels" . | nindent 4 }}
+    app.kubernetes.io/component: proxy
+data:
+  nginx.conf: |
+    events {
+        worker_connections 1024;
+    }
+    
+    http {
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+        
+        sendfile on;
+        keepalive_timeout 65;
+        
+        # WebSocket timeout
+        proxy_read_timeout 86400s;
+        proxy_send_timeout 86400s;
+        
+        upstream gotrue {
+            server {{ include "appflowy-sbx.fullname" . }}-gotrue:9999;
+        }
+        
+        upstream appflowy_cloud {
+            server {{ include "appflowy-sbx.fullname" . }}-cloud:8000;
+        }
+        
+        upstream appflowy_web {
+            server {{ include "appflowy-sbx.fullname" . }}-web:3000;
+        }
+        
+        upstream appflowy_admin {
+            server {{ include "appflowy-sbx.fullname" . }}-admin:3000;
+        }
+        
+        server {
+            listen 80;
+            server_name _;
+            
+            client_max_body_size 256M;
+            
+            # GoTrue endpoints
+            location /gotrue {
+                proxy_pass http://gotrue;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+            }
+            
+            # AppFlowy API endpoints
+            location /api {
+                proxy_pass http://appflowy_cloud;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                
+                # WebSocket support
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection "upgrade";
+            }
+            
+            # Admin frontend
+            location /admin {
+                proxy_pass http://appflowy_admin;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+            }
+            
+            # Default to web frontend
+            location / {
+                proxy_pass http://appflowy_web;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+            }
+        }
+    }
+{{- end }}
+---
+{{- if .Values.proxy.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "appflowy-sbx.fullname" . }}-proxy
+  labels:
+    {{- include "appflowy-sbx.labels" . | nindent 4 }}
+    app.kubernetes.io/component: proxy
+spec:
+  replicas: {{ .Values.proxy.replicas }}
+  selector:
+    matchLabels:
+      {{- include "appflowy-sbx.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: proxy
+  template:
+    metadata:
+      labels:
+        {{- include "appflowy-sbx.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: proxy
+    spec:
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: nginx
+        image: "{{ .Values.proxy.image.repository }}:{{ .Values.proxy.image.tag }}"
+        imagePullPolicy: {{ .Values.proxy.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+        {{- with .Values.proxy.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: {{ include "appflowy-sbx.fullname" . }}-nginx-config
+{{- end }}
+---
+{{- if .Values.proxy.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "appflowy-sbx.fullname" . }}-proxy
+  labels:
+    {{- include "appflowy-sbx.labels" . | nindent 4 }}
+    app.kubernetes.io/component: proxy
+spec:
+  type: {{ .Values.proxy.service.type }}
+  {{- if .Values.proxy.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.proxy.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.proxy.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "appflowy-sbx.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: proxy
+{{- end }}

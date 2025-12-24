@@ -1,0 +1,62 @@
+{{- if .Values.setupJob.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "appflowy-sbx.fullname" . }}-setup
+  labels:
+    {{- include "appflowy-sbx.labels" . | nindent 4 }}
+    app.kubernetes.io/component: setup-job
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  backoffLimit: {{ .Values.setupJob.backoffLimit }}
+  template:
+    metadata:
+      labels:
+        {{- include "appflowy-sbx.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: setup-job
+    spec:
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      restartPolicy: Never
+      containers:
+      - name: setup-db
+        image: "{{ .Values.setupJob.image.repository }}:{{ .Values.setupJob.image.tag }}"
+        imagePullPolicy: {{ .Values.setupJob.image.pullPolicy }}
+        command:
+          - /bin/bash
+          - -c
+          - |
+            set -e
+            echo "Waiting for PostgreSQL to be ready..."
+            until pg_isready -h {{ .Values.database.host }} -p {{ .Values.database.port }} -U {{ .Values.database.username }}; do
+              echo "Waiting for database..."
+              sleep 2
+            done
+            
+            echo "Creating database if not exists..."
+            PGPASSWORD={{ .Values.database.password }} psql -h {{ .Values.database.host }} -p {{ .Values.database.port }} -U {{ .Values.database.username }} -d postgres <<EOF
+            SELECT 'CREATE DATABASE {{ .Values.database.name }}' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '{{ .Values.database.name }}')\gexec
+            EOF
+            
+            echo "Enabling pgvector extension..."
+            PGPASSWORD={{ .Values.database.password }} psql -h {{ .Values.database.host }} -p {{ .Values.database.port }} -U {{ .Values.database.username }} -d {{ .Values.database.name }} <<EOF
+            CREATE EXTENSION IF NOT EXISTS vector;
+            EOF
+            
+            echo "Database setup completed successfully"
+        env:
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                key: POSTGRES_PASSWORD
+        {{- with .Values.setupJob.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+{{- end }}

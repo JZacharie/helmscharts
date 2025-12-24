@@ -1,0 +1,13 @@
+apiVersion: v2
+name: appflowy-sbx
+description: AppFlowy Cloud Sandbox - Custom chart based on docker-compose.yml
+type: application
+version: 0.1.0
+appVersion: "latest"
+keywords:
+  - appflowy
+  - collaboration
+  - productivity
+maintainers:
+  - name: JZacharie
+    email: joseph@zacharie.org

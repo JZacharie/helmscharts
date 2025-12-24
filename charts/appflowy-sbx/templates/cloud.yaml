@@ -1,0 +1,156 @@
+{{- if .Values.cloud.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "appflowy-sbx.fullname" . }}-cloud
+  labels:
+    {{- include "appflowy-sbx.labels" . | nindent 4 }}
+    app.kubernetes.io/component: cloud
+spec:
+  replicas: {{ .Values.cloud.replicas }}
+  selector:
+    matchLabels:
+      {{- include "appflowy-sbx.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: cloud
+  template:
+    metadata:
+      labels:
+        {{- include "appflowy-sbx.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: cloud
+    spec:
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: cloud
+        image: "{{ .Values.cloud.image.repository }}:{{ .Values.cloud.image.tag }}"
+        imagePullPolicy: {{ .Values.cloud.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 8000
+          protocol: TCP
+        env:
+          - name: RUST_LOG
+            value: {{ .Values.cloud.logLevel | quote }}
+          - name: APPFLOWY_ENVIRONMENT
+            value: "production"
+          
+          # Database
+          - name: APPFLOWY_DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                key: DATABASE_URL
+          - name: APPFLOWY_DATABASE_MAX_CONNECTIONS
+            value: {{ .Values.cloud.databaseMaxConnections | quote }}
+          
+          # Redis
+          - name: APPFLOWY_REDIS_URI
+            value: {{ .Values.redis.uri | quote }}
+          
+          # GoTrue/JWT
+          - name: APPFLOWY_GOTRUE_JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                key: GOTRUE_JWT_SECRET
+          - name: APPFLOWY_GOTRUE_BASE_URL
+            value: {{ include "appflowy-sbx.gotrueInternalUrl" . | quote }}
+          
+          # S3/MinIO
+          - name: APPFLOWY_S3_CREATE_BUCKET
+            value: {{ .Values.s3.createBucket | quote }}
+          - name: APPFLOWY_S3_USE_MINIO
+            value: {{ .Values.s3.useMinio | quote }}
+          - name: APPFLOWY_S3_MINIO_URL
+            value: {{ .Values.s3.url | quote }}
+          - name: APPFLOWY_S3_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                key: S3_ACCESS_KEY
+          - name: APPFLOWY_S3_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                key: S3_SECRET_KEY
+          - name: APPFLOWY_S3_BUCKET
+            value: {{ .Values.s3.bucket | quote }}
+          - name: APPFLOWY_S3_REGION
+            value: {{ .Values.s3.region | quote }}
+          
+          # SMTP
+          - name: APPFLOWY_MAILER_SMTP_HOST
+            value: {{ .Values.smtp.host | quote }}
+          - name: APPFLOWY_MAILER_SMTP_PORT
+            value: {{ .Values.smtp.port | quote }}
+          - name: APPFLOWY_MAILER_SMTP_USERNAME
+            value: {{ .Values.smtp.username | quote }}
+          - name: APPFLOWY_MAILER_SMTP_EMAIL
+            value: {{ .Values.smtp.email | quote }}
+          - name: APPFLOWY_MAILER_SMTP_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                key: SMTP_PASSWORD
+          - name: APPFLOWY_MAILER_SMTP_TLS_KIND
+            value: {{ .Values.smtp.tlsKind | quote }}
+          
+          # Access Control
+          - name: APPFLOWY_ACCESS_CONTROL
+            value: {{ .Values.cloud.accessControl | quote }}
+          
+          # AI Server
+          {{- if .Values.ai.enabled }}
+          - name: AI_SERVER_HOST
+            value: {{ .Values.ai.serverHost | quote }}
+          - name: AI_SERVER_PORT
+            value: {{ .Values.ai.serverPort | quote }}
+          {{- end }}
+          
+          # URLs
+          - name: APPFLOWY_WEB_URL
+            value: {{ .Values.baseUrl | quote }}
+          - name: APPFLOWY_BASE_URL
+            value: {{ .Values.baseUrl | quote }}
+        
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        
+        {{- with .Values.cloud.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+{{- end }}
+---
+{{- if .Values.cloud.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "appflowy-sbx.fullname" . }}-cloud
+  labels:
+    {{- include "appflowy-sbx.labels" . | nindent 4 }}
+    app.kubernetes.io/component: cloud
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8000
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "appflowy-sbx.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: cloud
+{{- end }}
