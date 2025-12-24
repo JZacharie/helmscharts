@@ -1,0 +1,33 @@
+{{- if .Values.proxy.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "appflowy.fullname" . }}-proxy
+  labels:
+    {{- include "appflowy.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "appflowy.fullname" . }}-proxy
+      {{- include "appflowy.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "appflowy.fullname" . }}-proxy
+        {{- include "appflowy.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "appflowy.fullname" . }}-proxy
+{{- end }}

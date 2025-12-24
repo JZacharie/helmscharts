@@ -1,0 +1,25 @@
+{{- if .Values.proxy.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "appflowy.fullname" . }}-proxy
+  labels:
+    {{- include "appflowy.labels" . | nindent 4 }}
+  {{- with .Values.proxy.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.proxy.service.type }}
+  {{- if .Values.proxy.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.proxy.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "appflowy.fullname" . }}-proxy
+    {{- include "appflowy.selectorLabels" . | nindent 4 }}
+{{- end }}

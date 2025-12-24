@@ -268,3 +268,8 @@ setupJob:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+proxy:
+  enabled: false
+  service:
+    type: ClusterIP
+    annotations: {}
