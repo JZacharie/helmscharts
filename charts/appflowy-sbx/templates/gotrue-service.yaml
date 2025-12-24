@@ -7,8 +7,7 @@ metadata:
     {{- include "appflowy-sbx.labels" . | nindent 4 }}
     app.kubernetes.io/component: gotrue
 spec:
-  type: LoadBalancer
-  loadBalancerIP: "192.168.0.199"
+  type: ClusterIP
   ports:
     - port: 9999
       targetPort: http
