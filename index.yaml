@@ -624,6 +624,24 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-cloud-0.1.0/appflowy-cloud-0.1.0.tgz
     version: 0.1.0
+  appflowy-sbx:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2025-12-24T08:56:25.817175601Z"
+    description: AppFlowy Cloud Sandbox - Custom chart based on docker-compose.yml
+    digest: 71eaed606056ab3fab59e96b6c6653a1239f86274fec70ac6017362cc28e64c5
+    keywords:
+    - appflowy
+    - collaboration
+    - productivity
+    maintainers:
+    - email: joseph@zacharie.org
+      name: JZacharie
+    name: appflowy-sbx
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/appflowy-sbx-0.1.0/appflowy-sbx-0.1.0.tgz
+    version: 0.1.0
   bolt-diy:
   - annotations:
       artifacthub.io/changes: |-
@@ -1703,4 +1721,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-12-24T06:08:24.840441474Z"
+generated: "2025-12-24T08:56:25.817287991Z"
