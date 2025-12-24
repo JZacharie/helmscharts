@@ -5,8 +5,8 @@ nameOverride: ""
 fullnameOverride: "appflowy-sbx"
 
 # Base configuration
-baseUrl: "http://192.168.0.196"
-externalHost: "192.168.0.196"
+baseUrl: "http://192.168.0.197"
+externalHost: "192.168.0.197"
 externalPort: 80
 
 # Database configuration (external PostgreSQL pg-sbx)

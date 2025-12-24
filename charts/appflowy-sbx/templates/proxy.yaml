@@ -68,9 +68,10 @@ data:
                 proxy_set_header Connection "upgrade";
             }
             
-            # Admin frontend
-            location /admin {
-                proxy_pass http://appflowy_admin;
+            
+            # Admin frontend console
+            location /console {
+                proxy_pass http://appflowy_admin/console;
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
