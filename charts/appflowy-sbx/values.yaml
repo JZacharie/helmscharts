@@ -62,8 +62,8 @@ gotrue:
     tag: latest
     pullPolicy: IfNotPresent
   
-  adminEmail: "joseph@zacharie.org"
-  adminPassword: "Superman69230"
+  adminEmail: "admin@example.com"
+  adminPassword: "password"
   
   disableSignup: false
   autoConfirm: true  # Skip email confirmation
