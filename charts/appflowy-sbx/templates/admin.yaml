@@ -32,9 +32,9 @@ spec:
           protocol: TCP
         env:
           - name: APPFLOWY_GOTRUE_BASE_URL
-            value: "{{ .Values.baseUrl }}/gotrue"
+            value: "http://192.168.0.199:9999"
           - name: APPFLOWY_BASE_URL
-            value: {{ .Values.baseUrl | quote }}
+            value: "http://192.168.0.198:8000"
         {{- with .Values.admin.resources }}
         resources:
           {{- toYaml . | nindent 10 }}
