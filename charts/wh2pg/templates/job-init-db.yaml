@@ -37,3 +37,5 @@ spec:
               key: {{ .Values.postgresql.external.existingSecretPasswordKey | default "password" }}
         - name: DB_SSL_MODE
           value: {{ .Values.postgresql.external.sslMode | default "require" | quote }}
+        - name: RUN_INIT_ONLY
+          value: "true"
