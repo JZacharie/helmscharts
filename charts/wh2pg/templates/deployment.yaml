@@ -46,8 +46,6 @@ spec:
         {{- end }}
         env:
         # PostgreSQL configuration
-        - name: DATABASE_URL
-          value: "postgresql://{{ include "wh2pg.postgresql.username" . }}:$(DB_PASSWORD)@{{ include "wh2pg.postgresql.host" . }}:{{ include "wh2pg.postgresql.port" . }}/{{ include "wh2pg.postgresql.database" . }}?sslmode={{ .Values.postgresql.external.sslMode | default "require" }}"
         - name: DB_HOST
           value: {{ include "wh2pg.postgresql.host" . | quote }}
         - name: DB_PORT
