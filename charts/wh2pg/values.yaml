@@ -47,8 +47,7 @@ ingress:
   enabled: false
   className: "nginx"
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/rate-limit: "100"
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
     # kubernetes.io/tls-acme: "true"
   hosts:
     - host: wh2pg.example.com
