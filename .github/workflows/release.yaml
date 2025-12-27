@@ -34,3 +34,15 @@ jobs:
           skip_existing: 'true'
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
+
+      - name: Deploy Landing Page
+        run: |
+          # The chart-releaser action handles the gh-pages branch
+          # We want to ensure our index.html is also there
+          git fetch origin gh-pages
+          git checkout gh-pages
+          git checkout main -- index.html
+          git add index.html
+          git commit -m "docs: update landing page [skip ci]" || echo "No changes to index.html"
+          git push origin gh-pages
+          git checkout main
