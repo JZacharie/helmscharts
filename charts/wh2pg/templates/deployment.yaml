@@ -85,6 +85,11 @@ spec:
             configMapKeyRef:
               name: {{ include "wh2pg.fullname" . }}
               key: LOG_LEVEL
+        - name: RUST_LOG
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "wh2pg.fullname" . }}
+              key: LOG_LEVEL
         - name: LOG_FORMAT
           valueFrom:
             configMapKeyRef:
