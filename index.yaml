@@ -1535,6 +1535,26 @@ entries:
   wh2pg:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-12-27T07:25:26.760143321Z"
+    description: Webhook to PostgreSQL - Service to receive webhooks and store them
+      in PostgreSQL
+    digest: 6b80529a3fccaaf0e8eb9529d683703f036744437e442fc496e158bc2f7d7712
+    home: https://github.com/JZacharie/wh2pg
+    keywords:
+    - webhook
+    - postgresql
+    - rust
+    maintainers:
+    - name: Joseph
+    name: wh2pg
+    sources:
+    - https://github.com/JZacharie/wh2pg
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/wh2pg-1.0.6/wh2pg-1.0.6.tgz
+    version: 1.0.6
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-12-27T07:15:11.48977488Z"
     description: Webhook to PostgreSQL - Service to receive webhooks and store them
       in PostgreSQL
@@ -1761,4 +1781,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-12-27T07:15:11.489906767Z"
+generated: "2025-12-27T07:25:26.76028773Z"
