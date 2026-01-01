@@ -124,7 +124,7 @@ ingress:
   
   annotations:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: "letsencrypt-production-dns"
   
   # Main application
   app:

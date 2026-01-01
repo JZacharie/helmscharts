@@ -47,7 +47,7 @@ ingress:
   enabled: false
   className: "nginx"
   annotations:
-    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # cert-manager.io/cluster-issuer: "letsencrypt-production-dns"
     # kubernetes.io/tls-acme: "true"
   hosts:
     - host: wh2pg.example.com
