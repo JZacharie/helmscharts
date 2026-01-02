@@ -1,0 +1,11 @@
+{{- if .Values.powerpipe.modConfig }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "powerpipe.fullname" . }}-mod-config
+  labels:
+    {{- include "powerpipe.labels" . | nindent 4 }}
+data:
+  mod.pp: |
+{{ .Values.powerpipe.modConfig | indent 4 }}
+{{- end }}

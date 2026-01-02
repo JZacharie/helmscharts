@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "powerpipe.fullname" . }}-cm-env-vars
+  labels:
+    {{- include "powerpipe.labels" . | nindent 4 }}
+{{- if .Values.powerpipe.installMods }}
+data:
+  INSTALL_MODS: {{ join " "  .Values.powerpipe.installMods | quote }}
+{{- end }}
