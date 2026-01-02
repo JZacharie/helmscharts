@@ -24,6 +24,17 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.powerpipe.podSecurityContext | nindent 8 }}
+      initContainers:
+      {{- if .Values.powerpipe.modConfig }}
+        - name: init-mod-config
+          image: busybox:latest
+          command: ['sh', '-c', 'cp /tmp/mod-config/mod.pp /home/powerpipe/mod.pp && chown 11234:11234 /home/powerpipe/mod.pp']
+          volumeMounts:
+            - name: mod-config
+              mountPath: /tmp/mod-config
+            - name: powerpipe-home
+              mountPath: /home/powerpipe
+      {{- end }}
       containers:
         - name: {{ include "powerpipe.fullname" . }}
           securityContext:
@@ -48,9 +59,8 @@ spec:
             periodSeconds: 10
           volumeMounts:
           {{- if .Values.powerpipe.modConfig }}
-            - name: mod-config
-              mountPath: /home/powerpipe/mod.pp
-              subPath: mod.pp
+            - name: powerpipe-home
+              mountPath: /home/powerpipe
           {{- end }}
           {{- if .Values.powerpipe.resources }}
           resources:
@@ -75,4 +85,6 @@ spec:
         - name: mod-config
           configMap:
             name: {{ include "powerpipe.fullname" . }}-mod-config
+        - name: powerpipe-home
+          emptyDir: {}
       {{- end }}
