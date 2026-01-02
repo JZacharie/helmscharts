@@ -27,13 +27,22 @@ spec:
       initContainers:
       {{- if .Values.powerpipe.modConfig }}
         - name: init-mod-config
-          image: busybox:latest
-          command: ['sh', '-c', 'cp /tmp/mod-config/mod.pp /home/powerpipe/mod.pp && chown 11234:11234 /home/powerpipe/mod.pp']
+          image: "{{ .Values.powerpipe.image.repository }}:{{ .Values.powerpipe.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.powerpipe.image.pullPolicy }}
+          securityContext:
+            runAsUser: 0
+          command:
+            - /bin/sh
+            - -c
+            - |
+              cp -a /home/powerpipe/. /data/
+              cp /tmp/mod-config/mod.pp /data/mod.pp
+              chown -R 11234:11234 /data
           volumeMounts:
             - name: mod-config
               mountPath: /tmp/mod-config
             - name: powerpipe-home
-              mountPath: /home/powerpipe
+              mountPath: /data
       {{- end }}
       containers:
         - name: {{ include "powerpipe.fullname" . }}
