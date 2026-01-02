@@ -1411,6 +1411,16 @@ entries:
   steampipe-powerpipe-kubernetes:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2026-01-02T08:32:36.444119022Z"
+    description: A Helm chart for deploying turbot's Steampipe and Powerpipe to Kubernetes
+    digest: 01d019d3cf6be2eee75806227758f1bd2e497ad6947b7684c67b0f13cb9a900f
+    name: steampipe-powerpipe-kubernetes
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/steampipe-powerpipe-kubernetes-0.11.18/steampipe-powerpipe-kubernetes-0.11.18.tgz
+    version: 0.11.18
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2026-01-02T08:29:09.138739135Z"
     description: A Helm chart for deploying turbot's Steampipe and Powerpipe to Kubernetes
     digest: 6eba2023be428a5a780fe9067d4698ca3968aa911249b6d2777e4251af0bac8b
@@ -1902,4 +1912,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2026-01-02T08:29:09.138878024Z"
+generated: "2026-01-02T08:32:36.444254765Z"
