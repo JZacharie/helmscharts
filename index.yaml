@@ -1408,6 +1408,17 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/speaches-1.0.0/speaches-1.0.0.tgz
     version: 1.0.0
+  steampipe-powerpipe-kubernetes:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2026-01-02T08:08:32.889915502Z"
+    description: A Helm chart for deploying turbot's Steampipe and Powerpipe to Kubernetes
+    digest: e645b5e746a0756daacbb3122736d10a80ba9708408c5cf9c50036d63590e747
+    name: steampipe-powerpipe-kubernetes
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/steampipe-powerpipe-kubernetes-0.11.15/steampipe-powerpipe-kubernetes-0.11.15.tgz
+    version: 0.11.15
   swingmusic:
   - annotations:
       artifacthub.io/changes: |-
@@ -1881,4 +1892,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2025-12-27T09:12:57.672940576Z"
+generated: "2026-01-02T08:08:33.072170173Z"
