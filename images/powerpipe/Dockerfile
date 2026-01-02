@@ -1,2 +1,2 @@
-FROM ghcr.io/oguzhan-yilmaz/steampipe-powerpipe-kubernetes--powerpipe:1.4.2
+FROM ghcr.io/oguzhan-yilmaz/steampipe-powerpipe-kubernetes--powerpipe:latest
 # Placeholder for potential customizations
