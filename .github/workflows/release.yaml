@@ -35,6 +35,28 @@ jobs:
         env:
           CR_TOKEN: "${{ secrets.TOKEN }}"
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Charts to GHCR
+        run: |
+          for chart in charts/*; do
+            if [ -d "$chart" ]; then
+              helm dependency build "$chart"
+              helm package "$chart" --destination .cr-release-packages
+            fi
+          done
+          
+          for pkg in .cr-release-packages/*.tgz; do
+            if [ -f "$pkg" ]; then
+              helm push "$pkg" oci://ghcr.io/${{ github.repository_owner }}/charts
+            fi
+          done
+
       - name: Deploy Landing Page
         run: |
           # The chart-releaser action handles the gh-pages branch
