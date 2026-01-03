@@ -4,7 +4,14 @@ metadata:
   name: {{ include "powerpipe.fullname" . }}-cm-env-vars
   labels:
     {{- include "powerpipe.labels" . | nindent 4 }}
-{{- if .Values.powerpipe.installMods }}
+{{- if or .Values.powerpipe.installMods .Values.powerpipe.envVars }}
 data:
+  {{- if .Values.powerpipe.installMods }}
   INSTALL_MODS: {{ join " "  .Values.powerpipe.installMods | quote }}
+  {{- end }}
+  {{- if .Values.powerpipe.envVars }}
+  {{- range $key, $value := .Values.powerpipe.envVars }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
 {{- end }}
