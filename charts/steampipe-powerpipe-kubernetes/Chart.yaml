@@ -3,4 +3,4 @@ appVersion: 1.16.0
 description: A Helm chart for deploying turbot's Steampipe and Powerpipe to Kubernetes
 name: steampipe-powerpipe-kubernetes
 type: application
-version: 0.11.20
+version: 0.11.21
