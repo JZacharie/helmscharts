@@ -1,3 +1,4 @@
+# Powerpipe v1.4.2 - Updated on 2026-01-03
 FROM ghcr.io/oguzhan-yilmaz/steampipe-powerpipe-kubernetes--powerpipe:latest
 
 USER root
