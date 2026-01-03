@@ -10,3 +10,8 @@ RUN rm -f /usr/local/bin/powerpipe /home/powerpipe/powerpipe && \
     cp /usr/local/bin/powerpipe /home/powerpipe/powerpipe && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
+ENTRYPOINT ["/usr/local/bin/start.sh"]
+CMD ["powerpipe", "server", "--ip", "0.0.0.0", "--port", "9033"]
