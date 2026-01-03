@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment Pilot</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f4f9; padding: 20px; max-width: 600px; margin: 0 auto; }
+        h1 { text-align: center; color: #333; }
+        .app-card { background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 15px; padding: 15px; display: flex; align-items: center; justify-content: space-between; }
+        .app-info { flex-grow: 1; }
+        .app-name { font-weight: bold; font-size: 1.1em; margin-bottom: 5px; display: block; }
+        .app-ns { font-size: 0.8em; color: #666; }
+        .status { font-weight: bold; font-size: 0.9em; padding: 4px 8px; border-radius: 4px; margin-right: 15px; }
+        .status-on { background: #d4edda; color: #155724; }
+        .status-off { background: #f8d7da; color: #721c24; }
+        .btn-group { display: flex; gap: 5px; }
+        button { border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-start { background: #28a745; color: white; opacity: 0.8; }
+        .btn-stop { background: #dc3545; color: white; opacity: 0.8; }
+        .btn-start:hover, .btn-stop:hover { opacity: 1; }
+        form { margin: 0; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Deployment Pilot</h1>
+    {% for app in apps %}
+    <div class="app-card">
+        <div class="app-info">
+            <span class="app-name">{{ app.name }}</span>
+            <span class="app-ns">{{ app.namespace }}</span>
+        </div>
+        
+        {% if app.current != "0" %}
+            <span class="status status-on">RUNNING ({{ app.current }})</span>
+        {% else %}
+            <span class="status status-off">STOPPED</span>
+        {% endif %}
+        
+        <div class="btn-group">
+            <form action="/scale/{{ app.name }}/1" method="post">
+                <button type="submit" class="btn-start">Start</button>
+            </form>
+            <form action="/scale/{{ app.name }}/0" method="post">
+                <button type="submit" class="btn-stop">Stop</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>
