@@ -13,5 +13,7 @@ RUN rm -f /usr/local/bin/powerpipe /home/powerpipe/powerpipe && \
 COPY start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
 
+WORKDIR /home/powerpipe
+
 ENTRYPOINT ["/usr/local/bin/start.sh"]
-CMD ["powerpipe", "server", "--ip", "0.0.0.0", "--port", "9033"]
+CMD ["powerpipe", "server", "--listen", "network", "--port", "9033"]
