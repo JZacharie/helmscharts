@@ -25,6 +25,11 @@ jobs:
       - name: Verify Git Remote
         run: git remote -v
 
+      - name: Add Helm Repositories
+        run: |
+          helm repo add bjw-s https://bjw-s-labs.github.io/helm-charts
+          helm repo add zekker6 https://zekker6.github.io/helm-charts
+
       - name: Update Helm dependencies
         run: helm dependency update charts/appflowy
 
@@ -53,7 +58,8 @@ jobs:
           
           for pkg in .cr-release-packages/*.tgz; do
             if [ -f "$pkg" ]; then
-              helm push "$pkg" oci://ghcr.io/${{ github.repository_owner }}/charts
+              OWNER_LOWER="$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')"
+              helm push "$pkg" oci://ghcr.io/$OWNER_LOWER/charts
             fi
           done
 
