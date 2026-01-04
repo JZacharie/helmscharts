@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.14-slim
 
 # Install kubectl
 RUN apt-get update && apt-get install -y curl && \
