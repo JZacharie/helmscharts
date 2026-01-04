@@ -1,0 +1,43 @@
+image:
+  repository: ghcr.io/jzacharie/keda-waiting-page
+  pullPolicy: Always
+  tag: "latest"
+
+replicaCount: 2
+
+serviceAccount:
+  create: true
+  name: "keda-waiting-page"
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  hosts:
+    - host: keda-status.p.zacharie.org
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: keda-waiting-page-tls
+      hosts:
+        - keda-status.p.zacharie.org
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
+
+rbac:
+  create: true
