@@ -1,0 +1,47 @@
+{{- if .Values.vault.enabled -}}
+{{- if .Values.vault.auth.token }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.vault.auth.secretName }}
+  namespace: {{ .Release.Namespace }}
+type: Opaque
+stringData:
+  {{ .Values.vault.auth.secretKey }}: {{ .Values.vault.auth.token | quote }}
+---
+{{- end }}
+apiVersion: external-secrets.io/v1beta1
+kind: SecretStore
+metadata:
+  name: {{ include "maintenance.fullname" . }}-vault
+  namespace: {{ .Release.Namespace }}
+spec:
+  provider:
+    vault:
+      server: {{ .Values.vault.address | quote }}
+      path: {{ .Values.vault.mountPath | quote }}
+      version: v2
+      auth:
+        tokenSecretRef:
+          name: {{ .Values.vault.auth.secretName }}
+          key: {{ .Values.vault.auth.secretKey }}
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: ssh-key
+  namespace: {{ .Release.Namespace }}
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    name: {{ include "maintenance.fullname" . }}-vault
+    kind: SecretStore
+  target:
+    name: ssh-key
+    creationPolicy: Owner
+  data:
+  - secretKey: id_rsa
+    remoteRef:
+      key: {{ .Values.vault.secretPath }}
+      property: {{ .Values.vault.secretKey }}
+{{- end }}

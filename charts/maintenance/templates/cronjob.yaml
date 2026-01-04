@@ -1,0 +1,137 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "maintenance.fullname" . }}-node
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "maintenance.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "maintenance.selectorLabels" . | nindent 12 }}
+        spec:
+          serviceAccountName: {{ .Values.serviceAccount.name | default (include "maintenance.fullname" .) }}
+          restartPolicy: OnFailure
+          containers:
+          - name: maintenance
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            command: ["/bin/sh"]
+            args:
+            - -c
+            - |
+              set -e
+              
+              echo "=== Node Maintenance Job Started at $(date) ==="
+              
+              # Fix Alpine SSL issues by using http repositories temporarily
+              sed -i 's/https/http/g' /etc/apk/repositories
+              
+              # Install required packages
+              apk add --no-cache ca-certificates openssh-client curl
+              
+              # Restore https repositories
+              sed -i 's/http:/https:/g' /etc/apk/repositories
+              
+              # Setup SSH key with correct permissions
+              mkdir -p /root/.ssh
+              cp /ssh-key/id_rsa /root/.ssh/id_rsa
+              chmod 600 /root/.ssh/id_rsa
+              
+              # Install kubectl
+              curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+              chmod +x kubectl
+              mv kubectl /usr/local/bin/
+              
+              # Get all node IPs
+              echo "=== Discovering cluster nodes ==="
+              NODE_IPS=$(kubectl get nodes -o jsonpath='{range .items[*]}{.status.addresses[?(@.type=="InternalIP")].address}{"\n"}{end}')
+              
+              echo "Found nodes:"
+              echo "$NODE_IPS"
+              
+              # Process each node
+              for NODE_IP in $NODE_IPS; do
+                echo ""
+                echo "=== Processing node: $NODE_IP ==="
+                
+                # Get node name for logging
+                NODE_NAME=$(kubectl get nodes -o jsonpath="{.items[?(@.status.addresses[0].address==\"$NODE_IP\")].metadata.name}")
+                echo "Node name: $NODE_NAME"
+                
+                # Check if SSH is accessible
+                if ! ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 -i /root/.ssh/id_rsa joseph@$NODE_IP "echo 'SSH connection successful'" 2>/dev/null; then
+                  echo "ERROR: Cannot connect to $NODE_IP via SSH, skipping..."
+                  continue
+                fi
+                
+                # Detect OS type
+                OS_INFO=$(ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "cat /etc/os-release" 2>/dev/null || echo "")
+                
+                # Check if it's a read-only system (Kairos)
+                IS_READONLY=$(ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "mount | grep -q 'on / type overlay' && echo 'true' || echo 'false'" 2>/dev/null || echo "false")
+                
+                echo "OS Info: $(echo "$OS_INFO" | grep PRETTY_NAME || echo 'Unknown')"
+                echo "Read-only filesystem: $IS_READONLY"
+                
+                # === Image Cleanup ===
+                echo "--- Cleaning up unused container images ---"
+                if ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "sudo crictl rmi --prune" 2>&1; then
+                  echo "✓ Image cleanup completed successfully"
+                else
+                  echo "✗ Image cleanup failed"
+                fi
+                
+                # === Package Updates ===
+                if [ "$IS_READONLY" = "true" ]; then
+                  echo "--- Skipping package updates (read-only system) ---"
+                  echo "Note: For Kairos systems, use Kubernetes-based upgrades: https://kairos.io/docs/upgrade/kubernetes/"
+                else
+                  # Detect package manager
+                  if echo "$OS_INFO" | grep -qi "debian\|ubuntu"; then
+                    echo "--- Updating Debian/Ubuntu packages ---"
+                    
+                    # Update package lists
+                    if ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "sudo apt-get update" 2>&1; then
+                      echo "✓ Package lists updated"
+                    else
+                      echo "✗ Failed to update package lists"
+                      continue
+                    fi
+                    
+                    # Upgrade packages (non-interactive)
+                    if ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold'" 2>&1; then
+                      echo "✓ Packages upgraded successfully"
+                    else
+                      echo "✗ Package upgrade failed"
+                    fi
+                    
+                    # Clean up
+                    ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "sudo apt-get autoremove -y && sudo apt-get clean" 2>&1 || true
+                    echo "✓ Package cleanup completed"
+                  else
+                    echo "--- Unsupported OS for package updates ---"
+                  fi
+                fi
+                
+                echo "=== Completed maintenance for $NODE_IP ==="
+              done
+              
+              echo ""
+              echo "=== Node Maintenance Job Completed at $(date) ==="
+            volumeMounts:
+            - name: ssh-key
+              mountPath: /ssh-key
+              readOnly: true
+          volumes:
+          - name: ssh-key
+            secret:
+              secretName: ssh-key
+              defaultMode: 0400

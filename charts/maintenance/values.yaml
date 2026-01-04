@@ -1,0 +1,30 @@
+image:
+  repository: alpine
+  tag: latest
+  pullPolicy: IfNotPresent
+
+schedule: "0 3 * * *"
+
+serviceAccount:
+  create: true
+  # The name of the service account to be used
+  # If not set and create is true, a name is generated using the fullname template
+  name: "image-cleanup"
+
+vault:
+  enabled: true
+  address: "https://vault.p.zacharie.org"
+  mountPath: "secret"
+  # The path in Vault where the secret is stored (e.g. secret/data/maintenance/ssh-key -> maintenance/ssh-key)
+  secretPath: "maintenance/ssh-key"
+  # The key in the Vault secret that contains the PRIVATE KEY content
+  secretKey: "id_rsa"
+  
+  auth:
+    # If set, a Secret will be created with this token.
+    # If empty, you must ensure the secret referenced by secretName exists.
+    token: ""
+    # The name of the secret containing the Vault token
+    secretName: "vault-token"
+    # The key in the secret containing the token
+    secretKey: "token"
