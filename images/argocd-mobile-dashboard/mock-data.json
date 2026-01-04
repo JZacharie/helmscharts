@@ -1,0 +1,54 @@
+[
+    {
+        "metadata": {
+            "name": "guestbook"
+        },
+        "status": {
+            "sync": {
+                "status": "Synced"
+            },
+            "health": {
+                "status": "Healthy"
+            }
+        }
+    },
+    {
+        "metadata": {
+            "name": "payment-service"
+        },
+        "status": {
+            "sync": {
+                "status": "OutOfSync"
+            },
+            "health": {
+                "status": "Degraded"
+            }
+        }
+    },
+    {
+        "metadata": {
+            "name": "inventory"
+        },
+        "status": {
+            "sync": {
+                "status": "Unknown"
+            },
+            "health": {
+                "status": "Missing"
+            }
+        }
+    },
+    {
+        "metadata": {
+            "name": "frontend"
+        },
+        "status": {
+            "sync": {
+                "status": "Synced"
+            },
+            "health": {
+                "status": "Healthy"
+            }
+        }
+    }
+]

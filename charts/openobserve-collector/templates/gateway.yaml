@@ -1,0 +1,76 @@
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: {{ include "openobserve-collector.fullname" . }}-gateway
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "openobserve-collector.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.gateway.autoscaler }}
+  autoscaler:
+    {{- toYaml .Values.gateway.autoscaler | nindent 4 }}
+  {{- else }}
+  replicas: {{ .Values.gateway.replicas | default 1 }}
+  {{- end }}
+  mode: statefulset
+  {{- if .Values.gateway.targetAllocator.enabled }}
+  targetAllocator:
+    enabled: true
+    serviceAccount: {{ include "openobserve-collector.serviceAccountName" . }}
+    {{- with .Values.gateway.targetAllocator.resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    prometheusCR:
+      enabled: true
+      serviceMonitorSelector: {}
+      podMonitorSelector: {}
+  {{- end }}
+  serviceAccount: {{ include "openobserve-collector.serviceAccountName" . }}
+  image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+  env:
+    - name: K8S_NODE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    - name: K8S_NODE_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.hostIP
+  {{- with .Values.gateway.env }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.gateway.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.gateway.nodeSelector }}
+  nodeSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.gateway.affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.gateway.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  config:
+    receivers:
+      {{- toYaml .Values.gateway.receivers | nindent 6 }}
+    connectors:
+      {{- toYaml .Values.gateway.connectors | nindent 6 }}
+    processors:
+      attributes:
+        actions:
+          - key: k8s_cluster
+            action: insert
+            value: {{ .Values.k8sCluster | quote }}
+      {{- toYaml .Values.gateway.processors | nindent 6 }}
+    extensions:
+      {{- toYaml .Values.gateway.extensions | nindent 6 }}
+    exporters:
+      {{- toYaml .Values.exporters | nindent 6 }}
+    service:
+      {{- toYaml .Values.gateway.service | nindent 6 }}

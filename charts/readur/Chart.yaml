@@ -1,32 +1,31 @@
-apiVersion: v2
-type: application
-name: readur
-home: https://github.com/readur/readur
-icon: https://github.com/readur/readur/blob/main/assets/icon.png
-deprecated: false
-description: |-
-  Readur is a document management and OCR processing service that automatically processes uploaded documents, extracts text using OCR, and makes content searchable.
 annotations:
   category: Document Management
-version: 0.2.6
+apiVersion: v2
 appVersion: latest
-kubeVersion: ">= 1.19"
 dependencies:
-  - name: common
-    repository: https://bjw-s-labs.github.io/helm-charts
-    version: 4.5.0
+- name: common
+  repository: https://bjw-s-labs.github.io/helm-charts
+  version: 4.1.2
+description: Readur is a document management and OCR processing service that automatically
+  processes uploaded documents, extracts text using OCR, and makes content searchable.
+home: https://github.com/readur/readur
+icon: https://github.com/readur/readur/blob/main/assets/icon.png
 keywords:
-  - document-management
-  - ocr
-  - text-extraction
-  - file-processing
-  - rust
-  - self-hosted
-  - document-search
-  - pdf
-  - tesseract
+- document-management
+- ocr
+- text-extraction
+- file-processing
+- rust
+- self-hosted
+- document-search
+- pdf
+- tesseract
+kubeVersion: '>= 1.19'
 maintainers:
-  - name: readur
-    url: https://github.com/readur/readur
+- name: readur
+  url: https://github.com/readur/readur
+name: readur
 sources:
-  - https://github.com/readur/readur
+- https://github.com/readur/readur
+type: application
+version: 0.2.6

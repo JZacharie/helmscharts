@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Démarrage en cours...</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="background">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="spinner-container">
+                    <svg class="spinner" viewBox="0 0 50 50">
+                        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>
+                    </svg>
+                </div>
+                <h1 class="title">Démarrage de l'application</h1>
+                <p class="subtitle" id="app-name">Chargement...</p>
+            </div>
+
+            <div class="status-section">
+                <div class="status-item">
+                    <div class="status-label">Statut du Pod</div>
+                    <div class="status-value" id="pod-status">
+                        <span class="status-badge pending">Initialisation</span>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Temps écoulé</div>
+                    <div class="status-value" id="elapsed-time">0s</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Réplicas</div>
+                    <div class="status-value" id="replica-count">0/1</div>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-label">
+                    <span>Progression</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <div class="logs-section">
+                <div class="logs-header">
+                    <h3>Logs du Pod</h3>
+                    <button class="btn-toggle" id="toggle-logs">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="logs-container" id="logs-container">
+                    <div class="log-line">En attente des logs du pod...</div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <svg class="info-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5" />
+                    <path d="M10 6V10M10 14H10.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <p class="info-text">
+                    L'application démarre automatiquement. Vous serez redirigé dès qu'elle sera prête.
+                </p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Propulsé par KEDA • Kubernetes Event-Driven Autoscaling</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

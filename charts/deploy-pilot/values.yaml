@@ -1,0 +1,64 @@
+appsConfig:
+- kind: Deployment
+  name: k8sgpt
+  namespace: k8sgpt
+- kind: Deployment
+  name: lobe-chat
+  namespace: lobe-chat
+- kind: Deployment
+  name: open-webui
+  namespace: open-webui
+- kind: Deployment
+  name: code-server
+  namespace: devsecops
+- kind: Deployment
+  name: cyberchef
+  namespace: cyberchef
+- kind: Deployment
+  name: swaggerui
+  namespace: swaggerui
+- kind: Deployment
+  name: cloudbeaver
+  namespace: cloudbeaver
+- kind: Deployment
+  name: it-tools
+  namespace: it-tools
+- kind: Deployment
+  name: permission-manager
+  namespace: permission-manager
+- kind: Deployment
+  name: pgadmin4
+  namespace: sandbox
+- kind: Deployment
+  name: browserless-chrome
+  namespace: browserless-chrome
+- kind: Deployment
+  name: tika
+  namespace: tika
+- kind: Deployment
+  name: devdocs
+  namespace: devdocs
+- kind: Deployment
+  name: convertx
+  namespace: convertx
+image:
+  pullPolicy: Always
+  repository: ghcr.io/jzacharie/deploy-pilot
+  tag: latest
+ingress:
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: default-basicauthmiddleware@kubernetescrd
+  className: traefik
+  enabled: true
+  hosts:
+  - host: pilot.p.zacharie.org
+    paths:
+    - path: /
+      pathType: ImplementationSpecific
+resources: {}
+service:
+  port: 80
+  type: ClusterIP
+serviceAccount:
+  create: true
+  name: deploy-pilot-sa
