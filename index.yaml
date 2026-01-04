@@ -2,31 +2,31 @@ apiVersion: v1
 entries:
   appflowy:
   - apiVersion: v2
-    created: "2025-12-24T06:08:24.840262509Z"
+    created: '2025-12-24T06:08:24.840262509Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.4
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.10
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.3
     description: AppFlowy Cloud Helm Chart
     digest: 9c76327af62d15e943c8521eafef6dd7ffa26e50a2642d82575ff8b32b28aa85
@@ -36,31 +36,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.3.13/appflowy-0.3.13.tgz
     version: 0.3.13
   - apiVersion: v2
-    created: "2025-12-24T06:01:11.090819285Z"
+    created: '2025-12-24T06:01:11.090819285Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.4
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.9
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.3
     description: AppFlowy Cloud Helm Chart
     digest: 096694fa238b8fa84a324b6935f6c537f279d4f6f768136fcfdb345ae75133bd
@@ -70,31 +70,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.3.12/appflowy-0.3.12.tgz
     version: 0.3.12
   - apiVersion: v2
-    created: "2025-12-24T05:56:54.885645082Z"
+    created: '2025-12-24T05:56:54.885645082Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.4
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.9
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.3
     description: AppFlowy Cloud Helm Chart
     digest: aaf66ed395b20e76ed081ffc978e44374d1648af554a49ec19ea393b4d60c787
@@ -104,31 +104,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.3.11/appflowy-0.3.11.tgz
     version: 0.3.11
   - apiVersion: v2
-    created: "2025-12-24T05:53:04.953181353Z"
+    created: '2025-12-24T05:53:04.953181353Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.4
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.9
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.3
     description: AppFlowy Cloud Helm Chart
     digest: ae973aaec412eff277ee44eb1f0e5cce81f92f3f0512e0fcb9ead13d402fab7a
@@ -138,31 +138,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.3.10/appflowy-0.3.10.tgz
     version: 0.3.10
   - apiVersion: v2
-    created: "2025-12-24T05:49:10.402414972Z"
+    created: '2025-12-24T05:49:10.402414972Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.4
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.8
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.3
     description: AppFlowy Cloud Helm Chart
     digest: e45d5383d587c6f066321da961137d5241e2368f2bdf23efce9cca5899677de7
@@ -172,31 +172,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.3.9/appflowy-0.3.9.tgz
     version: 0.3.9
   - apiVersion: v2
-    created: "2025-12-24T05:45:42.299014835Z"
+    created: '2025-12-24T05:45:42.299014835Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.4
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.8
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.3
     description: AppFlowy Cloud Helm Chart
     digest: 23296e49fde0c0d775891258faa4be351ab07a6b283ff51bd015751745bbf016
@@ -206,31 +206,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.3.8/appflowy-0.3.8.tgz
     version: 0.3.8
   - apiVersion: v2
-    created: "2025-12-24T05:36:52.84615447Z"
+    created: '2025-12-24T05:36:52.84615447Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.8
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.3
     description: AppFlowy Cloud Helm Chart
     digest: 7855cbf44852b48b99078ec2eceb19a324a8b3067b664ff3950a01620c315b3a
@@ -240,31 +240,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.3.7/appflowy-0.3.7.tgz
     version: 0.3.7
   - apiVersion: v2
-    created: "2025-12-24T05:34:32.195188843Z"
+    created: '2025-12-24T05:34:32.195188843Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.8
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.3
     description: AppFlowy Cloud Helm Chart
     digest: 3f1c5eb2242585ba7e224026a1c698ffec92938cfb2e10668834901d06f409ff
@@ -274,31 +274,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.3.6/appflowy-0.3.6.tgz
     version: 0.3.6
   - apiVersion: v2
-    created: "2025-12-24T05:18:08.106508521Z"
+    created: '2025-12-24T05:18:08.106508521Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.4
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.4
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.7
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.3
     description: AppFlowy Cloud Helm Chart
     digest: 32a05d9c9dc538ce926a06adc30c37ecb88d73bb80c3625d922d6341596ffa87
@@ -308,31 +308,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.3.5/appflowy-0.3.5.tgz
     version: 0.3.5
   - apiVersion: v2
-    created: "2025-12-24T05:02:50.94012295Z"
+    created: '2025-12-24T05:02:50.94012295Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.6
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.3
     description: AppFlowy Cloud Helm Chart
     digest: e9613fefb1c9ebc223913e6d4e70bfdd37e857de0ae52479acff3f74ac2ee11e
@@ -342,31 +342,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.3.4/appflowy-0.3.4.tgz
     version: 0.3.4
   - apiVersion: v2
-    created: "2025-12-24T04:50:43.918725957Z"
+    created: '2025-12-24T04:50:43.918725957Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.5
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.3
     description: AppFlowy Cloud Helm Chart
     digest: 6f535ce5ecc691ef2a76791950ed8d89f67fa63caf4aecb6148d89d9a445fe61
@@ -376,31 +376,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.3.3/appflowy-0.3.3.tgz
     version: 0.3.3
   - apiVersion: v2
-    created: "2025-12-23T10:47:38.650513455Z"
+    created: '2025-12-23T10:47:38.650513455Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.3
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.3
     description: AppFlowy Cloud Helm Chart
     digest: 99e2bd77373dc56c080fd6fea96341cf0d1ea2c2c17d1fe056b66aa109218a91
@@ -410,31 +410,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.3.2/appflowy-0.3.2.tgz
     version: 0.3.2
   - apiVersion: v2
-    created: "2025-12-23T09:50:23.842457734Z"
+    created: '2025-12-23T09:50:23.842457734Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.2
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.2
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.2
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.2
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.2
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.2
     description: AppFlowy Cloud Helm Chart
     digest: 403fdfea7707ab754025c4c8254f75a1b5544252d82aed12a380cfc3347d4a70
@@ -444,31 +444,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.3.1/appflowy-0.3.1.tgz
     version: 0.3.1
   - apiVersion: v2
-    created: "2025-11-02T16:57:33.991587241Z"
+    created: '2025-11-02T16:57:33.991587241Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.1
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.1
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.1
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.1
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.1
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.1
     description: AppFlowy Cloud Helm Chart
     digest: ea9c5ba3afdd0bdb45dbf5d5c4577386853dec9921d4a904edd781aa405a2c52
@@ -478,31 +478,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.3.0/appflowy-0.3.0.tgz
     version: 0.3.0
   - apiVersion: v2
-    created: "2025-11-02T09:04:01.264084372Z"
+    created: '2025-11-02T09:04:01.264084372Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.1
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.1
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.1
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.1
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.1
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.1
     description: AppFlowy Cloud Helm Chart
     digest: 893b2a6f88058bedc5ddf6c455552f301799a047985591d9cefffe5ad9b211fe
@@ -512,31 +512,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.2.4/appflowy-0.2.4.tgz
     version: 0.2.4
   - apiVersion: v2
-    created: "2025-11-02T09:01:32.243348221Z"
+    created: '2025-11-02T09:01:32.243348221Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.1
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.1
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.1
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.1
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.1
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.1
     description: AppFlowy Cloud Helm Chart
     digest: 627df657d2c6c6641d7a27aeefe64b00fd00463e6ddc583a102c7de3c1970a35
@@ -546,31 +546,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.2.3/appflowy-0.2.3.tgz
     version: 0.2.3
   - apiVersion: v2
-    created: "2025-11-02T08:54:57.10599976Z"
+    created: '2025-11-02T08:54:57.10599976Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.0
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.0
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.0
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.0
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.0
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.0
     description: AppFlowy Cloud Helm Chart
     digest: 50c53767285e70b8d6326cf779daeff13c3968bfb61804bfef5168cd7a5320e8
@@ -580,31 +580,31 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/appflowy-0.2.2/appflowy-0.2.2.tgz
     version: 0.2.2
   - apiVersion: v2
-    created: "2025-11-02T08:37:16.997701091Z"
+    created: '2025-11-02T08:37:16.997701091Z'
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
-      repository: ""
+      repository: ''
       version: 0.1.0
     - condition: appflowy-gotrue.enabled
       name: appflowy-gotrue
-      repository: ""
+      repository: ''
       version: 0.1.0
     - condition: appflowy-admin.enabled
       name: appflowy-admin
-      repository: ""
+      repository: ''
       version: 0.1.0
     - condition: appflowy-worker.enabled
       name: appflowy-worker
-      repository: ""
+      repository: ''
       version: 0.1.0
     - condition: appflowy-web.enabled
       name: appflowy-web
-      repository: ""
+      repository: ''
       version: 0.1.0
     - condition: global.ai.enabled
       name: appflowy-ai
-      repository: ""
+      repository: ''
       version: 0.1.0
     description: AppFlowy Cloud Helm Chart
     digest: fa62b0999783aecf3c5312499cb9e8b98345bd2222df0a7f59f51037caf3059f
@@ -616,7 +616,7 @@ entries:
   appflowy-cloud:
   - apiVersion: v2
     appVersion: latest
-    created: "2025-10-30T07:58:35.482874976Z"
+    created: '2025-10-30T07:58:35.482874976Z'
     description: Helm chart for AppFlowy Cloud
     digest: 6659d4d209ce17f17b30711d92e94f15d447fbb81a761149750490c8882b51b5
     name: appflowy-cloud
@@ -627,7 +627,7 @@ entries:
   appflowy-sbx:
   - apiVersion: v2
     appVersion: latest
-    created: "2025-12-24T08:56:25.817175601Z"
+    created: '2025-12-24T08:56:25.817175601Z'
     description: AppFlowy Cloud Sandbox - Custom chart based on docker-compose.yml
     digest: 71eaed606056ab3fab59e96b6c6653a1239f86274fec70ac6017362cc28e64c5
     keywords:
@@ -645,7 +645,7 @@ entries:
   argocd-mobile-dashboard:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-01-04T07:32:36.574761915Z"
+    created: '2026-01-04T07:32:36.574761915Z'
     description: A mobile dashboard for ArgoCD
     digest: fa426b20d6137d5e348242ab1347b1605b652d5cb732d60bb737c5fb15f88d2c
     name: argocd-mobile-dashboard
@@ -653,69 +653,13 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/argocd-mobile-dashboard-0.1.0/argocd-mobile-dashboard-0.1.0.tgz
     version: 0.1.0
-  bolt-diy:
-  - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update bolt-diy/bolt-diy docker tag to v1.7.0
-    apiVersion: v2
-    appVersion: 1.7.0
-    created: "2025-03-07T15:12:56.066369006Z"
-    dependencies:
-    - name: common
-      repository: https://zekker6.github.io/helm-charts
-      version: 0.5.2
-    description: bolt-diy helm package
-    digest: f1e04c50c9331574cdf65809af08df8b5c0a1e317aa24b61abffd9c514cb85ce
-    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/bolt-diy
-    icon: https://www.bolt-diy.co/favicon-32x32.png
-    kubeVersion: '>=1.16.0-0'
-    maintainers:
-    - email: me@zekker.dev
-      name: zekker6
-      url: https://github.com/zekker6/
-    name: bolt-diy
-    sources:
-    - https://github.com/bolt-diyco/bolt-diy
-    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/bolt-diy
-    urls:
-    - https://github.com/JZacharie/helmscharts/releases/download/bolt-diy-0.1.1/bolt-diy-0.1.1.tgz
-    version: 0.1.1
-  - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update bolt-diy/bolt-diy docker tag to v1.7.0
-    apiVersion: v2
-    appVersion: 1.7.0
-    created: "2025-02-25T14:22:32.918593412Z"
-    dependencies:
-    - name: common
-      repository: https://zekker6.github.io/helm-charts
-      version: 0.5.2
-    description: bolt-diy helm package
-    digest: ffb97d04cfcfea14ff234e6eb955f1c48e58ca97c4691528b7dcf8ff0a56e8ef
-    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/bolt-diy
-    icon: https://www.bolt-diy.co/favicon-32x32.png
-    kubeVersion: '>=1.16.0-0'
-    maintainers:
-    - email: me@zekker.dev
-      name: zekker6
-      url: https://github.com/zekker6/
-    name: bolt-diy
-    sources:
-    - https://github.com/bolt-diyco/bolt-diy
-    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/bolt-diy
-    urls:
-    - https://github.com/JZacharie/helmscharts/releases/download/bolt-diy-0.1.0/bolt-diy-0.1.0.tgz
-    version: 0.1.0
   chartdb:
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update chartdb/chartdb docker tag to v1.7.0
+      artifacthub.io/changes: "- kind: changed\n  description: update chartdb/chartdb\
+        \ docker tag to v1.7.0"
     apiVersion: v2
     appVersion: 1.7.0
-    created: "2025-02-21T05:35:06.131758092Z"
+    created: '2025-02-21T05:35:06.131758092Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -738,17 +682,13 @@ entries:
     version: 1.7.2
   common:
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update ghcr.io/coder/code-server to 4.93.1
-        - kind: changed
-          description: update docker.io/grafana/promtail to 3.2.1
-        - kind: changed
-          description: update docker.io/qmcgaw/gluetun to v3.39.1
-        - kind: fixed
-          description: properly handle empty paths in ingress configuration
+      artifacthub.io/changes: "- kind: changed\n  description: update ghcr.io/coder/code-server\
+        \ to 4.93.1\n- kind: changed\n  description: update docker.io/grafana/promtail\
+        \ to 3.2.1\n- kind: changed\n  description: update docker.io/qmcgaw/gluetun\
+        \ to v3.39.1\n- kind: fixed\n  description: properly handle empty paths in\
+        \ ingress configuration"
     apiVersion: v2
-    created: "2025-02-18T05:35:16.104322124Z"
+    created: '2025-02-18T05:35:16.104322124Z'
     description: Function library for Helm charts
     digest: dbc85cf83ca0495032b3b74732450c41ada05c755c94e8b51b995ec8bde2ae77
     home: https://github.com/zekker6/helm-charts/tree/main/charts/library/common
@@ -766,17 +706,13 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2/common-0.5.2.tgz
     version: 0.5.2
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update ghcr.io/coder/code-server to 4.93.1
-        - kind: changed
-          description: update docker.io/grafana/promtail to 3.2.1
-        - kind: changed
-          description: update docker.io/qmcgaw/gluetun to v3.39.1
-        - kind: fixed
-          description: properly handle empty paths in ingress configuration
+      artifacthub.io/changes: "- kind: changed\n  description: update ghcr.io/coder/code-server\
+        \ to 4.93.1\n- kind: changed\n  description: update docker.io/grafana/promtail\
+        \ to 3.2.1\n- kind: changed\n  description: update docker.io/qmcgaw/gluetun\
+        \ to v3.39.1\n- kind: fixed\n  description: properly handle empty paths in\
+        \ ingress configuration"
     apiVersion: v2
-    created: "2025-10-19T05:47:20.270917698Z"
+    created: '2025-10-19T05:47:20.270917698Z'
     description: Function library for Helm charts
     digest: 01abb6339b5aa0d3a18e142a25b281ab358c0d6ea3c7ae0102be6882a446e57a
     home: https://github.com/zekker6/helm-charts/tree/main/charts/library/common
@@ -793,44 +729,13 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
     version: 0.5.2-rc
-  crewai:
-  - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update wud/wud docker tag to v2.9.3
-    apiVersion: v2
-    appVersion: 8.0.1
-    created: "2025-02-28T05:46:48.364667274Z"
-    dependencies:
-    - name: common
-      repository: https://zekker6.github.io/helm-charts
-      version: 0.5.2
-    description: wud helm package
-    digest: ba8eee55383c0931550b6997e8a316627454f81a724d8ef1914214f25b2988ab
-    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/wud
-    icon: https://www.wud.co/favicon-32x32.png
-    keywords:
-    - docker
-    kubeVersion: '>=1.16.0-0'
-    maintainers:
-    - email: me@zekker.dev
-      name: zekker6
-      url: https://github.com/zekker6/
-    name: crewai
-    sources:
-    - https://github.com/wudco/wud
-    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/wud
-    urls:
-    - https://github.com/JZacharie/helmscharts/releases/download/crewai-1.0.0/crewai-1.0.0.tgz
-    version: 1.0.0
   cursor:
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update cursor/cursor docker tag to v1.7.0
+      artifacthub.io/changes: "- kind: changed\n  description: update cursor/cursor\
+        \ docker tag to v1.7.0"
     apiVersion: v2
     appVersion: 1.7.0
-    created: "2025-03-11T05:49:02.353603085Z"
+    created: '2025-03-11T05:49:02.353603085Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -854,7 +759,7 @@ entries:
   deploy-pilot:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-01-04T07:32:36.732525668Z"
+    created: '2026-01-04T07:32:36.732525668Z'
     description: A Helm chart for Deployment Pilot
     digest: 5fb86e33c6752be27cbf97f0060ca357b011d44be3983763796922bb7cd94b0a
     name: deploy-pilot
@@ -864,12 +769,11 @@ entries:
     version: 0.1.0
   faster-whisper:
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update faster-whisper/faster-whisper docker tag to 2.4.0
+      artifacthub.io/changes: "- kind: changed\n  description: update faster-whisper/faster-whisper\
+        \ docker tag to 2.4.0"
     apiVersion: v2
     appVersion: 2.4.0
-    created: "2025-02-18T18:26:36.128057708Z"
+    created: '2025-02-18T18:26:36.128057708Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -895,12 +799,11 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/faster-whisper-2.4.3/faster-whisper-2.4.3.tgz
     version: 2.4.3
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update faster-whisper/faster-whisper docker tag to 2.4.0
+      artifacthub.io/changes: "- kind: changed\n  description: update faster-whisper/faster-whisper\
+        \ docker tag to 2.4.0"
     apiVersion: v2
     appVersion: 2.4.0
-    created: "2025-02-18T18:18:11.142961889Z"
+    created: '2025-02-18T18:18:11.142961889Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -925,69 +828,10 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/faster-whisper-2.4.2/faster-whisper-2.4.2.tgz
     version: 2.4.2
-  foxops:
-  - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update foxops/foxops docker tag to v2.9.3
-    apiVersion: v2
-    appVersion: 8.0.1
-    created: "2025-04-26T04:30:02.051772383Z"
-    dependencies:
-    - name: common
-      repository: https://zekker6.github.io/helm-charts
-      version: 0.5.2
-    description: foxops helm package
-    digest: 119bea4fc3416b830eb2488587dcd51f32c3d776685e23944ba917700b045dc7
-    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/foxops
-    icon: https://www.foxops.co/favicon-32x32.png
-    keywords:
-    - docker
-    kubeVersion: '>=1.16.0-0'
-    maintainers:
-    - email: me@zekker.dev
-      name: zekker6
-      url: https://github.com/zekker6/
-    name: foxops
-    sources:
-    - https://github.com/foxopsco/foxops
-    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/foxops
-    urls:
-    - https://github.com/JZacharie/helmscharts/releases/download/foxops-1.0.1/foxops-1.0.1.tgz
-    version: 1.0.1
-  - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update foxops/foxops docker tag to v2.9.3
-    apiVersion: v2
-    appVersion: 8.0.1
-    created: "2025-04-25T16:30:48.251355096Z"
-    dependencies:
-    - name: common
-      repository: https://zekker6.github.io/helm-charts
-      version: 0.5.2
-    description: foxops helm package
-    digest: 8b3ed669012564987bb26aca7f1daf2324ecc03188694bb46ead6404d5afccca
-    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/foxops
-    icon: https://www.foxops.co/favicon-32x32.png
-    keywords:
-    - docker
-    kubeVersion: '>=1.16.0-0'
-    maintainers:
-    - email: me@zekker.dev
-      name: zekker6
-      url: https://github.com/zekker6/
-    name: foxops
-    sources:
-    - https://github.com/foxopsco/foxops
-    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/foxops
-    urls:
-    - https://github.com/JZacharie/helmscharts/releases/download/foxops-1.0.0/foxops-1.0.0.tgz
-    version: 1.0.0
   garage:
   - apiVersion: v2
     appVersion: v1.3.0
-    created: "2025-10-19T05:48:23.526752144Z"
+    created: '2025-10-19T05:48:23.526752144Z'
     description: S3-compatible object store for small self-hosted geo-distributed
       deployments
     digest: e663564514aa20d2f6021bb3061b7d0c7b25ed273f065efb7674c6e96ec3c153
@@ -1007,7 +851,7 @@ entries:
   itop:
   - apiVersion: v2
     appVersion: 3.0.1
-    created: "2025-02-18T05:37:02.532948076Z"
+    created: '2025-02-18T05:37:02.532948076Z'
     description: A Helm chart for Kubernetes
     digest: 1931fbfbe74575b4c6b873c098c6787347d87f9661feb6ed9073daf0e9de0e70
     name: itop
@@ -1017,12 +861,11 @@ entries:
     version: 0.1.0
   linkwarden:
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update linkwarden/linkwarden docker tag to v2.9.3
+      artifacthub.io/changes: "- kind: changed\n  description: update linkwarden/linkwarden\
+        \ docker tag to v2.9.3"
     apiVersion: v2
     appVersion: v2.9.3
-    created: "2025-02-21T05:35:23.712066635Z"
+    created: '2025-02-21T05:35:23.712066635Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -1049,8 +892,8 @@ entries:
     version: 2.9.4
   maker-management-platform:
   - apiVersion: v2
-    appVersion: "1.0"
-    created: "2026-01-04T07:32:36.881178285Z"
+    appVersion: '1.0'
+    created: '2026-01-04T07:32:36.881178285Z'
     description: A Helm chart for Maker Management Platform
     digest: 7b03548f85c0f45c245cbf54247176c9055289703c447282cddea86c3a56c58f
     name: maker-management-platform
@@ -1059,12 +902,11 @@ entries:
     version: 0.1.0
   mem0:
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update mem0/mem0 docker tag to v2.9.3
+      artifacthub.io/changes: "- kind: changed\n  description: update mem0/mem0 docker\
+        \ tag to v2.9.3"
     apiVersion: v2
     appVersion: 8.0.1
-    created: "2025-04-26T04:30:02.136033436Z"
+    created: '2025-04-26T04:30:02.136033436Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -1088,12 +930,11 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/mem0-1.0.1/mem0-1.0.1.tgz
     version: 1.0.1
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update mem0/mem0 docker tag to v2.9.3
+      artifacthub.io/changes: "- kind: changed\n  description: update mem0/mem0 docker\
+        \ tag to v2.9.3"
     apiVersion: v2
     appVersion: 8.0.1
-    created: "2025-04-25T16:29:52.817736457Z"
+    created: '2025-04-25T16:29:52.817736457Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -1119,7 +960,7 @@ entries:
   openai-whisper-asr-webservice:
   - apiVersion: v2
     appVersion: 1.7.0
-    created: "2025-03-07T15:12:56.158455171Z"
+    created: '2025-03-07T15:12:56.158455171Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -1133,7 +974,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: 1.7.0
-    created: "2025-03-07T14:51:40.149903609Z"
+    created: '2025-03-07T14:51:40.149903609Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -1148,7 +989,7 @@ entries:
   openobserve-collector:
   - apiVersion: v2
     appVersion: 0.136.0
-    created: "2026-01-04T07:32:37.025717737Z"
+    created: '2026-01-04T07:32:37.025717737Z'
     description: An opinionated installation of OTEL Collector for OpenObserve (forked
       with custom env support)
     digest: 883154d72bf4c1753c591537213b100f5d0a749d2f612b5eea1df37a2e6ca834
@@ -1163,12 +1004,11 @@ entries:
     version: 0.4.1-custom
   paperless-gpt:
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update paperless-gpt/paperless-gpt docker tag to v1.7.0
+      artifacthub.io/changes: "- kind: changed\n  description: update paperless-gpt/paperless-gpt\
+        \ docker tag to v1.7.0"
     apiVersion: v2
     appVersion: 1.7.0
-    created: "2025-03-23T06:22:55.161503033Z"
+    created: '2025-03-23T06:22:55.161503033Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -1189,27 +1029,12 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/paperless-gpt-0.1.0/paperless-gpt-0.1.0.tgz
     version: 0.1.0
-  polaris:
-  - apiVersion: v2
-    appVersion: 1.7.0
-    created: "2025-06-01T17:18:05.809521422Z"
-    dependencies:
-    - name: common
-      repository: https://zekker6.github.io/helm-charts
-      version: 0.5.2
-    description: polaris helm package
-    digest: 6e6b79c3d9574957c3bf7fd56cd89d508dd5d63bb3869cba8280048abb0e57f0
-    kubeVersion: '>=1.16.0-0'
-    name: polaris
-    urls:
-    - https://github.com/JZacharie/helmscharts/releases/download/polaris-0.1.2/polaris-0.1.2.tgz
-    version: 0.1.2
   readur:
   - annotations:
       category: Document Management
     apiVersion: v2
     appVersion: latest
-    created: "2025-12-18T04:35:43.440173439Z"
+    created: '2025-12-18T04:35:43.440173439Z'
     dependencies:
     - name: common
       repository: https://bjw-s-labs.github.io/helm-charts
@@ -1242,8 +1067,8 @@ entries:
     version: 0.2.6
   scale-manager:
   - apiVersion: v2
-    appVersion: "1.5"
-    created: "2025-12-17T17:35:58.749520143Z"
+    appVersion: '1.5'
+    created: '2025-12-17T17:35:58.749520143Z'
     description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
     digest: 24f68efafeda77417dcd17b8e242983dff200fd3d35e6e2d793b50ab9e706188
     name: scale-manager
@@ -1252,8 +1077,8 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/scale-manager-0.9.5/scale-manager-0.9.5.tgz
     version: 0.9.5
   - apiVersion: v2
-    appVersion: "1.5"
-    created: "2025-11-15T05:21:20.996998205Z"
+    appVersion: '1.5'
+    created: '2025-11-15T05:21:20.996998205Z'
     description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
     digest: 4594d029243d2156de676e6d9b06d8876d5dff982283960984c2ab547fc85dc8
     name: scale-manager
@@ -1262,8 +1087,8 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/scale-manager-0.9.4/scale-manager-0.9.4.tgz
     version: 0.9.4
   - apiVersion: v2
-    appVersion: "1.5"
-    created: "2025-11-15T05:16:26.689797303Z"
+    appVersion: '1.5'
+    created: '2025-11-15T05:16:26.689797303Z'
     description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
     digest: fbd04faa06382f596d3492c0dba840c19ccae65ec0d642b7e7a971aed9899c4b
     name: scale-manager
@@ -1272,8 +1097,8 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/scale-manager-0.9.3/scale-manager-0.9.3.tgz
     version: 0.9.3
   - apiVersion: v2
-    appVersion: "1.5"
-    created: "2025-11-15T05:13:10.038501992Z"
+    appVersion: '1.5'
+    created: '2025-11-15T05:13:10.038501992Z'
     description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
     digest: 3227e10f355245c709022b4b06026b55eb78bee777981e7d595f8834cd23fee5
     name: scale-manager
@@ -1282,8 +1107,8 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/scale-manager-0.9.2/scale-manager-0.9.2.tgz
     version: 0.9.2
   - apiVersion: v2
-    appVersion: "1.5"
-    created: "2025-11-15T05:03:10.551612333Z"
+    appVersion: '1.5'
+    created: '2025-11-15T05:03:10.551612333Z'
     description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
     digest: 9a666ca3626b6cd9e6503640e559fff96a8254c6a3d5051d3bee09ba2edc4158
     name: scale-manager
@@ -1292,8 +1117,8 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/scale-manager-0.9.1/scale-manager-0.9.1.tgz
     version: 0.9.1
   - apiVersion: v2
-    appVersion: "1.5"
-    created: "2025-11-15T04:55:53.116373096Z"
+    appVersion: '1.5'
+    created: '2025-11-15T04:55:53.116373096Z'
     description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
     digest: 2688ba5742d60546e074285634e070e6822563453d314bbf3a76ff47f37ba13f
     name: scale-manager
@@ -1302,8 +1127,8 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/scale-manager-0.9.0/scale-manager-0.9.0.tgz
     version: 0.9.0
   - apiVersion: v2
-    appVersion: "1.5"
-    created: "2025-11-15T04:48:36.744060151Z"
+    appVersion: '1.5'
+    created: '2025-11-15T04:48:36.744060151Z'
     description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
     digest: d07723139885b4f551360d05117ae616f3989e949f22f15a84874559f61e746e
     name: scale-manager
@@ -1312,8 +1137,8 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/scale-manager-0.8.0/scale-manager-0.8.0.tgz
     version: 0.8.0
   - apiVersion: v2
-    appVersion: "1.5"
-    created: "2025-11-15T04:43:01.732319948Z"
+    appVersion: '1.5'
+    created: '2025-11-15T04:43:01.732319948Z'
     description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
     digest: e563fc43750a35b873f3bed9125ca10d302cb853087392530307c8c3e603d6e2
     name: scale-manager
@@ -1322,8 +1147,8 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/scale-manager-0.7.0/scale-manager-0.7.0.tgz
     version: 0.7.0
   - apiVersion: v2
-    appVersion: "1.4"
-    created: "2025-11-15T04:19:37.819044517Z"
+    appVersion: '1.4'
+    created: '2025-11-15T04:19:37.819044517Z'
     description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
     digest: a923d4410f4a139cd49715ec8ac6f6192709c372fd32ee46cf15c7dba5518785
     name: scale-manager
@@ -1332,8 +1157,8 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/scale-manager-0.6.0/scale-manager-0.6.0.tgz
     version: 0.6.0
   - apiVersion: v2
-    appVersion: "1.3"
-    created: "2025-11-15T04:13:35.165580471Z"
+    appVersion: '1.3'
+    created: '2025-11-15T04:13:35.165580471Z'
     description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
     digest: 0e104710474837b360fcc10d10faf1c37c9be6c75b32cdd91bd2e23c6270494d
     name: scale-manager
@@ -1342,8 +1167,8 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/scale-manager-0.5.0/scale-manager-0.5.0.tgz
     version: 0.5.0
   - apiVersion: v2
-    appVersion: "1.2"
-    created: "2025-11-15T04:11:19.772844855Z"
+    appVersion: '1.2'
+    created: '2025-11-15T04:11:19.772844855Z'
     description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
     digest: 0942f725b9c5c07b9f852ebd30ec19fcd37509c58acafe32acb41d28deb6df4e
     name: scale-manager
@@ -1352,8 +1177,8 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/scale-manager-0.4.0/scale-manager-0.4.0.tgz
     version: 0.4.0
   - apiVersion: v2
-    appVersion: "1.1"
-    created: "2025-11-15T04:06:20.998710294Z"
+    appVersion: '1.1'
+    created: '2025-11-15T04:06:20.998710294Z'
     description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
     digest: a9e2fc01f84f744fbd4e5872f62d1627b70bcc4ed49cf2951eb62232aa75e0a0
     name: scale-manager
@@ -1362,8 +1187,8 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/scale-manager-0.3.0/scale-manager-0.3.0.tgz
     version: 0.3.0
   - apiVersion: v2
-    appVersion: "1.0"
-    created: "2025-11-14T07:59:42.998712957Z"
+    appVersion: '1.0'
+    created: '2025-11-14T07:59:42.998712957Z'
     description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
     digest: 00ef6d39d3d9ed5f3093900f9db722a2ece5224291c67307c698200c6ec07529
     name: scale-manager
@@ -1377,7 +1202,7 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-20T19:45:21.842128529Z"
+    created: '2025-12-20T19:45:21.842128529Z'
     description: A Helm chart for Sim - AI agent workflow platform
     digest: 8e7d1fe8d53ee3242ac109ced14c9f40f1baab9e13ee8ff22eccbe15314ae150
     home: https://sim.ai
@@ -1404,7 +1229,7 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-18T22:41:18.541889616Z"
+    created: '2025-12-18T22:41:18.541889616Z'
     description: A Helm chart for Sim - AI agent workflow platform
     digest: 588be397961a90af93353fb133c23672b00e66fcdab1dcccd0c461bf76346001
     home: https://sim.ai
@@ -1428,12 +1253,11 @@ entries:
     version: 0.1.0
   speaches:
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update wud/wud docker tag to v2.9.3
+      artifacthub.io/changes: "- kind: changed\n  description: update wud/wud docker\
+        \ tag to v2.9.3"
     apiVersion: v2
     appVersion: 8.0.1
-    created: "2025-02-21T19:56:13.996271009Z"
+    created: '2025-02-21T19:56:13.996271009Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -1459,7 +1283,7 @@ entries:
   steampipe-powerpipe-kubernetes:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2026-01-03T07:31:32.234674041Z"
+    created: '2026-01-03T07:31:32.234674041Z'
     description: A Helm chart for deploying turbot's Steampipe and Powerpipe to Kubernetes
     digest: 509f4250e7dfeb1f146c40fcf1c8a85532ce9e322beb81278bb5ee6a626bf8df
     name: steampipe-powerpipe-kubernetes
@@ -1469,7 +1293,7 @@ entries:
     version: 0.11.21
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2026-01-02T08:57:00.453385471Z"
+    created: '2026-01-02T08:57:00.453385471Z'
     description: A Helm chart for deploying turbot's Steampipe and Powerpipe to Kubernetes
     digest: bb946f86e9044b8bb6397f9a1b60b95422c0b4f243f81868242611e24317af09
     name: steampipe-powerpipe-kubernetes
@@ -1479,7 +1303,7 @@ entries:
     version: 0.11.20
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2026-01-02T08:35:18.311572061Z"
+    created: '2026-01-02T08:35:18.311572061Z'
     description: A Helm chart for deploying turbot's Steampipe and Powerpipe to Kubernetes
     digest: 4ddd004bc8d3cdfd8c8d84205f4b9cda2a4910d9d529feb6207bb9a3b354e878
     name: steampipe-powerpipe-kubernetes
@@ -1489,7 +1313,7 @@ entries:
     version: 0.11.19
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2026-01-02T08:32:36.444119022Z"
+    created: '2026-01-02T08:32:36.444119022Z'
     description: A Helm chart for deploying turbot's Steampipe and Powerpipe to Kubernetes
     digest: 01d019d3cf6be2eee75806227758f1bd2e497ad6947b7684c67b0f13cb9a900f
     name: steampipe-powerpipe-kubernetes
@@ -1499,7 +1323,7 @@ entries:
     version: 0.11.18
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2026-01-02T08:29:09.138739135Z"
+    created: '2026-01-02T08:29:09.138739135Z'
     description: A Helm chart for deploying turbot's Steampipe and Powerpipe to Kubernetes
     digest: 6eba2023be428a5a780fe9067d4698ca3968aa911249b6d2777e4251af0bac8b
     name: steampipe-powerpipe-kubernetes
@@ -1509,7 +1333,7 @@ entries:
     version: 0.11.17
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2026-01-02T08:08:32.889915502Z"
+    created: '2026-01-02T08:08:32.889915502Z'
     description: A Helm chart for deploying turbot's Steampipe and Powerpipe to Kubernetes
     digest: e645b5e746a0756daacbb3122736d10a80ba9708408c5cf9c50036d63590e747
     name: steampipe-powerpipe-kubernetes
@@ -1519,12 +1343,11 @@ entries:
     version: 0.11.15
   swingmusic:
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update swingmusic/swingmusic docker tag to vv1.4.8
+      artifacthub.io/changes: "- kind: changed\n  description: update swingmusic/swingmusic\
+        \ docker tag to vv1.4.8"
     apiVersion: v2
     appVersion: vv1.4.8
-    created: "2025-02-21T05:35:46.449701403Z"
+    created: '2025-02-21T05:35:46.449701403Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -1551,12 +1374,11 @@ entries:
     version: v1.4.10
   traccar:
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update traccar/traccar docker tag to v2.9.3
+      artifacthub.io/changes: "- kind: changed\n  description: update traccar/traccar\
+        \ docker tag to v2.9.3"
     apiVersion: v2
     appVersion: 8.0.1
-    created: "2025-02-18T05:47:56.180355056Z"
+    created: '2025-02-18T05:47:56.180355056Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -1581,12 +1403,11 @@ entries:
     version: 8.0.1
   tts-api:
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update tts-api/tts-api docker tag to vv1.4.8
+      artifacthub.io/changes: "- kind: changed\n  description: update tts-api/tts-api\
+        \ docker tag to vv1.4.8"
     apiVersion: v2
     appVersion: vv1.4.8
-    created: "2025-03-14T18:16:07.623319364Z"
+    created: '2025-03-14T18:16:07.623319364Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -1613,12 +1434,11 @@ entries:
     version: v1.0.0
   watchyourlan:
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update watchyourlan/watchyourlan docker tag to v2.9.3
+      artifacthub.io/changes: "- kind: changed\n  description: update watchyourlan/watchyourlan\
+        \ docker tag to v2.9.3"
     apiVersion: v2
     appVersion: 8.0.1
-    created: "2025-02-18T06:34:48.387157167Z"
+    created: '2025-02-18T06:34:48.387157167Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -1644,7 +1464,7 @@ entries:
   wh2pg:
   - apiVersion: v2
     appVersion: 0.1.1
-    created: "2025-12-27T09:12:57.672795546Z"
+    created: '2025-12-27T09:12:57.672795546Z'
     description: Webhook to PostgreSQL - Service to receive webhooks and store them
       in PostgreSQL
     digest: d8a8af8f16a37a495d4b50fe4997d42bd9e04870fd3fd9a20e510dda4f8fb6a7
@@ -1664,7 +1484,7 @@ entries:
     version: 1.2.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-27T08:40:41.477071347Z"
+    created: '2025-12-27T08:40:41.477071347Z'
     description: Webhook to PostgreSQL - Service to receive webhooks and store them
       in PostgreSQL
     digest: 5cf0c3078996189994d1280f2974c3170d008ba498b2434097f54c3b2e277559
@@ -1684,7 +1504,7 @@ entries:
     version: 1.1.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-27T08:27:04.635395336Z"
+    created: '2025-12-27T08:27:04.635395336Z'
     description: Webhook to PostgreSQL - Service to receive webhooks and store them
       in PostgreSQL
     digest: 50ab86e15aa1a9c1ee4807b99d0178f6b2d690c3806605a1bf54565442f65632
@@ -1704,7 +1524,7 @@ entries:
     version: 1.0.9
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-27T07:45:22.677670559Z"
+    created: '2025-12-27T07:45:22.677670559Z'
     description: Webhook to PostgreSQL - Service to receive webhooks and store them
       in PostgreSQL
     digest: 21cc8155877ea3654323c0e88a62e012349912c13ca1deacc91aca0013eb4465
@@ -1724,7 +1544,7 @@ entries:
     version: 1.0.8
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-27T07:36:04.790205509Z"
+    created: '2025-12-27T07:36:04.790205509Z'
     description: Webhook to PostgreSQL - Service to receive webhooks and store them
       in PostgreSQL
     digest: 66d70f8d2056e709951cc4dc0674ec013e3bbd1294b5bc1a4f7bc579fe0e333c
@@ -1744,7 +1564,7 @@ entries:
     version: 1.0.7
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-27T07:25:26.760143321Z"
+    created: '2025-12-27T07:25:26.760143321Z'
     description: Webhook to PostgreSQL - Service to receive webhooks and store them
       in PostgreSQL
     digest: 6b80529a3fccaaf0e8eb9529d683703f036744437e442fc496e158bc2f7d7712
@@ -1764,7 +1584,7 @@ entries:
     version: 1.0.6
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-27T07:15:11.48977488Z"
+    created: '2025-12-27T07:15:11.48977488Z'
     description: Webhook to PostgreSQL - Service to receive webhooks and store them
       in PostgreSQL
     digest: 9c4718735b118235bcf0aa08a84a2f429194108af8b1d3b65cc828377c2ca0ba
@@ -1784,7 +1604,7 @@ entries:
     version: 1.0.5
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-27T06:39:18.053604391Z"
+    created: '2025-12-27T06:39:18.053604391Z'
     description: Webhook to PostgreSQL - Service to receive webhooks and store them
       in PostgreSQL
     digest: 27fe3c9c476cba9b8c6e01141c915db133c917521e120543c2869c3f8db25974
@@ -1804,7 +1624,7 @@ entries:
     version: 1.0.4
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-18T10:13:15.092414592Z"
+    created: '2025-12-18T10:13:15.092414592Z'
     description: Webhook to PostgreSQL - Service to receive webhooks and store them
       in PostgreSQL
     digest: 0a0e1e849d31194c9aa9aaea5d02c8f75fb945022f09cb4d1db3a7c312330028
@@ -1824,7 +1644,7 @@ entries:
     version: 1.0.3
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-18T09:27:13.045675833Z"
+    created: '2025-12-18T09:27:13.045675833Z'
     description: Webhook to PostgreSQL - Service to receive webhooks and store them
       in PostgreSQL
     digest: 5ad5eea5c97d2379294761107171704387a9a37b36e2baffa4d1a2e6a055fb53
@@ -1844,7 +1664,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-18T08:40:31.625702426Z"
+    created: '2025-12-18T08:40:31.625702426Z'
     description: Webhook to PostgreSQL - Service to receive webhooks and store them
       in PostgreSQL
     digest: 1c6642ed3213ca263b78c64f926b05d9e11c0ffecc390476da9e1f47cf6a6f76
@@ -1864,7 +1684,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-12-18T04:35:43.564818285Z"
+    created: '2025-12-18T04:35:43.564818285Z'
     description: Webhook to PostgreSQL - Service to receive webhooks and store them
       in PostgreSQL
     digest: 99af8775025fb0d75219dfa27bf59af52bc86b84117cf4bc7966e40dd76da555
@@ -1885,7 +1705,7 @@ entries:
   wh2pg-chart:
   - apiVersion: v2
     appVersion: 0.1.1
-    created: "2026-01-04T07:43:00.68755407Z"
+    created: '2026-01-04T07:43:00.68755407Z'
     description: Webhook to PostgreSQL - Service to receive webhooks and store them
       in PostgreSQL
     digest: 5bd1e09cf5e97a46424fecb502d4b5c24256149b29f9a9e8be87722bf8fffe35
@@ -1905,12 +1725,11 @@ entries:
     version: 1.2.0
   whisper-cpp:
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update whisper-cpp/whisper-cpp docker tag to 2.4.0
+      artifacthub.io/changes: "- kind: changed\n  description: update whisper-cpp/whisper-cpp\
+        \ docker tag to 2.4.0"
     apiVersion: v2
     appVersion: 2.4.0
-    created: "2025-03-07T05:30:59.427217448Z"
+    created: '2025-03-07T05:30:59.427217448Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -1936,12 +1755,11 @@ entries:
     - https://github.com/JZacharie/helmscharts/releases/download/whisper-cpp-1.0.1/whisper-cpp-1.0.1.tgz
     version: 1.0.1
   - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update whisper-cpp/whisper-cpp docker tag to 2.4.0
+      artifacthub.io/changes: "- kind: changed\n  description: update whisper-cpp/whisper-cpp\
+        \ docker tag to 2.4.0"
     apiVersion: v2
     appVersion: 2.4.0
-    created: "2025-03-07T05:27:15.815956939Z"
+    created: '2025-03-07T05:27:15.815956939Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -1969,7 +1787,7 @@ entries:
   whisperx:
   - apiVersion: v2
     appVersion: 1.7.0
-    created: "2025-03-28T08:36:45.400664873Z"
+    created: '2025-03-28T08:36:45.400664873Z'
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -1981,34 +1799,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/whisperx-0.1.2/whisperx-0.1.2.tgz
     version: 0.1.2
-  wud:
-  - annotations:
-      artifacthub.io/changes: |-
-        - kind: changed
-          description: update wud/wud docker tag to v2.9.3
-    apiVersion: v2
-    appVersion: 8.0.1
-    created: "2025-02-18T05:35:16.187220514Z"
-    dependencies:
-    - name: common
-      repository: https://zekker6.github.io/helm-charts
-      version: 0.5.2
-    description: wud helm package
-    digest: f281357931108e38a7318cb6fa99fd929c705b67ebf69ae2ffb30153f6fdecd9
-    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/wud
-    icon: https://www.wud.co/favicon-32x32.png
-    keywords:
-    - docker
-    kubeVersion: '>=1.16.0-0'
-    maintainers:
-    - email: me@zekker.dev
-      name: zekker6
-      url: https://github.com/zekker6/
-    name: wud
-    sources:
-    - https://github.com/wudco/wud
-    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/wud
-    urls:
-    - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
-    version: 8.0.1
-generated: "2026-01-04T07:43:00.687699301Z"
+generated: '2026-01-04T07:43:00.687699301Z'
