@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: agent
+  name: agent
+  namespace: {{ .Release.Namespace }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: {{ .Values.agent.replicaCount }}
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: agent
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: agent
+    spec:
+      containers:
+      - image: "{{ .Values.agent.image.repository }}:{{ .Values.agent.image.tag }}"
+        imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
+        name: agent
+        ports:
+        - containerPort: {{ .Values.agent.service.port }}
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /library
+          name: library
+        - mountPath: /data
+          name: data
+        - name: xpool
+          mountPath: "{{ .Values.agent.persistence.xpool.path }}"
+          readOnly: false             
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: library
+        persistentVolumeClaim:
+          claimName: library-pvc
+      - name: data
+        persistentVolumeClaim:
+          claimName: data-pvc
+      - name: xpool
+        nfs:
+          server: {{ .Values.agent.persistence.xpool.server }}
+          path: {{ .Values.agent.persistence.xpool.path }}

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mmp-ui
+  name: mmp-ui
+  namespace: {{ .Release.Namespace }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: {{ .Values.ui.replicaCount }}
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: mmp-ui
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: mmp-ui
+    spec:
+      containers:
+      - env:
+        - name: AGENT_ADDRESS
+          value: {{ .Values.ui.env.agentAddress }}
+        image: "{{ .Values.ui.image.repository }}:{{ .Values.ui.image.tag }}"
+        imagePullPolicy: {{ .Values.ui.image.pullPolicy }}
+        name: mmp-ui
+        ports:
+        - containerPort: {{ .Values.ui.service.targetPort }}
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

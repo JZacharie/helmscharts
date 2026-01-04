@@ -1,0 +1,59 @@
+agent:
+  image:
+    repository: ghcr.io/maker-management-platform/agent
+    tag: main
+    pullPolicy: IfNotPresent
+  replicaCount: 1
+  persistence:
+    library:
+      enabled: true
+      size: 1Gi
+      storageClassName: nfs-client-jonas
+      accessMode: ReadWriteOnce
+    data:
+      enabled: true
+      size: 2Gi
+      storageClassName: nfs-client-jonas
+      accessMode: ReadWriteOnce
+    xpool:
+      enabled: true
+      # Assuming this is an NFS mount based on the original manifest
+      server: 192.168.0.50
+      path: /xpool
+  service:
+    port: 8000
+
+ui:
+  image:
+    repository: ghcr.io/maker-management-platform/mmp-ui
+    tag: master
+    pullPolicy: IfNotPresent
+  replicaCount: 1
+  service:
+    port: 8083
+    targetPort: 8081
+  env:
+    agentAddress: agent:8000
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production-dns
+    freelens.app/resource-version: v1
+    gethomepage.dev/description: maker-management-platform
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Media
+    gethomepage.dev/icon: https://maker-management-platform.p.zacharie.org/vite.svg
+    gethomepage.dev/instance: public
+    gethomepage.dev/name: maker-management-platform
+    traefik.ingress.kubernetes.io/router.middlewares: default-traefik-auth@kubernetescrd
+  hosts:
+    - host: maker-management-platform.p.zacharie.org
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: maker-management-platform.p.zacharie.org-tls
+      hosts:
+        - maker-management-platform.p.zacharie.org
