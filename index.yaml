@@ -1882,6 +1882,27 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wh2pg-1.0.0/wh2pg-1.0.0.tgz
     version: 1.0.0
+  wh2pg-chart:
+  - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2026-01-04T07:43:00.68755407Z"
+    description: Webhook to PostgreSQL - Service to receive webhooks and store them
+      in PostgreSQL
+    digest: 5bd1e09cf5e97a46424fecb502d4b5c24256149b29f9a9e8be87722bf8fffe35
+    home: https://github.com/JZacharie/wh2pg
+    keywords:
+    - webhook
+    - postgresql
+    - rust
+    maintainers:
+    - name: Joseph
+    name: wh2pg-chart
+    sources:
+    - https://github.com/JZacharie/wh2pg
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/wh2pg-chart-1.2.0/wh2pg-chart-1.2.0.tgz
+    version: 1.2.0
   whisper-cpp:
   - annotations:
       artifacthub.io/changes: |-
@@ -1990,4 +2011,4 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/wud-8.0.1/wud-8.0.1.tgz
     version: 8.0.1
-generated: "2026-01-04T07:32:37.20457098Z"
+generated: "2026-01-04T07:43:00.687699301Z"
