@@ -1,0 +1,122 @@
+{{- if .Values.vault.enabled -}}
+{{- $tokenSecretName := .Values.vault.auth.secretName | default (printf "%s-vault-token" (include "kasm.fullname" .)) -}}
+{{- $tokenSecretKey := .Values.vault.auth.secretKey | default "token" -}}
+{{- if .Values.vault.auth.token }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $tokenSecretName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kasm.labels" . | nindent 4 }}
+type: Opaque
+stringData:
+  {{ $tokenSecretKey }}: {{ .Values.vault.auth.token | quote }}
+---
+{{- end }}
+apiVersion: external-secrets.io/v1beta1
+kind: SecretStore
+metadata:
+  name: {{ include "kasm.fullname" . }}-vault
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kasm.labels" . | nindent 4 }}
+spec:
+  provider:
+    vault:
+      server: {{ .Values.vault.address | quote }}
+      path: {{ .Values.vault.mountPath | default "secret" | quote }}
+      version: v2
+      auth:
+        tokenSecretRef:
+          name: {{ $tokenSecretName }}
+          key: {{ $tokenSecretKey }}
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: {{ include "kasm.fullname" . }}-admin-credentials
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kasm.labels" . | nindent 4 }}
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    name: {{ include "kasm.fullname" . }}-vault
+    kind: SecretStore
+  target:
+    name: {{ include "kasm.fullname" . }}-admin-credentials
+    creationPolicy: Owner
+  data:
+  - secretKey: admin-password
+    remoteRef:
+      key: {{ .Values.vault.secrets.adminPassword.path }}
+      property: {{ .Values.vault.secrets.adminPassword.key }}
+  - secretKey: user-password
+    remoteRef:
+      key: {{ .Values.vault.secrets.userPassword.path }}
+      property: {{ .Values.vault.secrets.userPassword.key }}
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: {{ include "kasm.fullname" . }}-database-credentials
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kasm.labels" . | nindent 4 }}
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    name: {{ include "kasm.fullname" . }}-vault
+    kind: SecretStore
+  target:
+    name: {{ include "kasm.fullname" . }}-database-credentials
+    creationPolicy: Owner
+  data:
+  - secretKey: postgres-password
+    remoteRef:
+      key: {{ .Values.vault.secrets.databasePassword.path }}
+      property: {{ .Values.vault.secrets.databasePassword.key }}
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: {{ include "kasm.fullname" . }}-redis-credentials
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kasm.labels" . | nindent 4 }}
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    name: {{ include "kasm.fullname" . }}-vault
+    kind: SecretStore
+  target:
+    name: {{ include "kasm.fullname" . }}-redis-credentials
+    creationPolicy: Owner
+  data:
+  - secretKey: redis-password
+    remoteRef:
+      key: {{ .Values.vault.secrets.redisPassword.path }}
+      property: {{ .Values.vault.secrets.redisPassword.key }}
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: {{ include "kasm.fullname" . }}-manager-token
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kasm.labels" . | nindent 4 }}
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    name: {{ include "kasm.fullname" . }}-vault
+    kind: SecretStore
+  target:
+    name: {{ include "kasm.fullname" . }}-manager-token
+    creationPolicy: Owner
+  data:
+  - secretKey: manager-token
+    remoteRef:
+      key: {{ .Values.vault.secrets.managerToken.path }}
+      property: {{ .Values.vault.secrets.managerToken.key }}
+{{- end }}
