@@ -14,7 +14,7 @@ stringData:
   {{ $tokenSecretKey }}: {{ .Values.vault.auth.token | quote }}
 ---
 {{- end }}
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: SecretStore
 metadata:
   name: {{ include "kasm.fullname" . }}-vault
@@ -32,7 +32,7 @@ spec:
           name: {{ $tokenSecretName }}
           key: {{ $tokenSecretKey }}
 ---
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: {{ include "kasm.fullname" . }}-admin-credentials
@@ -57,7 +57,7 @@ spec:
       key: {{ .Values.vault.secrets.userPassword.path }}
       property: {{ .Values.vault.secrets.userPassword.key }}
 ---
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: {{ include "kasm.fullname" . }}-database-credentials
@@ -78,7 +78,7 @@ spec:
       key: {{ .Values.vault.secrets.databasePassword.path }}
       property: {{ .Values.vault.secrets.databasePassword.key }}
 ---
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: {{ include "kasm.fullname" . }}-redis-credentials
@@ -99,7 +99,7 @@ spec:
       key: {{ .Values.vault.secrets.redisPassword.path }}
       property: {{ .Values.vault.secrets.redisPassword.key }}
 ---
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: {{ include "kasm.fullname" . }}-manager-token
