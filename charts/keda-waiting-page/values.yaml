@@ -1,5 +1,5 @@
 image:
-  repository: registry.p.zacharie.org/keda-waiting-page
+  repository: ghcr.io/jzacharie/keda-waiting-page
   pullPolicy: Always
   tag: "latest"
 

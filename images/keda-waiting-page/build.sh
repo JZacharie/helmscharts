@@ -2,7 +2,7 @@
 set -e
 
 # Configuration
-IMAGE_NAME="registry.p.zacharie.org/keda-waiting-page"
+IMAGE_NAME="ghcr.io/jzacharie/keda-waiting-page"
 IMAGE_TAG="${1:-latest}"
 FULL_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
 
