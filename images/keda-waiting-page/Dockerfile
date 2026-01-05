@@ -1,5 +1,5 @@
 # Multi-stage Dockerfile for KEDA Waiting Page
-FROM python:3.11-slim as backend-builder
+FROM python:3.14-slim as backend-builder
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/server.py .
 
 # Production stage
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 # Install nginx
 RUN apt-get update && \
