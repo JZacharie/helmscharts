@@ -864,7 +864,7 @@ copilot:
     # Image configuration
     image:
       repository: postgres
-      tag: 16-alpine
+      tag: 18-alpine
       pullPolicy: IfNotPresent
     
     # Authentication configuration
