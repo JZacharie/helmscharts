@@ -123,7 +123,7 @@ certificate:
   certManager:
     enabled: false
     addWildCard: true
-    issuerName: ""
+    issuerName: "letsencrypt-production-dns"
     issuerKind: ""
     issuerGroup: ""
     annotations: {}
