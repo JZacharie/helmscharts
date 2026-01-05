@@ -191,6 +191,46 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/itop-0.1.0.tgz
     version: 0.1.0
+  kasm:
+  - annotations:
+      category: Virtual Desktop
+      images: |
+        - name: kasm-api
+          image: kasmweb/api:1.18.1
+        - name: kasm-manager
+          image: kasmweb/manager:1.18.1
+        - name: kasm-db
+          image: kasmweb/postgres:1.18.1
+        - name: kasm-proxy
+          image: kasmweb/proxy:1.18.1
+        - name: kasm-guac
+          image: kasmweb/kasm-guac:1.18.1
+        - name: rdp-gateway
+          image: kasmweb/rdp-gateway:1.18.1
+        - name: rdp-gateway
+          image: kasmweb/rdp-https-gateway:1.18.1
+    apiVersion: v2
+    appVersion: 1.18.1
+    created: "2026-01-05T06:58:55.751033574Z"
+    description: Kasm is a platform specializing in providing secure browser-based
+      workspaces for a wide range of applications and industries. Its main goal is
+      to provide isolated and secure environments that can be accessed via web browsers,
+      ensuring that users can perform tasks without risking the security of their
+      local systems.
+    digest: ed97482c63dc2631f776bbba2581db200b5df8b957d2d27dcb42e65ce23566d9
+    home: https://kasm.com
+    icon: https://kasm-static-content.s3.amazonaws.com/icons/kasm-logo-small.png
+    keywords:
+    - kasm
+    - vdi
+    - workspaces
+    maintainers:
+    - name: Kasm Technologies, Inc.
+      url: https://github.com/kasmtech/kasm-helm
+    name: kasm
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/kasm-1.1181.0/kasm-1.1181.0.tgz
+    version: 1.1181.0
   keda-waiting-page:
   - apiVersion: v2
     appVersion: 1.0.0
@@ -600,4 +640,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-01-04T14:14:07.862323569+01:00"
+generated: "2026-01-05T06:58:55.930476086Z"
