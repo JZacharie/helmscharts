@@ -119,4 +119,45 @@ spec:
     remoteRef:
       key: {{ .Values.vault.secrets.managerToken.path }}
       property: {{ .Values.vault.secrets.managerToken.key }}
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: {{ include "kasm.fullname" . }}-consolidated-secrets
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kasm.labels" . | nindent 4 }}
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    name: {{ include "kasm.fullname" . }}-vault
+    kind: SecretStore
+  target:
+    name: {{ .Release.Name }}-secrets
+    creationPolicy: Owner
+  data:
+  - secretKey: admin-password
+    remoteRef:
+      key: {{ .Values.vault.secrets.adminPassword.path }}
+      property: {{ .Values.vault.secrets.adminPassword.key }}
+  - secretKey: user-password
+    remoteRef:
+      key: {{ .Values.vault.secrets.userPassword.path }}
+      property: {{ .Values.vault.secrets.userPassword.key }}
+  - secretKey: db-password
+    remoteRef:
+      key: {{ .Values.vault.secrets.databasePassword.path }}
+      property: {{ .Values.vault.secrets.databasePassword.key }}
+  - secretKey: redis-password
+    remoteRef:
+      key: {{ .Values.vault.secrets.redisPassword.path }}
+      property: {{ .Values.vault.secrets.redisPassword.key }}
+  - secretKey: manager-token
+    remoteRef:
+      key: {{ .Values.vault.secrets.managerToken.path }}
+      property: {{ .Values.vault.secrets.managerToken.key }}
+  - secretKey: service-token
+    remoteRef:
+      key: {{ .Values.vault.secrets.managerToken.path }}
+      property: {{ .Values.vault.secrets.managerToken.key }}
 {{- end }}
