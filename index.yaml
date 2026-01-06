@@ -234,6 +234,16 @@ entries:
   keda-waiting-page:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2026-01-06T02:45:12.996828318Z"
+    description: A Helm chart for the KEDA waiting page
+    digest: 609660c8eaca30ae1dbfe7deff8418d600e6ed4fc2958aab3ca34d289257cce0
+    name: keda-waiting-page
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/keda-waiting-page-0.1.1/keda-waiting-page-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2026-01-04T14:14:07.884700844+01:00"
     description: A Helm chart for the KEDA waiting page
     digest: 35532a5597fe20e5334f9fad7096246c262c75bb83b3db47730b0fce8c94b324
@@ -640,4 +650,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-01-05T06:58:55.930476086Z"
+generated: "2026-01-06T02:45:12.996842003Z"
