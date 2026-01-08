@@ -3,7 +3,7 @@
 image:
   repository: shenxn/protonmail-bridge
   pullPolicy: IfNotPresent
-  tag: "3.9.1"
+  tag: "latest"
 
 replicaCount: 1
 
