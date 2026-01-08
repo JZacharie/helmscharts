@@ -374,6 +374,17 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/pd3f-0.1.2.tgz
     version: 0.1.2
+  proton-bridge:
+  - apiVersion: v2
+    appVersion: 3.9.1
+    created: "2026-01-08T10:25:51.322671317Z"
+    description: Proton Mail Bridge for email clients
+    digest: a9e2902880cbf6a0090a03634b9ac99a43f2e6271fff825def070125b369102b
+    name: proton-bridge
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/proton-bridge-0.1.0/proton-bridge-0.1.0.tgz
+    version: 0.1.0
   readur:
   - annotations:
       category: Document Management
@@ -650,4 +661,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-01-06T02:45:12.996842003Z"
+generated: "2026-01-08T10:25:51.32268386Z"
