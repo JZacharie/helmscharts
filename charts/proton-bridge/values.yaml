@@ -1,0 +1,64 @@
+# Proton Bridge Helm Chart Values
+
+image:
+  repository: shenxn/protonmail-bridge
+  pullPolicy: IfNotPresent
+  tag: "3.9.1"
+
+replicaCount: 1
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  runAsUser: 1000
+
+service:
+  type: ClusterIP
+  imapPort: 1143
+  smtpPort: 1025
+
+ingress:
+  enabled: false
+  className: "traefik"
+  annotations: {}
+  hosts:
+    - host: proton-bridge.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+env: []
