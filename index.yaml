@@ -376,6 +376,16 @@ entries:
     version: 0.1.2
   proton-bridge:
   - apiVersion: v2
+    appVersion: latest
+    created: "2026-01-08T10:29:32.998278515Z"
+    description: Proton Mail Bridge for email clients
+    digest: 19588c0324e16f2e9704f4e2a8c786c2e4e6ac6b7952f4ef66ac3fd1b12693f1
+    name: proton-bridge
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/proton-bridge-0.1.1/proton-bridge-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     appVersion: 3.9.1
     created: "2026-01-08T10:25:51.322671317Z"
     description: Proton Mail Bridge for email clients
@@ -661,4 +671,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-01-08T10:25:51.32268386Z"
+generated: "2026-01-08T10:29:32.998298081Z"
