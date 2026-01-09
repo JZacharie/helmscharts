@@ -198,7 +198,10 @@ env:
 services:
   type: ClusterIP
   ports:
-    http: 80
+    # Backend services (FastAPI) use port 80
+    backend: 80
+    # Frontend service uses port 3000
+    frontend: 3000
 
 # Ingress configuration
 ingress:

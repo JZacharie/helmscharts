@@ -36,7 +36,11 @@ spec:
               service:
                 name: {{ $fullname }}-{{ .service }}
                 port:
-                  number: 80
+                  {{- if eq .service "frontend" }}
+                  number: {{ $.Values.services.ports.frontend }}
+                  {{- else }}
+                  number: {{ $.Values.services.ports.backend }}
+                  {{- end }}
           {{- end }}
     {{- end }}
 {{- end }}

@@ -36,7 +36,7 @@ spec:
         imagePullPolicy: {{ .Values.images.frontend.pullPolicy }}
         ports:
         - name: http
-          containerPort: 80
+          containerPort: 3000
           protocol: TCP
         env:
         # Service endpoints (internal Kubernetes DNS)
