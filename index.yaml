@@ -163,6 +163,23 @@ entries:
   fundy:
   - apiVersion: v2
     appVersion: sha-6e9f6c2
+    created: "2026-01-09T18:05:59.48851417Z"
+    description: Helm chart for Fundy application - Financial data analysis platform
+      with microservices architecture
+    digest: c97f4aef8da7e9bd5f67f01fbb9c60906ce561c389ac1ee237ac116c180b7e6e
+    keywords:
+    - fundy
+    - analytics
+    - microservices
+    maintainers:
+    - name: Joseph Zacharie
+    name: fundy
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/fundy-0.1.5/fundy-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
+    appVersion: sha-6e9f6c2
     created: "2026-01-09T17:59:05.616525849Z"
     description: Helm chart for Fundy application - Financial data analysis platform
       with microservices architecture
@@ -767,4 +784,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-01-09T17:59:05.616560113Z"
+generated: "2026-01-09T18:05:59.488566137Z"
