@@ -6,7 +6,7 @@ metadata:
     {{- include "fundy.labels" . | nindent 4 }}
     {{- include "fundy.componentLabels" "optimizer" | nindent 4 }}
 spec:
-  replicas: {{ index (.Values.replicaCount | default dict) "optimizer" | default 1 }}
+  replicas: {{ .Values.replicaCount.optimizer }}
   selector:
     matchLabels:
       {{- include "fundy.selectorLabels" . | nindent 6 }}
@@ -32,8 +32,8 @@ spec:
       - name: optimizer
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-        image: "{{ index (.Values.images | default dict) "optimizer" | default (dict "repository" "") | .repository }}:{{ index (.Values.images | default dict) "optimizer" | default (dict "tag" "latest") | .tag }}"
-        imagePullPolicy: {{ index (.Values.images | default dict) "optimizer" | default (dict "pullPolicy" "IfNotPresent") | .pullPolicy }}
+        image: "{{ .Values.images.optimizer.repository }}:{{ .Values.images.optimizer.tag }}"
+        imagePullPolicy: {{ .Values.images.optimizer.pullPolicy }}
         ports:
         - name: http
           containerPort: 80
