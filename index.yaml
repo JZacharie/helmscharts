@@ -2,7 +2,7 @@ apiVersion: v1
 entries:
   appflowy:
   - apiVersion: v2
-    created: "2026-01-09T17:52:03.481435852+01:00"
+    created: "2026-01-09T18:42:09.33006715+01:00"
     dependencies:
     - condition: appflowy-cloud.enabled
       name: appflowy-cloud
@@ -38,7 +38,7 @@ entries:
   appflowy-sbx:
   - apiVersion: v2
     appVersion: latest
-    created: "2026-01-09T17:52:03.48238793+01:00"
+    created: "2026-01-09T18:42:09.331155375+01:00"
     description: AppFlowy Cloud Sandbox - Custom chart based on docker-compose.yml
     digest: 8f3133588c9f919c9fe06103bb0359086c066abd1eea6721f4c8ca86a12d49ec
     keywords:
@@ -56,7 +56,7 @@ entries:
   argocd-mobile-dashboard:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-01-09T17:52:03.482644429+01:00"
+    created: "2026-01-09T18:42:09.331678726+01:00"
     description: A mobile dashboard for ArgoCD
     digest: c9df1125ffc4035c1d1f4e04fa9c5cf1733df5b20ca3d22bc798bb9211a0fe9e
     name: argocd-mobile-dashboard
@@ -71,7 +71,7 @@ entries:
           description: update chartdb/chartdb docker tag to v1.7.0
     apiVersion: v2
     appVersion: 1.7.0
-    created: "2026-01-09T17:52:03.484583416+01:00"
+    created: "2026-01-09T18:42:09.333969802+01:00"
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -104,7 +104,7 @@ entries:
         - kind: fixed
           description: properly handle empty paths in ingress configuration
     apiVersion: v2
-    created: "2026-01-09T17:52:03.486691552+01:00"
+    created: "2026-01-09T18:42:09.336417607+01:00"
     description: Function library for Helm charts
     digest: ae1154de25afb942cd2c7f794c9d9aef6bd9b537807170e8ec7fd77c768ef23b
     home: https://github.com/zekker6/helm-charts/tree/main/charts/library/common
@@ -128,7 +128,7 @@ entries:
           description: update cursor/cursor docker tag to v1.7.0
     apiVersion: v2
     appVersion: 1.7.0
-    created: "2026-01-09T17:52:03.489775603+01:00"
+    created: "2026-01-09T18:42:09.338891733+01:00"
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -152,7 +152,7 @@ entries:
   deploy-pilot:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-01-09T17:52:03.490101568+01:00"
+    created: "2026-01-09T18:42:09.339450643+01:00"
     description: A Helm chart for Deployment Pilot
     digest: 9ae5897c886573eac684d563df0b5a95d2594043796bfc044045aeb2aac67707
     name: deploy-pilot
@@ -163,7 +163,24 @@ entries:
   fundy:
   - apiVersion: v2
     appVersion: sha-6e9f6c2
-    created: "2026-01-09T17:52:03.490417356+01:00"
+    created: "2026-01-09T18:42:09.342214648+01:00"
+    description: Helm chart for Fundy application - Financial data analysis platform
+      with microservices architecture
+    digest: c8afc2fc24e3979b7a85170b60249d094874f9648339d41eced460775b4e56c1
+    keywords:
+    - fundy
+    - analytics
+    - microservices
+    maintainers:
+    - name: Joseph Zacharie
+    name: fundy
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/fundy-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: sha-6e9f6c2
+    created: "2026-01-09T18:42:09.340589502+01:00"
     description: Helm chart for Fundy application - Financial data analysis platform
       with microservices architecture
     digest: b52ee84f6e468b496b16a370a3b3d4c1ca933de6219b16940ddd59e680e49072
@@ -181,7 +198,7 @@ entries:
   garage:
   - apiVersion: v2
     appVersion: v1.3.0
-    created: "2026-01-09T17:52:03.491104579+01:00"
+    created: "2026-01-09T18:42:09.343341383+01:00"
     description: S3-compatible object store for small self-hosted geo-distributed
       deployments
     digest: 1ec5f3762c4b56d69f40a9778cef15d3dbaf7e63b91f438801c83bd8d200e4b1
@@ -201,7 +218,7 @@ entries:
   itop:
   - apiVersion: v2
     appVersion: 3.0.1
-    created: "2026-01-09T17:52:03.491478918+01:00"
+    created: "2026-01-09T18:42:09.343933495+01:00"
     description: A Helm chart for Kubernetes
     digest: eed67770fa65a9ce100f55fe369fd83e2bd67ec016021b01fd89125685ddd5e5
     name: itop
@@ -229,7 +246,7 @@ entries:
           image: kasmweb/rdp-https-gateway:1.18.1
     apiVersion: v2
     appVersion: 1.18.1
-    created: "2026-01-09T17:52:03.493157471+01:00"
+    created: "2026-01-09T18:42:09.345880417+01:00"
     description: Kasm is a platform specializing in providing secure browser-based
       workspaces for a wide range of applications and industries. Its main goal is
       to provide isolated and secure environments that can be accessed via web browsers,
@@ -252,7 +269,7 @@ entries:
   keda-waiting-page:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-01-09T17:52:03.49373769+01:00"
+    created: "2026-01-09T18:42:09.347080821+01:00"
     description: A Helm chart for the KEDA waiting page
     digest: c8ed65ea7b2cad8623d4fa18738c3967059f3b5c1357abf15528ea1954909369
     name: keda-waiting-page
@@ -262,7 +279,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-01-09T17:52:03.493468673+01:00"
+    created: "2026-01-09T18:42:09.346523974+01:00"
     description: A Helm chart for the KEDA waiting page
     digest: 669dd55e34912d156259c825c4b3aeb2917276e4369f922fd7bf408ea2c19a5a
     name: keda-waiting-page
@@ -277,7 +294,7 @@ entries:
           description: update linkwarden/linkwarden docker tag to v2.9.3
     apiVersion: v2
     appVersion: v2.9.3
-    created: "2026-01-09T17:52:03.496349368+01:00"
+    created: "2026-01-09T18:42:09.349502059+01:00"
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -305,7 +322,7 @@ entries:
   maintenance:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-01-09T17:52:03.497313794+01:00"
+    created: "2026-01-09T18:42:09.350018863+01:00"
     description: Maintenance CronJobs for node cleanup and other tasks
     digest: 0ace74827605c3eb5bcfdc59fb3145b396c69c90d225ff2050c8ce07a5d00613
     name: maintenance
@@ -316,7 +333,7 @@ entries:
   maker-management-platform:
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2026-01-09T17:52:03.497764883+01:00"
+    created: "2026-01-09T18:42:09.350690156+01:00"
     description: A Helm chart for Maker Management Platform
     digest: 817ebbe3d07879a411229c4903bdcfa8d3a8dcabf34f24885fcd5dac7332b4b2
     name: maker-management-platform
@@ -326,7 +343,7 @@ entries:
   openai-whisper-asr-webservice:
   - apiVersion: v2
     appVersion: 1.7.0
-    created: "2026-01-09T17:52:03.499887693+01:00"
+    created: "2026-01-09T18:42:09.353871881+01:00"
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -341,7 +358,7 @@ entries:
   openobserve-collector:
   - apiVersion: v2
     appVersion: 0.136.0
-    created: "2026-01-09T17:52:03.501963684+01:00"
+    created: "2026-01-09T18:42:09.355861706+01:00"
     description: An opinionated installation of OTEL Collector for OpenObserve (forked
       with custom env support)
     digest: 8d82d6b35b232128f0dedfe6f357b7da042eef580faf947a1261ce013358d8e7
@@ -361,7 +378,7 @@ entries:
           description: update paperless-gpt/paperless-gpt docker tag to v1.7.0
     apiVersion: v2
     appVersion: 1.7.0
-    created: "2026-01-09T17:52:03.50455095+01:00"
+    created: "2026-01-09T18:42:09.358283514+01:00"
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -385,7 +402,7 @@ entries:
   pd3f:
   - apiVersion: v2
     appVersion: "1.0"
-    created: "2026-01-09T17:52:03.505054872+01:00"
+    created: "2026-01-09T18:42:09.358972253+01:00"
     description: A Helm chart for PD3F application
     digest: 75cbae83a9efc84c7429e0850a0b98cfcf198e25f6978d20e6f1d8a216cf749c
     name: pd3f
@@ -395,7 +412,7 @@ entries:
   proton-bridge:
   - apiVersion: v2
     appVersion: latest
-    created: "2026-01-09T17:52:03.506115805+01:00"
+    created: "2026-01-09T18:42:09.360913465+01:00"
     description: Proton Mail Bridge for email clients
     digest: da7c222a1b78bc2392e4423c906dba952e02687a4561970c5b236a2658c2967e
     name: proton-bridge
@@ -405,7 +422,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: latest
-    created: "2026-01-09T17:52:03.505766367+01:00"
+    created: "2026-01-09T18:42:09.360352864+01:00"
     description: Proton Mail Bridge for email clients
     digest: af7e750220d3861af33b46765735d27bcaafb010cc6cab1196c9765516cf0cfc
     name: proton-bridge
@@ -415,7 +432,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: 3.9.1
-    created: "2026-01-09T17:52:03.505438581+01:00"
+    created: "2026-01-09T18:42:09.359622746+01:00"
     description: Proton Mail Bridge for email clients
     digest: 3ce06f70abf3fc19eae509f045219c91ce8caf55769adadc67ae5e16eb927a59
     name: proton-bridge
@@ -428,7 +445,7 @@ entries:
       category: Document Management
     apiVersion: v2
     appVersion: latest
-    created: "2026-01-09T17:52:03.513082654+01:00"
+    created: "2026-01-09T18:42:09.367726245+01:00"
     dependencies:
     - name: common
       repository: https://bjw-s-labs.github.io/helm-charts
@@ -462,7 +479,7 @@ entries:
   scale-manager:
   - apiVersion: v2
     appVersion: "1.5"
-    created: "2026-01-09T17:52:03.51337423+01:00"
+    created: "2026-01-09T18:42:09.368372229+01:00"
     description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
     digest: 56a511cc857c43c03f44d397426b45b74564c3d6ce1ab20367551897f78d53b5
     name: scale-manager
@@ -476,7 +493,7 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-01-09T17:52:03.516649654+01:00"
+    created: "2026-01-09T18:42:09.371439243+01:00"
     description: A Helm chart for Sim - AI agent workflow platform
     digest: c7a7796f9cf53156233af897a08282b318c62d924aa794de3b4e8e95a4b70152
     home: https://sim.ai
@@ -505,7 +522,7 @@ entries:
           description: update wud/wud docker tag to v2.9.3
     apiVersion: v2
     appVersion: 8.0.1
-    created: "2026-01-09T17:52:03.518694386+01:00"
+    created: "2026-01-09T18:42:09.373951623+01:00"
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -531,7 +548,7 @@ entries:
   steampipe-powerpipe-kubernetes:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2026-01-09T17:52:03.519367467+01:00"
+    created: "2026-01-09T18:42:09.374913983+01:00"
     description: A Helm chart for deploying turbot's Steampipe and Powerpipe to Kubernetes
     digest: 21e40f9fb113840df824c11970b11626313f9a48268659c6145c2fdf42d72e87
     name: steampipe-powerpipe-kubernetes
@@ -546,7 +563,7 @@ entries:
           description: update swingmusic/swingmusic docker tag to vv1.4.8
     apiVersion: v2
     appVersion: vv1.4.8
-    created: "2026-01-09T17:52:03.523444815+01:00"
+    created: "2026-01-09T18:42:09.37823919+01:00"
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -578,7 +595,7 @@ entries:
           description: update traccar/traccar docker tag to v2.9.3
     apiVersion: v2
     appVersion: 8.0.1
-    created: "2026-01-09T17:52:03.525643361+01:00"
+    created: "2026-01-09T18:42:09.380812614+01:00"
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -608,7 +625,7 @@ entries:
           description: update tts-api/tts-api docker tag to vv1.4.8
     apiVersion: v2
     appVersion: vv1.4.8
-    created: "2026-01-09T17:52:03.527762825+01:00"
+    created: "2026-01-09T18:42:09.383842171+01:00"
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -640,7 +657,7 @@ entries:
           description: update watchyourlan/watchyourlan docker tag to v2.9.3
     apiVersion: v2
     appVersion: 8.0.1
-    created: "2026-01-09T17:52:03.529974758+01:00"
+    created: "2026-01-09T18:42:09.386522033+01:00"
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -666,7 +683,7 @@ entries:
   wh2pg-chart:
   - apiVersion: v2
     appVersion: 0.1.1
-    created: "2026-01-09T17:52:03.530517449+01:00"
+    created: "2026-01-09T18:42:09.387530204+01:00"
     description: Webhook to PostgreSQL - Service to receive webhooks and store them
       in PostgreSQL
     digest: 0ec853754fe91846a4dde054a4eafd1c90ba2e0c4856eefd0c17866f99c94c7c
@@ -687,7 +704,7 @@ entries:
   whisperx:
   - apiVersion: v2
     appVersion: 1.7.0
-    created: "2026-01-09T17:52:03.533855026+01:00"
+    created: "2026-01-09T18:42:09.391479996+01:00"
     dependencies:
     - name: common
       repository: https://zekker6.github.io/helm-charts
@@ -699,4 +716,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-01-09T17:52:03.478799031+01:00"
+generated: "2026-01-09T18:42:09.324744884+01:00"
