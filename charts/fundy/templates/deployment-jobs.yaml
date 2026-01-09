@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "fundy.fullname" . }}-jobs
+  labels:
+    {{- include "fundy.labels" . | nindent 4 }}
+    {{- include "fundy.componentLabels" "jobs" | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount.jobs }}
+  selector:
+    matchLabels:
+      {{- include "fundy.selectorLabels" . | nindent 6 }}
+      {{- include "fundy.componentLabels" "jobs" | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "fundy.selectorLabels" . | nindent 8 }}
+        {{- include "fundy.componentLabels" "jobs" | nindent 8 }}
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: jobs
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        image: "{{ .Values.images.jobs.repository }}:{{ .Values.images.jobs.tag }}"
+        imagePullPolicy: {{ .Values.images.jobs.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        env:
+        - name: DATABASE_URL
+          value: {{ .Values.env.databases.jobs | quote }}
+        - name: CLICKHOUSE_HOST
+          value: {{ .Values.env.clickhouse.host | quote }}
+        - name: CLICKHOUSE_PORT
+          value: {{ .Values.env.clickhouse.port | quote }}
+        - name: CLICKHOUSE_USERNAME
+          value: {{ .Values.env.clickhouse.username | quote }}
+        - name: CLICKHOUSE_PASSWORD
+          value: {{ .Values.env.clickhouse.password | quote }}
+        - name: FUNDY_COGNITO_JWKS_URL
+          value: {{ .Values.env.cognito.jwksUrl | quote }}
+        - name: SENTRY_BACKEND_DSN
+          value: {{ .Values.env.monitoring.sentryBackendDsn | quote }}
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: {{ .Values.env.monitoring.otelExporterOtlpEndpoint | quote }}
+        {{- if .Values.healthcheck.enabled }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.healthcheck.path }}
+            port: http
+          initialDelaySeconds: {{ .Values.healthcheck.initialDelaySeconds }}
+          periodSeconds: {{ .Values.healthcheck.periodSeconds }}
+          timeoutSeconds: {{ .Values.healthcheck.timeoutSeconds }}
+          failureThreshold: {{ .Values.healthcheck.failureThreshold }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.healthcheck.path }}
+            port: http
+          initialDelaySeconds: {{ .Values.healthcheck.initialDelaySeconds }}
+          periodSeconds: {{ .Values.healthcheck.periodSeconds }}
+          timeoutSeconds: {{ .Values.healthcheck.timeoutSeconds }}
+          failureThreshold: {{ .Values.healthcheck.failureThreshold }}
+        {{- end }}
+        resources:
+          {{- toYaml .Values.resources.jobs | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "fundy.fullname" . }}-users
+  labels:
+    {{- include "fundy.labels" . | nindent 4 }}
+    {{- include "fundy.componentLabels" "users" | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount.users }}
+  selector:
+    matchLabels:
+      {{- include "fundy.selectorLabels" . | nindent 6 }}
+      {{- include "fundy.componentLabels" "users" | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "fundy.selectorLabels" . | nindent 8 }}
+        {{- include "fundy.componentLabels" "users" | nindent 8 }}
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: users
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        image: "{{ .Values.images.users.repository }}:{{ .Values.images.users.tag }}"
+        imagePullPolicy: {{ .Values.images.users.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        env:
+        - name: DATABASE_URL
+          value: {{ .Values.env.databases.users | quote }}
+        - name: AMPLITUDE_API_KEY
+          value: {{ .Values.env.apiKeys.amplitude | quote }}
+        - name: FUNDY_COGNITO_ACCESS_KEY
+          value: {{ .Values.env.cognito.accessKey | quote }}
+        - name: FUNDY_COGNITO_SECRET_ACCESS_KEY
+          value: {{ .Values.env.cognito.secretAccessKey | quote }}
+        - name: FUNDY_COGNITO_USER_POOL_ID
+          value: {{ .Values.env.cognito.userPoolId | quote }}
+        - name: FUNDY_COGNITO_JWKS_URL
+          value: {{ .Values.env.cognito.jwksUrl | quote }}
+        - name: SENTRY_BACKEND_DSN
+          value: {{ .Values.env.monitoring.sentryBackendDsn | quote }}
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: {{ .Values.env.monitoring.otelExporterOtlpEndpoint | quote }}
+        {{- if .Values.healthcheck.enabled }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.healthcheck.path }}
+            port: http
+          initialDelaySeconds: {{ .Values.healthcheck.initialDelaySeconds }}
+          periodSeconds: {{ .Values.healthcheck.periodSeconds }}
+          timeoutSeconds: {{ .Values.healthcheck.timeoutSeconds }}
+          failureThreshold: {{ .Values.healthcheck.failureThreshold }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.healthcheck.path }}
+            port: http
+          initialDelaySeconds: {{ .Values.healthcheck.initialDelaySeconds }}
+          periodSeconds: {{ .Values.healthcheck.periodSeconds }}
+          timeoutSeconds: {{ .Values.healthcheck.timeoutSeconds }}
+          failureThreshold: {{ .Values.healthcheck.failureThreshold }}
+        {{- end }}
+        resources:
+          {{- toYaml .Values.resources.users | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,12 @@
+apiVersion: v2
+name: fundy
+description: Helm chart for Fundy application - Financial data analysis platform with microservices architecture
+type: application
+version: 0.1.0
+appVersion: "sha-6e9f6c2"
+keywords:
+  - fundy
+  - analytics
+  - microservices
+maintainers:
+  - name: Joseph Zacharie

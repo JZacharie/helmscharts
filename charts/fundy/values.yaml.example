@@ -1,0 +1,273 @@
+# Fundy Helm Chart Values
+# This is an EXAMPLE file. Copy this to values.yaml and fill in your actual values from .env.secrets
+
+# Global settings
+global:
+  # Image pull secret for GitHub Container Registry
+  imagePullSecrets:
+    - name: regcred
+
+# Images configuration
+images:
+  analytics:
+    repository: ghcr.io/stainly/fundy/analytics
+    tag: sha-6e9f6c2
+    pullPolicy: IfNotPresent
+  
+  jobs:
+    repository: ghcr.io/stainly/fundy/jobs
+    tag: sha-6e9f6c2
+    pullPolicy: IfNotPresent
+  
+  reports:
+    repository: ghcr.io/stainly/fundy/reports
+    tag: sha-6e9f6c2
+    pullPolicy: IfNotPresent
+  
+  users:
+    repository: ghcr.io/stainly/fundy/users
+    tag: sha-6e9f6c2
+    pullPolicy: IfNotPresent
+  
+  frontend:
+    repository: ghcr.io/stainly/fundy/frontend
+    tag: sha-6e9f6c2
+    pullPolicy: IfNotPresent
+  
+  optimizer:
+    repository: ghcr.io/stainly/fundy/optimizer
+    tag: sha-6e9f6c2
+    pullPolicy: IfNotPresent
+  
+  builder:
+    repository: ghcr.io/stainly/fundy/builder
+    tag: sha-6e9f6c2
+    pullPolicy: IfNotPresent
+  
+  data:
+    repository: ghcr.io/stainly/fundy/data
+    tag: sha-0f03eae
+    pullPolicy: IfNotPresent
+
+# Replica counts
+replicaCount:
+  analytics: 1
+  jobs: 1
+  reports: 1
+  users: 1
+  frontend: 1
+  optimizer: 1
+  builder: 1
+  data: 1
+
+# Resource limits and requests
+resources:
+  analytics:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  
+  jobs:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  
+  reports:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  
+  users:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  
+  frontend:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  
+  optimizer:
+    requests:
+      memory: "512Mi"
+      cpu: "200m"
+    limits:
+      memory: "2Gi"
+      cpu: "2000m"
+  
+  builder:
+    requests:
+      memory: "512Mi"
+      cpu: "200m"
+    limits:
+      memory: "2Gi"
+      cpu: "2000m"
+  
+  data:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+# Environment variables - Fill these from your .env.secrets file
+env:
+  # ClickHouse Database Configuration
+  clickhouse:
+    host: ""  # CLICKHOUSE_HOST
+    port: ""  # CLICKHOUSE_PORT
+    username: ""  # CLICKHOUSE_USERNAME
+    password: ""  # CLICKHOUSE_PASSWORD
+  
+  # PostgreSQL Database URLs
+  databases:
+    builder: ""  # BUILDER_DATABASE_URL
+    jobs: ""  # JOBS_DATABASE_URL
+    users: ""  # USERS_DATABASE_URL
+  
+  # AWS S3/Storage Configuration
+  aws:
+    s3:
+      regionName: ""  # IC_AWS_S3_REGION_NAME
+      endpointUrl: ""  # IC_AWS_S3_ENDPOINT_URL
+      accessKeyId: ""  # IC_AWS_ACCESS_KEY_ID
+      secretAccessKey: ""  # IC_AWS_SECRET_ACCESS_KEY
+      storageBucketName: ""  # IC_AWS_STORAGE_BUCKET_NAME
+  
+  # AWS Cognito Configuration
+  cognito:
+    clientId: ""  # AWS_COGNITO_CLIENT_ID
+    cognitoDomain: ""  # AWS_COGNITO_COGNITO_DOMAIN
+    authority: ""  # AWS_COGNITO_AUTHORITY
+    accessKey: ""  # FUNDY_COGNITO_ACCESS_KEY
+    secretAccessKey: ""  # FUNDY_COGNITO_SECRET_ACCESS_KEY
+    userPoolId: ""  # FUNDY_COGNITO_USER_POOL_ID
+    jwksUrl: ""  # FUNDY_COGNITO_JWKS_URL
+  
+  # Third-party API Keys
+  apiKeys:
+    gleap: ""  # VITE_GLEAP_API_KEY
+    gleapIdentitySecret: ""  # GLEAP_IDENTITY_SECRET
+    amplitude: ""  # AMPLITUDE_API_KEY
+    muiLicense: ""  # MUI_LICENSE_KEY
+    openAi: ""  # OPEN_AI_API_KEY
+    postmark: ""  # VITE_POSTMARK_API_KEY
+  
+  # Contact Form Configuration
+  contactForm:
+    to: ""  # VITE_CONTACT_FORM_TO
+    from: ""  # VITE_CONTACT_FORM_FROM
+    subject: ""  # VITE_CONTACT_FORM_SUBJECT
+  
+  # Session and Security
+  session:
+    secret: ""  # FUNDY_SESSION_SECRET
+  
+  # Monitoring and Observability
+  monitoring:
+    sentryBackendDsn: ""  # SENTRY_BACKEND_DSN
+    otelExporterOtlpEndpoint: ""  # OTEL_EXPORTER_OTLP_ENDPOINT
+  
+  # Service Configuration
+  optimization:
+    parallelization: "8"  # OPTIMIZATION_PARALLELIZATION
+  
+  backtesting:
+    parallelization: "8"  # BACKTESTING_PARALLELIZATION
+  
+  # Base URL
+  baseUrl: "http://localhost:8000"  # BASE_URL
+
+# Service configuration
+services:
+  type: ClusterIP
+  ports:
+    http: 80
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: "traefik"  # Change to your ingress controller
+  annotations: {}
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  
+  hosts:
+    - host: fundy.example.com  # Change to your domain
+      paths:
+        - path: /api/analytics
+          pathType: Prefix
+          service: analytics
+        - path: /api/jobs
+          pathType: Prefix
+          service: jobs
+        - path: /api/reports
+          pathType: Prefix
+          service: reports
+        - path: /api/users
+          pathType: Prefix
+          service: users
+        - path: /api/builder
+          pathType: Prefix
+          service: builder
+        - path: /api/data
+          pathType: Prefix
+          service: data
+        - path: /
+          pathType: Prefix
+          service: frontend
+  
+  tls: []
+    # - secretName: fundy-tls
+    #   hosts:
+    #     - fundy.example.com
+
+# Health check configuration
+healthcheck:
+  enabled: true
+  path: /health
+  initialDelaySeconds: 40
+  periodSeconds: 30
+  timeoutSeconds: 10
+  failureThreshold: 3
+
+# Pod annotations
+podAnnotations: {}
+
+# Pod security context
+podSecurityContext: {}
+  # fsGroup: 2000
+
+# Container security context
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity: {}

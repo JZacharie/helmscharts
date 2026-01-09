@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "fundy.fullname" . }}-frontend
+  labels:
+    {{- include "fundy.labels" . | nindent 4 }}
+    {{- include "fundy.componentLabels" "frontend" | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount.frontend }}
+  selector:
+    matchLabels:
+      {{- include "fundy.selectorLabels" . | nindent 6 }}
+      {{- include "fundy.componentLabels" "frontend" | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "fundy.selectorLabels" . | nindent 8 }}
+        {{- include "fundy.componentLabels" "frontend" | nindent 8 }}
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: frontend
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        image: "{{ .Values.images.frontend.repository }}:{{ .Values.images.frontend.tag }}"
+        imagePullPolicy: {{ .Values.images.frontend.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        env:
+        # Service endpoints (internal Kubernetes DNS)
+        - name: FUNDY_DATA_ENDPOINT
+          value: "http://{{ include "fundy.fullname" . }}-data:80/api/data/"
+        - name: FUNDY_JOBS_ENDPOINT
+          value: "http://{{ include "fundy.fullname" . }}-jobs:80/api/jobs/"
+        - name: FUNDY_BUILDER_ENDPOINT
+          value: "http://{{ include "fundy.fullname" . }}-builder:80/api/builder/"
+        - name: FUNDY_ANALYTICS_ENDPOINT
+          value: "http://{{ include "fundy.fullname" . }}-analytics:80/api/analytics/"
+        - name: FUNDY_USERS_ENDPOINT
+          value: "http://{{ include "fundy.fullname" . }}-users:80/api/users/"
+        # AWS S3 Configuration
+        - name: IC_AWS_S3_REGION_NAME
+          value: {{ .Values.env.aws.s3.regionName | quote }}
+        - name: IC_AWS_S3_ENDPOINT_URL
+          value: {{ .Values.env.aws.s3.endpointUrl | quote }}
+        - name: IC_AWS_ACCESS_KEY_ID
+          value: {{ .Values.env.aws.s3.accessKeyId | quote }}
+        - name: IC_AWS_SECRET_ACCESS_KEY
+          value: {{ .Values.env.aws.s3.secretAccessKey | quote }}
+        - name: IC_AWS_STORAGE_BUCKET_NAME
+          value: {{ .Values.env.aws.s3.storageBucketName | quote }}
+        # Base URL
+        - name: BASE_URL
+          value: {{ .Values.env.baseUrl | quote }}
+        # AWS Cognito
+        - name: AWS_COGNITO_CLIENT_ID
+          value: {{ .Values.env.cognito.clientId | quote }}
+        - name: AWS_COGNITO_COGNITO_DOMAIN
+          value: {{ .Values.env.cognito.cognitoDomain | quote }}
+        - name: AWS_COGNITO_AUTHORITY
+          value: {{ .Values.env.cognito.authority | quote }}
+        # API Keys
+        - name: VITE_GLEAP_API_KEY
+          value: {{ .Values.env.apiKeys.gleap | quote }}
+        - name: GLEAP_IDENTITY_SECRET
+          value: {{ .Values.env.apiKeys.gleapIdentitySecret | quote }}
+        - name: AMPLITUDE_API_KEY
+          value: {{ .Values.env.apiKeys.amplitude | quote }}
+        - name: MUI_LICENSE_KEY
+          value: {{ .Values.env.apiKeys.muiLicense | quote }}
+        - name: OPEN_AI_API_KEY
+          value: {{ .Values.env.apiKeys.openAi | quote }}
+        - name: VITE_POSTMARK_API_KEY
+          value: {{ .Values.env.apiKeys.postmark | quote }}
+        # Contact Form
+        - name: VITE_CONTACT_FORM_TO
+          value: {{ .Values.env.contactForm.to | quote }}
+        - name: VITE_CONTACT_FORM_FROM
+          value: {{ .Values.env.contactForm.from | quote }}
+        - name: VITE_CONTACT_FORM_SUBJECT
+          value: {{ .Values.env.contactForm.subject | quote }}
+        # Session
+        - name: FUNDY_SESSION_SECRET
+          value: {{ .Values.env.session.secret | quote }}
+        resources:
+          {{- toYaml .Values.resources.frontend | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,42 @@
+Thank you for installing {{ .Chart.Name }}.
+
+Your release is named {{ .Release.Name }}.
+
+The Fundy application has been deployed with the following components:
+
+  ✓ Analytics Service
+  ✓ Jobs Service
+  ✓ Reports Service
+  ✓ Users Service
+  ✓ Frontend Service
+  ✓ Optimizer Service
+  ✓ Builder Service
+  ✓ Data Service
+
+To learn more about the release, try:
+
+  $ helm status {{ .Release.Name }} -n {{ .Release.Namespace }}
+  $ helm get all {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+{{- if .Values.ingress.enabled }}
+
+Application URL:
+{{- range .Values.ingress.hosts }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ .host }}
+{{- end }}
+{{- else }}
+
+To access the application:
+
+1. Forward the frontend service port:
+   kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "fundy.fullname" . }}-frontend 8080:80
+
+2. Access the application at: http://localhost:8080
+{{- end }}
+
+IMPORTANT:
+- Make sure you have created the 'regcred' secret for pulling images from ghcr.io
+- Ensure all database connections (ClickHouse, PostgreSQL) are configured correctly
+- Verify that all external dependencies (AWS, Cognito, etc.) are accessible
+
+For more information, see the README.md file in the chart repository.
