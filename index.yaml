@@ -160,6 +160,24 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/deploy-pilot-0.1.0.tgz
     version: 0.1.0
+  fundy:
+  - apiVersion: v2
+    appVersion: sha-6e9f6c2
+    created: "2026-01-09T10:36:28.301936003Z"
+    description: Helm chart for Fundy application - Financial data analysis platform
+      with microservices architecture
+    digest: 2ec3c13fc06cb5a35098e93d52538c4905c5ba556cf34e2d727e1356df30bb05
+    keywords:
+    - fundy
+    - analytics
+    - microservices
+    maintainers:
+    - name: Joseph Zacharie
+    name: fundy
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/fundy-0.1.0/fundy-0.1.0.tgz
+    version: 0.1.0
   garage:
   - apiVersion: v2
     appVersion: v1.3.0
@@ -681,4 +699,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-01-08T10:32:11.613047117Z"
+generated: "2026-01-09T10:36:28.301962772Z"
