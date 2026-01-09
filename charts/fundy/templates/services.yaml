@@ -1,11 +1,6 @@
 {{- $fullname := include "fundy.fullname" . -}}
 {{- $labels := include "fundy.labels" . -}}
 {{- $selectorLabels := include "fundy.selectorLabels" . -}}
-{{- $services := .Values.services | default dict -}}
-{{- $ports := $services.ports | default dict -}}
-{{- $type := $services.type | default "ClusterIP" -}}
-{{- $backendPort := $ports.backend | default 80 -}}
-{{- $frontendPort := $ports.frontend | default 3000 -}}
 
 {{- $components := list "analytics" "jobs" "reports" "users" "frontend" "optimizer" "builder" "data" -}}
 
@@ -19,9 +14,9 @@ metadata:
     {{- $labels | nindent 4 }}
     {{- include "fundy.componentLabels" $component | nindent 4 }}
 spec:
-  type: {{ $type }}
+  type: {{ $.Values.services.type }}
   ports:
-    - port: {{ if eq $component "frontend" }}{{ $frontendPort }}{{ else }}{{ $backendPort }}{{ end }}
+    - port: {{ if eq $component "frontend" }}{{ $.Values.services.ports.frontend }}{{ else }}{{ $.Values.services.ports.backend }}{{ end }}
       targetPort: http
       protocol: TCP
       name: http

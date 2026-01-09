@@ -1,7 +1,8 @@
-# Fundy Helm Chart Default Values
+# Fundy Helm Chart Values
 
 global:
-  imagePullSecrets: []
+  imagePullSecrets:
+    - name: regcred
 
 replicaCount:
   analytics: 1
@@ -16,35 +17,35 @@ replicaCount:
 images:
   analytics:
     repository: ghcr.io/stainly/fundy/analytics
-    tag: latest
+    tag: sha-6e9f6c2
     pullPolicy: IfNotPresent
   jobs:
     repository: ghcr.io/stainly/fundy/jobs
-    tag: latest
+    tag: sha-6e9f6c2
     pullPolicy: IfNotPresent
   reports:
     repository: ghcr.io/stainly/fundy/reports
-    tag: latest
+    tag: sha-6e9f6c2
     pullPolicy: IfNotPresent
   users:
     repository: ghcr.io/stainly/fundy/users
-    tag: latest
+    tag: sha-6e9f6c2
     pullPolicy: IfNotPresent
   frontend:
     repository: ghcr.io/stainly/fundy/frontend
-    tag: latest
+    tag: sha-6e9f6c2
     pullPolicy: IfNotPresent
   optimizer:
     repository: ghcr.io/stainly/fundy/optimizer
-    tag: latest
+    tag: sha-6e9f6c2
     pullPolicy: IfNotPresent
   builder:
     repository: ghcr.io/stainly/fundy/builder
-    tag: latest
+    tag: sha-6e9f6c2
     pullPolicy: IfNotPresent
   data:
     repository: ghcr.io/stainly/fundy/data
-    tag: latest
+    tag: sha-0f03eae
     pullPolicy: IfNotPresent
 
 services:
@@ -54,25 +55,90 @@ services:
     frontend: 3000
 
 ingress:
-  enabled: false
-  className: ""
+  enabled: true
+  className: "traefik"
   annotations: {}
-  hosts: []
+  hosts:
+    - host: fundy.p.zacharie.org
+      paths:
+        - path: /api/analytics
+          pathType: Prefix
+          service: analytics
+        - path: /api/jobs
+          pathType: Prefix
+          service: jobs
+        - path: /api/reports
+          pathType: Prefix
+          service: reports
+        - path: /api/users
+          pathType: Prefix
+          service: users
+        - path: /api/builder
+          pathType: Prefix
+          service: builder
+        - path: /api/data
+          pathType: Prefix
+          service: data
+        - path: /
+          pathType: Prefix
+          service: frontend
   tls: []
 
-resources: {}
+resources:
+  analytics: {}
+  jobs: {}
+  reports: {}
+  users: {}
+  frontend: {}
+  optimizer: {}
+  builder: {}
+  data: {}
+
 env:
-  clickhouse: {}
-  databases: {}
+  clickhouse:
+    host: ""
+    port: ""
+    username: ""
+    password: ""
+  databases:
+    builder: ""
+    jobs: ""
+    users: ""
   aws:
-    s3: {}
-  cognito: {}
-  apiKeys: {}
-  contactForm: {}
-  session: {}
-  monitoring: {}
-  optimization: {}
-  backtesting: {}
+    s3:
+      regionName: ""
+      endpointUrl: ""
+      accessKeyId: ""
+      secretAccessKey: ""
+      storageBucketName: ""
+  cognito:
+    clientId: ""
+    cognitoDomain: ""
+    authority: ""
+    accessKey: ""
+    secretAccessKey: ""
+    userPoolId: ""
+    jwksUrl: ""
+  apiKeys:
+    gleap: ""
+    gleapIdentitySecret: ""
+    amplitude: ""
+    muiLicense: ""
+    openAi: ""
+    postmark: ""
+  contactForm:
+    to: ""
+    from: ""
+    subject: ""
+  session:
+    secret: ""
+  monitoring:
+    sentryBackendDsn: ""
+    otelExporterOtlpEndpoint: ""
+  optimization:
+    parallelization: "8"
+  backtesting:
+    parallelization: "8"
   baseUrl: "http://localhost:8000"
 
 healthcheck:
