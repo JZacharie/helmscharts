@@ -6,7 +6,7 @@ metadata:
     {{- include "fundy.labels" . | nindent 4 }}
     {{- include "fundy.componentLabels" "reports" | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount.reports }}
+  replicas: {{ index .Values.replicaCount "reports" | default 1 }}
   selector:
     matchLabels:
       {{- include "fundy.selectorLabels" . | nindent 6 }}
@@ -32,8 +32,8 @@ spec:
       - name: reports
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-        image: "{{ .Values.images.reports.repository }}:{{ .Values.images.reports.tag }}"
-        imagePullPolicy: {{ .Values.images.reports.pullPolicy }}
+        image: "{{ index .Values.images "reports" | default (dict "repository" "") | .repository }}:{{ index .Values.images "reports" | default (dict "tag" "latest") | .tag }}"
+        imagePullPolicy: {{ index .Values.images "reports" | default (dict "pullPolicy" "IfNotPresent") | .pullPolicy }}
         ports:
         - name: http
           containerPort: 80
@@ -46,9 +46,9 @@ spec:
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: {{ .Values.env.monitoring.otelExporterOtlpEndpoint | quote }}
         - name: BUILDER_SERVICE_URL
-          value: "http://{{ include "fundy.fullname" . }}-builder:80"
+          value: "http://{{ include "fundy.fullname" . }}-builder-svc:80"
         - name: ANALYTICS_SERVICE_URL
-          value: "http://{{ include "fundy.fullname" . }}-analytics:80"
+          value: "http://{{ include "fundy.fullname" . }}-analytics-svc:80"
         {{- if .Values.healthcheck.enabled }}
         livenessProbe:
           httpGet:

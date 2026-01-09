@@ -6,7 +6,7 @@ metadata:
     {{- include "fundy.labels" . | nindent 4 }}
     {{- include "fundy.componentLabels" "users" | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount.users }}
+  replicas: {{ index .Values.replicaCount "users" | default 1 }}
   selector:
     matchLabels:
       {{- include "fundy.selectorLabels" . | nindent 6 }}
@@ -32,15 +32,15 @@ spec:
       - name: users
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-        image: "{{ .Values.images.users.repository }}:{{ .Values.images.users.tag }}"
-        imagePullPolicy: {{ .Values.images.users.pullPolicy }}
+        image: "{{ index .Values.images "users" | default (dict "repository" "") | .repository }}:{{ index .Values.images "users" | default (dict "tag" "latest") | .tag }}"
+        imagePullPolicy: {{ index .Values.images "users" | default (dict "pullPolicy" "IfNotPresent") | .pullPolicy }}
         ports:
         - name: http
           containerPort: 80
           protocol: TCP
         env:
         - name: DATABASE_URL
-          value: {{ .Values.env.databases.users | quote }}
+          value: {{ index .Values.env.databases "users" | default "" | quote }}
         - name: AMPLITUDE_API_KEY
           value: {{ .Values.env.apiKeys.amplitude | quote }}
         - name: FUNDY_COGNITO_ACCESS_KEY

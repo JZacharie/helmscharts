@@ -6,7 +6,7 @@ metadata:
     {{- include "fundy.labels" . | nindent 4 }}
     {{- include "fundy.componentLabels" "jobs" | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount.jobs }}
+  replicas: {{ index .Values.replicaCount "jobs" | default 1 }}
   selector:
     matchLabels:
       {{- include "fundy.selectorLabels" . | nindent 6 }}
@@ -32,15 +32,15 @@ spec:
       - name: jobs
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-        image: "{{ .Values.images.jobs.repository }}:{{ .Values.images.jobs.tag }}"
-        imagePullPolicy: {{ .Values.images.jobs.pullPolicy }}
+        image: "{{ index .Values.images "jobs" | default (dict "repository" "") | .repository }}:{{ index .Values.images "jobs" | default (dict "tag" "latest") | .tag }}"
+        imagePullPolicy: {{ index .Values.images "jobs" | default (dict "pullPolicy" "IfNotPresent") | .pullPolicy }}
         ports:
         - name: http
           containerPort: 80
           protocol: TCP
         env:
         - name: DATABASE_URL
-          value: {{ .Values.env.databases.jobs | quote }}
+          value: {{ index .Values.env.databases "jobs" | default "" | quote }}
         - name: CLICKHOUSE_HOST
           value: {{ .Values.env.clickhouse.host | quote }}
         - name: CLICKHOUSE_PORT

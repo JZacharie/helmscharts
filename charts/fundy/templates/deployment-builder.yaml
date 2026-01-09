@@ -6,7 +6,7 @@ metadata:
     {{- include "fundy.labels" . | nindent 4 }}
     {{- include "fundy.componentLabels" "builder" | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount.builder }}
+  replicas: {{ index .Values.replicaCount "builder" | default 1 }}
   selector:
     matchLabels:
       {{- include "fundy.selectorLabels" . | nindent 6 }}
@@ -32,15 +32,15 @@ spec:
       - name: builder
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-        image: "{{ .Values.images.builder.repository }}:{{ .Values.images.builder.tag }}"
-        imagePullPolicy: {{ .Values.images.builder.pullPolicy }}
+        image: "{{ index .Values.images "builder" | default (dict "repository" "") | .repository }}:{{ index .Values.images "builder" | default (dict "tag" "latest") | .tag }}"
+        imagePullPolicy: {{ index .Values.images "builder" | default (dict "pullPolicy" "IfNotPresent") | .pullPolicy }}
         ports:
         - name: http
           containerPort: 80
           protocol: TCP
         env:
         - name: DATABASE_URL
-          value: {{ .Values.env.databases.builder | quote }}
+          value: {{ index .Values.env.databases "builder" | default "" | quote }}
         - name: CLICKHOUSE_HOST
           value: {{ .Values.env.clickhouse.host | quote }}
         - name: CLICKHOUSE_PORT
@@ -60,9 +60,9 @@ spec:
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: {{ .Values.env.monitoring.otelExporterOtlpEndpoint | quote }}
         - name: OPTIMIZER_SERVICE_URL
-          value: "http://{{ include "fundy.fullname" . }}-optimizer:80"
+          value: "http://{{ include "fundy.fullname" . }}-optimizer-svc:80"
         - name: JOBS_SERVICE_URL
-          value: "http://{{ include "fundy.fullname" . }}-jobs:80"
+          value: "http://{{ include "fundy.fullname" . }}-jobs-svc:80"
         {{- if .Values.healthcheck.enabled }}
         livenessProbe:
           httpGet:

@@ -6,7 +6,7 @@ metadata:
     {{- include "fundy.labels" . | nindent 4 }}
     {{- include "fundy.componentLabels" "frontend" | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount.frontend }}
+  replicas: {{ index .Values.replicaCount "frontend" | default 1 }}
   selector:
     matchLabels:
       {{- include "fundy.selectorLabels" . | nindent 6 }}
@@ -32,8 +32,8 @@ spec:
       - name: frontend
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-        image: "{{ .Values.images.frontend.repository }}:{{ .Values.images.frontend.tag }}"
-        imagePullPolicy: {{ .Values.images.frontend.pullPolicy }}
+        image: "{{ index .Values.images "frontend" | default (dict "repository" "") | .repository }}:{{ index .Values.images "frontend" | default (dict "tag" "latest") | .tag }}"
+        imagePullPolicy: {{ index .Values.images "frontend" | default (dict "pullPolicy" "IfNotPresent") | .pullPolicy }}
         ports:
         - name: http
           containerPort: 3000
