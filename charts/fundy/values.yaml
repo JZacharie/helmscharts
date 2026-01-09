@@ -134,7 +134,7 @@ env:
     secret: ""
   monitoring:
     sentryBackendDsn: ""
-    otelExporterOtlpEndpoint: ""
+    otelExporterOtlpEndpoint: "http://o2c-openobserve-collector-gateway-collector-headless:4318"
   optimization:
     parallelization: "8"
   backtesting:

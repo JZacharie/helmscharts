@@ -41,15 +41,15 @@ spec:
         env:
         # Service endpoints (internal Kubernetes DNS)
         - name: FUNDY_DATA_ENDPOINT
-          value: "http://{{ include "fundy.fullname" . }}-data-svc:80/api/data/"
+          value: "http://{{ include "fundy.fullname" . }}-data:80/api/data/"
         - name: FUNDY_JOBS_ENDPOINT
-          value: "http://{{ include "fundy.fullname" . }}-jobs-svc:80/api/jobs/"
+          value: "http://{{ include "fundy.fullname" . }}-jobs:80/api/jobs/"
         - name: FUNDY_BUILDER_ENDPOINT
-          value: "http://{{ include "fundy.fullname" . }}-builder-svc:80/api/builder/"
+          value: "http://{{ include "fundy.fullname" . }}-builder:80/api/builder/"
         - name: FUNDY_ANALYTICS_ENDPOINT
-          value: "http://{{ include "fundy.fullname" . }}-analytics-svc:80/api/analytics/"
+          value: "http://{{ include "fundy.fullname" . }}-analytics:80/api/analytics/"
         - name: FUNDY_USERS_ENDPOINT
-          value: "http://{{ include "fundy.fullname" . }}-users-svc:80/api/users/"
+          value: "http://{{ include "fundy.fullname" . }}-users:80/api/users/"
         # AWS S3 Configuration
         - name: IC_AWS_S3_REGION_NAME
           value: {{ .Values.env.aws.s3.regionName | quote }}
