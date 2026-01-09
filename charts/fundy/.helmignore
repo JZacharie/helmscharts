@@ -21,5 +21,5 @@
 .idea/
 *.tmproj
 .vscode/
-# values.yaml should not be in the chart package (contains secrets)
-values.yaml
+# values.yaml contains default values and should be in the chart package
+# Use a separate values-secrets.yaml or similar for actual secrets

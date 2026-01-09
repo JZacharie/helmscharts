@@ -1,0 +1,921 @@
+---
+# Source: fundy/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fundy-config
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+data:
+  # Add any non-sensitive configuration here if needed
+  # For now, this is a placeholder for the checksum annotation in deployments
+---
+# Source: fundy/templates/services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: fundy-analytics-svc
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: analytics
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/component: analytics
+---
+# Source: fundy/templates/services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: fundy-jobs-svc
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: jobs
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/component: jobs
+---
+# Source: fundy/templates/services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: fundy-reports-svc
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: reports
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/component: reports
+---
+# Source: fundy/templates/services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: fundy-users-svc
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: users
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/component: users
+---
+# Source: fundy/templates/services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: fundy-frontend-svc
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: frontend
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/component: frontend
+---
+# Source: fundy/templates/services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: fundy-optimizer-svc
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: optimizer
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/component: optimizer
+---
+# Source: fundy/templates/services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: fundy-builder-svc
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: builder
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/component: builder
+---
+# Source: fundy/templates/services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: fundy-data-svc
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: data
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/component: data
+---
+# Source: fundy/templates/deployment-analytics.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fundy-analytics
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: analytics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fundy
+      app.kubernetes.io/instance: fundy
+      app.kubernetes.io/component: analytics
+  template:
+    metadata:
+      annotations:
+        checksum/config: fa981cdf3d4d4fd6f529188530905036ab13ef2743988e016367ee45988e86a4
+      labels:
+        app.kubernetes.io/name: fundy
+        app.kubernetes.io/instance: fundy
+        app.kubernetes.io/component: analytics
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      securityContext:
+        {}
+      containers:
+      - name: analytics
+        securityContext:
+            {}
+        image: "ghcr.io/stainly/fundy/analytics:sha-6e9f6c2"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        env:
+        - name: CLICKHOUSE_HOST
+          value: ""
+        - name: CLICKHOUSE_PORT
+          value: ""
+        - name: CLICKHOUSE_USERNAME
+          value: ""
+        - name: CLICKHOUSE_PASSWORD
+          value: ""
+        - name: AMPLITUDE_API_KEY
+          value: ""
+        - name: FUNDY_COGNITO_JWKS_URL
+          value: ""
+        - name: SENTRY_BACKEND_DSN
+          value: ""
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: ""
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        resources:
+            {}
+---
+# Source: fundy/templates/deployment-builder.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fundy-builder
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: builder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fundy
+      app.kubernetes.io/instance: fundy
+      app.kubernetes.io/component: builder
+  template:
+    metadata:
+      annotations:
+        checksum/config: fa981cdf3d4d4fd6f529188530905036ab13ef2743988e016367ee45988e86a4
+      labels:
+        app.kubernetes.io/name: fundy
+        app.kubernetes.io/instance: fundy
+        app.kubernetes.io/component: builder
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      securityContext:
+        {}
+      containers:
+      - name: builder
+        securityContext:
+            {}
+        image: "ghcr.io/stainly/fundy/builder:sha-6e9f6c2"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        env:
+        - name: DATABASE_URL
+          value: ""
+        - name: CLICKHOUSE_HOST
+          value: ""
+        - name: CLICKHOUSE_PORT
+          value: ""
+        - name: CLICKHOUSE_USERNAME
+          value: ""
+        - name: CLICKHOUSE_PASSWORD
+          value: ""
+        - name: BACKTESTING_PARALLELIZATION
+          value: "8"
+        - name: AMPLITUDE_API_KEY
+          value: ""
+        - name: FUNDY_COGNITO_JWKS_URL
+          value: ""
+        - name: SENTRY_BACKEND_DSN
+          value: ""
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: ""
+        - name: OPTIMIZER_SERVICE_URL
+          value: "http://fundy-optimizer-svc:80"
+        - name: JOBS_SERVICE_URL
+          value: "http://fundy-jobs-svc:80"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        resources:
+            {}
+---
+# Source: fundy/templates/deployment-data.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fundy-data
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: data
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fundy
+      app.kubernetes.io/instance: fundy
+      app.kubernetes.io/component: data
+  template:
+    metadata:
+      annotations:
+        checksum/config: fa981cdf3d4d4fd6f529188530905036ab13ef2743988e016367ee45988e86a4
+      labels:
+        app.kubernetes.io/name: fundy
+        app.kubernetes.io/instance: fundy
+        app.kubernetes.io/component: data
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      securityContext:
+        {}
+      containers:
+      - name: data
+        securityContext:
+            {}
+        image: "ghcr.io/stainly/fundy/data:sha-0f03eae"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        env:
+        - name: CLICKHOUSE_HOST
+          value: ""
+        - name: CLICKHOUSE_PORT
+          value: ""
+        - name: CLICKHOUSE_USERNAME
+          value: ""
+        - name: CLICKHOUSE_PASSWORD
+          value: ""
+        - name: AMPLITUDE_API_KEY
+          value: ""
+        - name: FUNDY_COGNITO_JWKS_URL
+          value: ""
+        - name: SENTRY_BACKEND_DSN
+          value: ""
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: ""
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        resources:
+            {}
+---
+# Source: fundy/templates/deployment-frontend.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fundy-frontend
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fundy
+      app.kubernetes.io/instance: fundy
+      app.kubernetes.io/component: frontend
+  template:
+    metadata:
+      annotations:
+        checksum/config: fa981cdf3d4d4fd6f529188530905036ab13ef2743988e016367ee45988e86a4
+      labels:
+        app.kubernetes.io/name: fundy
+        app.kubernetes.io/instance: fundy
+        app.kubernetes.io/component: frontend
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      securityContext:
+        {}
+      containers:
+      - name: frontend
+        securityContext:
+            {}
+        image: "ghcr.io/stainly/fundy/frontend:sha-6e9f6c2"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 3000
+          protocol: TCP
+        env:
+        # Service endpoints (internal Kubernetes DNS)
+        - name: FUNDY_DATA_ENDPOINT
+          value: "http://fundy-data-svc:80/api/data/"
+        - name: FUNDY_JOBS_ENDPOINT
+          value: "http://fundy-jobs-svc:80/api/jobs/"
+        - name: FUNDY_BUILDER_ENDPOINT
+          value: "http://fundy-builder-svc:80/api/builder/"
+        - name: FUNDY_ANALYTICS_ENDPOINT
+          value: "http://fundy-analytics-svc:80/api/analytics/"
+        - name: FUNDY_USERS_ENDPOINT
+          value: "http://fundy-users-svc:80/api/users/"
+        # AWS S3 Configuration
+        - name: IC_AWS_S3_REGION_NAME
+          value: ""
+        - name: IC_AWS_S3_ENDPOINT_URL
+          value: ""
+        - name: IC_AWS_ACCESS_KEY_ID
+          value: ""
+        - name: IC_AWS_SECRET_ACCESS_KEY
+          value: ""
+        - name: IC_AWS_STORAGE_BUCKET_NAME
+          value: ""
+        # Base URL
+        - name: BASE_URL
+          value: "http://localhost:8000"
+        # AWS Cognito
+        - name: AWS_COGNITO_CLIENT_ID
+          value: ""
+        - name: AWS_COGNITO_COGNITO_DOMAIN
+          value: ""
+        - name: AWS_COGNITO_AUTHORITY
+          value: ""
+        # API Keys
+        - name: VITE_GLEAP_API_KEY
+          value: ""
+        - name: GLEAP_IDENTITY_SECRET
+          value: ""
+        - name: AMPLITUDE_API_KEY
+          value: ""
+        - name: MUI_LICENSE_KEY
+          value: ""
+        - name: OPEN_AI_API_KEY
+          value: ""
+        - name: VITE_POSTMARK_API_KEY
+          value: ""
+        # Contact Form
+        - name: VITE_CONTACT_FORM_TO
+          value: ""
+        - name: VITE_CONTACT_FORM_FROM
+          value: ""
+        - name: VITE_CONTACT_FORM_SUBJECT
+          value: ""
+        # Session
+        - name: FUNDY_SESSION_SECRET
+          value: ""
+        resources:
+            {}
+---
+# Source: fundy/templates/deployment-jobs.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fundy-jobs
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: jobs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fundy
+      app.kubernetes.io/instance: fundy
+      app.kubernetes.io/component: jobs
+  template:
+    metadata:
+      annotations:
+        checksum/config: fa981cdf3d4d4fd6f529188530905036ab13ef2743988e016367ee45988e86a4
+      labels:
+        app.kubernetes.io/name: fundy
+        app.kubernetes.io/instance: fundy
+        app.kubernetes.io/component: jobs
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      securityContext:
+        {}
+      containers:
+      - name: jobs
+        securityContext:
+            {}
+        image: "ghcr.io/stainly/fundy/jobs:sha-6e9f6c2"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        env:
+        - name: DATABASE_URL
+          value: ""
+        - name: CLICKHOUSE_HOST
+          value: ""
+        - name: CLICKHOUSE_PORT
+          value: ""
+        - name: CLICKHOUSE_USERNAME
+          value: ""
+        - name: CLICKHOUSE_PASSWORD
+          value: ""
+        - name: FUNDY_COGNITO_JWKS_URL
+          value: ""
+        - name: SENTRY_BACKEND_DSN
+          value: ""
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: ""
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        resources:
+            {}
+---
+# Source: fundy/templates/deployment-optimizer.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fundy-optimizer
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: optimizer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fundy
+      app.kubernetes.io/instance: fundy
+      app.kubernetes.io/component: optimizer
+  template:
+    metadata:
+      annotations:
+        checksum/config: fa981cdf3d4d4fd6f529188530905036ab13ef2743988e016367ee45988e86a4
+      labels:
+        app.kubernetes.io/name: fundy
+        app.kubernetes.io/instance: fundy
+        app.kubernetes.io/component: optimizer
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      securityContext:
+        {}
+      containers:
+      - name: optimizer
+        securityContext:
+            {}
+        image: "ghcr.io/stainly/fundy/optimizer:sha-6e9f6c2"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        env:
+        - name: CLICKHOUSE_HOST
+          value: ""
+        - name: CLICKHOUSE_PORT
+          value: ""
+        - name: CLICKHOUSE_USERNAME
+          value: ""
+        - name: CLICKHOUSE_PASSWORD
+          value: ""
+        - name: OPTIMIZATION_PARALLELIZATION
+          value: "8"
+        - name: FUNDY_COGNITO_JWKS_URL
+          value: ""
+        - name: SENTRY_BACKEND_DSN
+          value: ""
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        resources:
+            {}
+---
+# Source: fundy/templates/deployment-reports.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fundy-reports
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: reports
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fundy
+      app.kubernetes.io/instance: fundy
+      app.kubernetes.io/component: reports
+  template:
+    metadata:
+      annotations:
+        checksum/config: fa981cdf3d4d4fd6f529188530905036ab13ef2743988e016367ee45988e86a4
+      labels:
+        app.kubernetes.io/name: fundy
+        app.kubernetes.io/instance: fundy
+        app.kubernetes.io/component: reports
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      securityContext:
+        {}
+      containers:
+      - name: reports
+        securityContext:
+            {}
+        image: "ghcr.io/stainly/fundy/reports:sha-6e9f6c2"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        env:
+        - name: FUNDY_COGNITO_JWKS_URL
+          value: ""
+        - name: SENTRY_BACKEND_DSN
+          value: ""
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: ""
+        - name: BUILDER_SERVICE_URL
+          value: "http://fundy-builder-svc:80"
+        - name: ANALYTICS_SERVICE_URL
+          value: "http://fundy-analytics-svc:80"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        resources:
+            {}
+---
+# Source: fundy/templates/deployment-users.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fundy-users
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: users
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fundy
+      app.kubernetes.io/instance: fundy
+      app.kubernetes.io/component: users
+  template:
+    metadata:
+      annotations:
+        checksum/config: fa981cdf3d4d4fd6f529188530905036ab13ef2743988e016367ee45988e86a4
+      labels:
+        app.kubernetes.io/name: fundy
+        app.kubernetes.io/instance: fundy
+        app.kubernetes.io/component: users
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      securityContext:
+        {}
+      containers:
+      - name: users
+        securityContext:
+            {}
+        image: "ghcr.io/stainly/fundy/users:sha-6e9f6c2"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        env:
+        - name: DATABASE_URL
+          value: ""
+        - name: AMPLITUDE_API_KEY
+          value: ""
+        - name: FUNDY_COGNITO_ACCESS_KEY
+          value: ""
+        - name: FUNDY_COGNITO_SECRET_ACCESS_KEY
+          value: ""
+        - name: FUNDY_COGNITO_USER_POOL_ID
+          value: ""
+        - name: FUNDY_COGNITO_JWKS_URL
+          value: ""
+        - name: SENTRY_BACKEND_DSN
+          value: ""
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: ""
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 40
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        resources:
+            {}
+---
+# Source: fundy/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fundy
+  labels:
+    helm.sh/chart: fundy-0.1.2
+    app.kubernetes.io/name: fundy
+    app.kubernetes.io/instance: fundy
+    app.kubernetes.io/version: "sha-6e9f6c2"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: "fundy.p.zacharie.org"
+      http:
+        paths:
+          - path: /api/analytics
+            pathType: Prefix
+            backend:
+              service:
+                name: fundy-analytics-svc
+                port:
+                  number: 80
+          - path: /api/jobs
+            pathType: Prefix
+            backend:
+              service:
+                name: fundy-jobs-svc
+                port:
+                  number: 80
+          - path: /api/reports
+            pathType: Prefix
+            backend:
+              service:
+                name: fundy-reports-svc
+                port:
+                  number: 80
+          - path: /api/users
+            pathType: Prefix
+            backend:
+              service:
+                name: fundy-users-svc
+                port:
+                  number: 80
+          - path: /api/builder
+            pathType: Prefix
+            backend:
+              service:
+                name: fundy-builder-svc
+                port:
+                  number: 80
+          - path: /api/data
+            pathType: Prefix
+            backend:
+              service:
+                name: fundy-data-svc
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fundy-frontend-svc
+                port:
+                  number: 3000
