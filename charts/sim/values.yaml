@@ -677,7 +677,7 @@ cronjobs:
   # Global CronJob settings
   image:
     repository: curlimages/curl
-    tag: 8.5.0
+    tag: 8.18.0
     pullPolicy: IfNotPresent
     
   resources:
