@@ -1,147 +1,31 @@
 {{- $fullname := include "fundy.fullname" . -}}
 {{- $labels := include "fundy.labels" . -}}
 {{- $selectorLabels := include "fundy.selectorLabels" . -}}
+{{- $services := .Values.services | default dict -}}
+{{- $ports := $services.ports | default dict -}}
+{{- $type := $services.type | default "ClusterIP" -}}
+{{- $backendPort := $ports.backend | default 80 -}}
+{{- $frontendPort := $ports.frontend | default 3000 -}}
+
+{{- $components := list "analytics" "jobs" "reports" "users" "frontend" "optimizer" "builder" "data" -}}
+
+{{- range $component := $components }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $fullname }}-analytics
+  name: {{ $fullname }}-{{ $component }}-svc
   labels:
     {{- $labels | nindent 4 }}
-    {{- include "fundy.componentLabels" "analytics" | nindent 4 }}
+    {{- include "fundy.componentLabels" $component | nindent 4 }}
 spec:
-  type: {{ .Values.services.type }}
+  type: {{ $type }}
   ports:
-    - port: {{ .Values.services.ports.backend }}
+    - port: {{ if eq $component "frontend" }}{{ $frontendPort }}{{ else }}{{ $backendPort }}{{ end }}
       targetPort: http
       protocol: TCP
       name: http
   selector:
     {{- $selectorLabels | nindent 4 }}
-    {{- include "fundy.componentLabels" "analytics" | nindent 4 }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ $fullname }}-jobs
-  labels:
-    {{- $labels | nindent 4 }}
-    {{- include "fundy.componentLabels" "jobs" | nindent 4 }}
-spec:
-  type: {{ .Values.services.type }}
-  ports:
-    - port: {{ .Values.services.ports.backend }}
-      targetPort: http
-      protocol: TCP
-      name: http
-  selector:
-    {{- $selectorLabels | nindent 4 }}
-    {{- include "fundy.componentLabels" "jobs" | nindent 4 }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ $fullname }}-reports
-  labels:
-    {{- $labels | nindent 4 }}
-    {{- include "fundy.componentLabels" "reports" | nindent 4 }}
-spec:
-  type: {{ .Values.services.type }}
-  ports:
-    - port: {{ .Values.services.ports.backend }}
-      targetPort: http
-      protocol: TCP
-      name: http
-  selector:
-    {{- $selectorLabels | nindent 4 }}
-    {{- include "fundy.componentLabels" "reports" | nindent 4 }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ $fullname }}-users
-  labels:
-    {{- $labels | nindent 4 }}
-    {{- include "fundy.componentLabels" "users" | nindent 4 }}
-spec:
-  type: {{ .Values.services.type }}
-  ports:
-    - port: {{ .Values.services.ports.backend }}
-      targetPort: http
-      protocol: TCP
-      name: http
-  selector:
-    {{- $selectorLabels | nindent 4 }}
-    {{- include "fundy.componentLabels" "users" | nindent 4 }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ $fullname }}-frontend
-  labels:
-    {{- $labels | nindent 4 }}
-    {{- include "fundy.componentLabels" "frontend" | nindent 4 }}
-spec:
-  type: {{ .Values.services.type }}
-  ports:
-    - port: {{ .Values.services.ports.frontend }}
-      targetPort: http
-      protocol: TCP
-      name: http
-  selector:
-    {{- $selectorLabels | nindent 4 }}
-    {{- include "fundy.componentLabels" "frontend" | nindent 4 }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ $fullname }}-optimizer
-  labels:
-    {{- $labels | nindent 4 }}
-    {{- include "fundy.componentLabels" "optimizer" | nindent 4 }}
-spec:
-  type: {{ .Values.services.type }}
-  ports:
-    - port: {{ .Values.services.ports.backend }}
-      targetPort: http
-      protocol: TCP
-      name: http
-  selector:
-    {{- $selectorLabels | nindent 4 }}
-    {{- include "fundy.componentLabels" "optimizer" | nindent 4 }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ $fullname }}-builder
-  labels:
-    {{- $labels | nindent 4 }}
-    {{- include "fundy.componentLabels" "builder" | nindent 4 }}
-spec:
-  type: {{ .Values.services.type }}
-  ports:
-    - port: {{ .Values.services.ports.backend }}
-      targetPort: http
-      protocol: TCP
-      name: http
-  selector:
-    {{- $selectorLabels | nindent 4 }}
-    {{- include "fundy.componentLabels" "builder" | nindent 4 }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ $fullname }}-data
-  labels:
-    {{- $labels | nindent 4 }}
-    {{- include "fundy.componentLabels" "data" | nindent 4 }}
-spec:
-  type: {{ .Values.services.type }}
-  ports:
-    - port: {{ .Values.services.ports.backend }}
-      targetPort: http
-      protocol: TCP
-      name: http
-  selector:
-    {{- $selectorLabels | nindent 4 }}
-    {{- include "fundy.componentLabels" "data" | nindent 4 }}
+    {{- include "fundy.componentLabels" $component | nindent 4 }}
+{{- end }}

@@ -1,4 +1,4 @@
-{{- if .Values.ingress.enabled -}}
+{{- if (and .Values.ingress (default false .Values.ingress.enabled)) -}}
 {{- $fullname := include "fundy.fullname" . -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -34,7 +34,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ $fullname }}-{{ .service }}
+                name: {{ $fullname }}-{{ .service }}-svc
                 port:
                   {{- if eq .service "frontend" }}
                   number: {{ $.Values.services.ports.frontend }}
