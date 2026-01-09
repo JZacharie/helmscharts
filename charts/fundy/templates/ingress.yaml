@@ -34,7 +34,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ $fullname }}-{{ .service }}-svc
+                name: {{ $fullname }}-{{ .service }}-svc-svc
                 port:
                   {{- if eq .service "frontend" }}
                   number: {{ $.Values.services.ports.frontend }}
