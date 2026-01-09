@@ -1,6 +1,0 @@
-level=DEBUG msg="Original chart version" version=""
-level=DEBUG msg="Chart path" path=/home/joseph/git/helmscharts/charts/fundy
-level=DEBUG msg="number of dependencies in the chart" dependencies=0
-Error: fundy/templates/deployment-users.yaml:9:22
-  executing "fundy/templates/deployment-users.yaml" at <.Values.replicaCount.users>:
-    nil pointer evaluating interface {}.users
