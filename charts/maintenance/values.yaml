@@ -5,6 +5,13 @@ image:
 
 schedule: "0 3 * * *"
 
+# Image pruning configuration
+imagePrune:
+  # List of node names where image pruning should be SKIPPED
+  # If empty, pruning will be executed on all nodes
+  excludedNodes:
+    - vm169
+
 serviceAccount:
   create: true
   # The name of the service account to be used

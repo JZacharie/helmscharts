@@ -82,12 +82,30 @@ spec:
                 echo "Read-only filesystem: $IS_READONLY"
                 
                 # === Image Cleanup ===
-                echo "--- Cleaning up unused container images ---"
-                if ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "sudo crictl rmi --prune" 2>&1; then
-                  echo "✓ Image cleanup completed successfully"
+                {{- if .Values.imagePrune.excludedNodes }}
+                # Check if this node should skip image pruning
+                EXCLUDED_NODES="{{ range .Values.imagePrune.excludedNodes }}{{ . }} {{ end }}"
+                SKIP_PRUNE=false
+                for EXCLUDED_NODE in $EXCLUDED_NODES; do
+                  if [ "$NODE_NAME" = "$EXCLUDED_NODE" ]; then
+                    SKIP_PRUNE=true
+                    break
+                  fi
+                done
+                
+                if [ "$SKIP_PRUNE" = "true" ]; then
+                  echo "--- Skipping image cleanup (node is in excluded list) ---"
                 else
-                  echo "✗ Image cleanup failed"
+                {{- end }}
+                  echo "--- Cleaning up unused container images ---"
+                  if ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "sudo crictl rmi --prune" 2>&1; then
+                    echo "✓ Image cleanup completed successfully"
+                  else
+                    echo "✗ Image cleanup failed"
+                  fi
+                {{- if .Values.imagePrune.excludedNodes }}
                 fi
+                {{- end }}
                 
                 # === Package Updates ===
                 if [ "$IS_READONLY" = "true" ]; then
