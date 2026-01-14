@@ -5,6 +5,8 @@ image:
 
 replicaCount: 2
 
+nodeSelector: {}
+
 serviceAccount:
   create: true
   name: "keda-waiting-page"
