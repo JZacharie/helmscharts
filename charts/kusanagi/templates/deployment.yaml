@@ -41,6 +41,17 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- if or .Values.secret.kubeConfig .Values.secret.existingSecret }}
+            - name: kubeconfig
+              mountPath: "/app/.kube"
+              readOnly: true
+            {{- end }}
+          env:
+            {{- if or .Values.secret.kubeConfig .Values.secret.existingSecret }}
+            - name: KUBECONFIG
+              value: "/app/.kube/config"
+            {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -53,3 +64,12 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        {{- if or .Values.secret.kubeConfig .Values.secret.existingSecret }}
+        - name: kubeconfig
+          secret:
+            secretName: {{ default (printf "%s-kubeconfig" (include "kusanagi.fullname" .)) .Values.secret.existingSecret }}
+            items:
+              - key: {{ .Values.secret.existingSecretKey | default "config" }}
+                path: config
+        {{- end }}

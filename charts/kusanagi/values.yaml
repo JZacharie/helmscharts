@@ -59,6 +59,14 @@ tolerations: []
 
 affinity: {}
 
+# Secret management
+secret:
+  # Base64 encoded kubeconfig (optional)
+  kubeConfig: ""
+  # OR use an existing secret
+  existingSecret: ""
+  existingSecretKey: "config"
+
 livenessProbe:
   httpGet:
     path: /health
