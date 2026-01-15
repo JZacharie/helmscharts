@@ -1,0 +1,12 @@
+apiVersion: v2
+name: kusanagi
+description: Agent controller for K3s improvements
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - kusanagi
+  - agent
+  - rust
+maintainers:
+  - name: Joseph
