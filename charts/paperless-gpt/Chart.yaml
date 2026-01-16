@@ -1,9 +1,9 @@
 annotations:
   artifacthub.io/changes: |-
     - kind: changed
-      description: update paperless-gpt/paperless-gpt docker tag to v1.7.0
+      description: update paperless-gpt/paperless-gpt docker tag to v0.24.0
 apiVersion: v2
-appVersion: "1.7.0"
+appVersion: "0.24.0"
 dependencies:
   - name: common
     repository: https://zekker6.github.io/helm-charts
@@ -20,4 +20,4 @@ name: paperless-gpt
 sources:
   - https://github.com/paperless-gptco/paperless-gpt
   - https://github.com/zekker6/helm-charts/tree/master/charts/apps/paperless-gpt
-version: 0.1.0
+version: 0.2.0
