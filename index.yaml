@@ -512,6 +512,33 @@ entries:
   - annotations:
       artifacthub.io/changes: |-
         - kind: changed
+          description: update paperless-gpt/paperless-gpt docker tag to v0.24.0
+    apiVersion: v2
+    appVersion: 0.24.0
+    created: "2026-01-16T15:37:23.768895431Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: paperless-gpt helm package
+    digest: e912b2699ea0b23e0074b50d482a300e2ac258b910aef184f02814d29465dc85
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/paperless-gpt
+    icon: https://www.paperless-gpt.co/favicon-32x32.png
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: paperless-gpt
+    sources:
+    - https://github.com/paperless-gptco/paperless-gpt
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/paperless-gpt
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/paperless-gpt-0.2.0/paperless-gpt-0.2.0.tgz
+    version: 0.2.0
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
           description: update paperless-gpt/paperless-gpt docker tag to v1.7.0
     apiVersion: v2
     appVersion: 1.7.0
@@ -853,4 +880,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-01-16T04:26:48.072774445Z"
+generated: "2026-01-16T15:37:23.768945975Z"
