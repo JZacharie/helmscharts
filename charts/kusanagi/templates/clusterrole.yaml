@@ -9,7 +9,7 @@ rules:
   # ArgoCD Applications
   - apiGroups: ["argoproj.io"]
     resources: ["applications"]
-    verbs: ["get", "list", "watch"]
+    verbs: ["get", "list", "watch", "patch"]
   # Namespaces
   - apiGroups: [""]
     resources: ["namespaces"]
