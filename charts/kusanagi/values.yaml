@@ -76,3 +76,14 @@ readinessProbe:
   httpGet:
     path: /health
     port: http
+
+# Observability endpoints
+prometheus:
+  # URL for Prometheus API (leave empty to use default)
+  url: ""
+  # Default: http://kube-prometheus-stack-prometheus.kube-prometheus-stack.svc:9090
+
+alertmanager:
+  # URL for Alertmanager API (leave empty to use default)
+  url: ""
+  # Default: http://kube-prometheus-stack-alertmanager.kube-prometheus-stack.svc:9093

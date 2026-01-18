@@ -52,6 +52,14 @@ spec:
             - name: KUBECONFIG
               value: "/app/.kube/config"
             {{- end }}
+            {{- if .Values.prometheus.url }}
+            - name: PROMETHEUS_URL
+              value: {{ .Values.prometheus.url | quote }}
+            {{- end }}
+            {{- if .Values.alertmanager.url }}
+            - name: ALERTMANAGER_URL
+              value: {{ .Values.alertmanager.url | quote }}
+            {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
