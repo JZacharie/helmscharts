@@ -367,6 +367,22 @@ entries:
     version: 0.1.0
   kusanagi:
   - apiVersion: v2
+    appVersion: 0.3.2
+    created: "2026-01-19T07:31:11.942340228Z"
+    description: Agent controller for K3s improvements
+    digest: a6a30b51c2f5687381d1fc6cc870bce41ef7c19cd5f8e1954805b284f3a6acfa
+    keywords:
+    - kusanagi
+    - agent
+    - rust
+    maintainers:
+    - name: Joseph
+    name: kusanagi
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/kusanagi-0.3.2/kusanagi-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v2
     appVersion: 0.3.1
     created: "2026-01-16T16:06:53.301229174Z"
     description: Agent controller for K3s improvements
@@ -896,4 +912,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-01-16T16:06:53.301299555Z"
+generated: "2026-01-19T07:31:11.942446062Z"
