@@ -17,3 +17,9 @@ persistence:
   cache:
     enabled: false
     mountPath: /root/.cache
+
+nodeSelector: {}
+
+affinity: {}
+
+tolerations: []
