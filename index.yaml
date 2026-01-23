@@ -636,6 +636,21 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/proton-bridge-0.1.0/proton-bridge-0.1.0.tgz
     version: 0.1.0
+  qwen3-tts:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-01-23T05:27:08.510406338Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: Qwen3-TTS Helm package
+    digest: 042232fecf1057056bac3d62dc9038830716b1d1fe0f31d3af939ac719b74340
+    name: qwen3-tts
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/qwen3-tts-0.1.0/qwen3-tts-0.1.0.tgz
+    version: 0.1.0
   readur:
   - annotations:
       category: Document Management
@@ -912,4 +927,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-01-19T07:31:11.942446062Z"
+generated: "2026-01-23T05:27:08.510460128Z"
