@@ -1,0 +1,19 @@
+image:
+  repository: registry.hf.space/qwen-qwen3-tts
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  main:
+    ports:
+      http:
+        port: 7860
+
+ingress:
+  main:
+    enabled: false
+
+persistence:
+  cache:
+    enabled: false
+    mountPath: /root/.cache

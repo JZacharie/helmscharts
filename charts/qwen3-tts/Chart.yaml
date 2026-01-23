@@ -1,0 +1,10 @@
+apiVersion: v2
+name: qwen3-tts
+description: Qwen3-TTS Helm package
+type: application
+version: 0.1.0
+appVersion: "latest"
+dependencies:
+  - name: common
+    repository: https://zekker6.github.io/helm-charts
+    version: 0.5.2
