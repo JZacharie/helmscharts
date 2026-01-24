@@ -42,4 +42,8 @@ rules:
   - apiGroups: ["batch"]
     resources: ["jobs"]
     verbs: ["get", "list", "watch"]
+  # Security Reports (PolicyReports)
+  - apiGroups: ["wgpolicyk8s.io"]
+    resources: ["clusterpolicyreports", "policyreports"]
+    verbs: ["get", "list", "watch"]
 {{- end }}
