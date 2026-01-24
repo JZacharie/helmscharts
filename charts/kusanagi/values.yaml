@@ -103,4 +103,14 @@ config:
   encryption_key: "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTI="
   ota_password: "Superman69"
   fallback_password: "Superman69"
+ 
+s3:
+  endpoint: "https://minio-170-api.zacharie.org"
+  access_key: "kusanagi"
+  secret_key: "Ph5jVRSIQNwyeRv4jZB9NtxyS5j9XqTrnDuqpmZT"
+  bucket: "kusanagi"
+ 
+ollama:
+  url: "http://192.168.0.52:11434/api/generate"
+  model: "ministral-3:14b"
 
