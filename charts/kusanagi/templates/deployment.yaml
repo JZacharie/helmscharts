@@ -100,6 +100,15 @@ spec:
             - name: OLLAMA_MODEL
               value: {{ .Values.ollama.model | quote }}
 
+            - name: MCP_KUBERNETES_URL
+              value: {{ .Values.mcp.kubernetes_url | quote }}
+            - name: MCP_CILIUM_URL
+              value: {{ .Values.mcp.cilium_url | quote }}
+            - name: MCP_STEAMPIPE_URL
+              value: {{ .Values.mcp.steampipe_url | quote }}
+            - name: MCP_TRIVY_URL
+              value: {{ .Values.mcp.trivy_url | quote }}
+
 
             {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}

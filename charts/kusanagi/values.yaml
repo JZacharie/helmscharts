@@ -114,3 +114,9 @@ ollama:
   url: "http://192.168.0.52:11434/api/generate"
   model: "ministral-3:14b"
 
+mcp:
+  kubernetes_url: "http://localhost:3000/mcp/kubernetes"
+  cilium_url: "http://localhost:3000/mcp/cilium"
+  steampipe_url: "http://localhost:3000/mcp/steampipe"
+  trivy_url: "http://localhost:3000/mcp/trivy"
+
