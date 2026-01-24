@@ -65,52 +65,95 @@ spec:
               value: {{ .Values.alertmanager.url | quote }}
             {{- end }}
  
+            {{- if .Values.mqtt.endpoint }}
             - name: MQTT_ENDPOINT
               value: {{ .Values.mqtt.endpoint | quote }}
+            {{- end }}
+            {{- if .Values.mqtt.user }}
             - name: MQTT_USER
               value: {{ .Values.mqtt.user | quote }}
+            {{- end }}
+            {{- if .Values.mqtt.password }}
             - name: MQTT_PASSWORD
               value: {{ .Values.mqtt.password | quote }}
+            {{- end }}
+            {{- if .Values.config.wifi_ssid }}
             - name: WIFI_SSID
               value: {{ .Values.config.wifi_ssid | quote }}
+            {{- end }}
+            {{- if .Values.config.wifi_psk }}
             - name: WIFI_PSK
               value: {{ .Values.config.wifi_psk | quote }}
+            {{- end }}
+            {{- if .Values.config.wifi_password }}
             - name: WIFI_PASSWORD
               value: {{ .Values.config.wifi_password | quote }}
+            {{- end }}
+            {{- if .Values.config.web_server_password }}
             - name: WEB_SERVER_PASSWORD
               value: {{ .Values.config.web_server_password | quote }}
+            {{- end }}
+            {{- if .Values.config.encryption_key }}
             - name: ENCRYPTION_KEY
               value: {{ .Values.config.encryption_key | quote }}
+            {{- end }}
+            {{- if .Values.config.ota_password }}
             - name: OTA_PASSWORD
               value: {{ .Values.config.ota_password | quote }}
+            {{- end }}
+            {{- if .Values.config.fallback_password }}
             - name: FALLBACK_PASSWORD
               value: {{ .Values.config.fallback_password | quote }}
+            {{- end }}
  
+            {{- if .Values.s3.endpoint }}
             - name: S3_ENDPOINT
               value: {{ .Values.s3.endpoint | quote }}
+            {{- end }}
+            {{- if .Values.s3.access_key }}
             - name: S3_ACCESS_KEY
               value: {{ .Values.s3.access_key | quote }}
+            {{- end }}
+            {{- if .Values.s3.secret_key }}
             - name: S3_SECRET_KEY
               value: {{ .Values.s3.secret_key | quote }}
+            {{- end }}
+            {{- if .Values.s3.bucket }}
             - name: S3_BUCKET
               value: {{ .Values.s3.bucket | quote }}
+            {{- end }}
  
+            {{- if .Values.ollama.url }}
             - name: OLLAMA_URL
               value: {{ .Values.ollama.url | quote }}
+            {{- end }}
+            {{- if .Values.ollama.model }}
             - name: OLLAMA_MODEL
               value: {{ .Values.ollama.model | quote }}
+            {{- end }}
 
+            {{- if .Values.mcp.kubernetes_url }}
             - name: MCP_KUBERNETES_URL
               value: {{ .Values.mcp.kubernetes_url | quote }}
+            {{- end }}
+            {{- if .Values.mcp.cilium_url }}
             - name: MCP_CILIUM_URL
               value: {{ .Values.mcp.cilium_url | quote }}
+            {{- end }}
+            {{- if .Values.mcp.steampipe_url }}
             - name: MCP_STEAMPIPE_URL
               value: {{ .Values.mcp.steampipe_url | quote }}
+            {{- end }}
+            {{- if .Values.mcp.trivy_url }}
             - name: MCP_TRIVY_URL
               value: {{ .Values.mcp.trivy_url | quote }}
-
+            {{- end }}
 
             {{- with .Values.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- with .Values.envFrom }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
       {{- with .Values.nodeSelector }}
