@@ -1,0 +1,29 @@
+image:
+  repository: froodle/s-pdf
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  main:
+    ports:
+      http:
+        port: 8080
+
+ingress:
+  main:
+    enabled: false
+
+persistence:
+  trainingData:
+    enabled: false
+    mountPath: /usr/share/tesseract-ocr/5/tessdata
+  extraConfigs:
+    enabled: false
+    mountPath: /configs
+  logs:
+    enabled: false
+    mountPath: /logs
+
+nodeSelector: {}
+affinity: {}
+tolerations: []
