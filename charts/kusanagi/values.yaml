@@ -89,3 +89,18 @@ alertmanager:
   # Default: http://kube-prometheus-stack-alertmanager.kube-prometheus-stack.svc:9093
 
 env: []
+ 
+mqtt:
+  endpoint: "192.168.0.115"
+  user: "joseph"
+  password: "2f21ZxB5JC6XfujK"
+
+config:
+  wifi_ssid: "zac_2G"
+  wifi_psk: "1342141006"
+  wifi_password: "1342141006"
+  web_server_password: "Superman69"
+  encryption_key: "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTI="
+  ota_password: "Superman69"
+  fallback_password: "Superman69"
+

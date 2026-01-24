@@ -64,6 +64,28 @@ spec:
             - name: ALERTMANAGER_URL
               value: {{ .Values.alertmanager.url | quote }}
             {{- end }}
+ 
+            - name: MQTT_ENDPOINT
+              value: {{ .Values.mqtt.endpoint | quote }}
+            - name: MQTT_USER
+              value: {{ .Values.mqtt.user | quote }}
+            - name: MQTT_PASSWORD
+              value: {{ .Values.mqtt.password | quote }}
+            - name: WIFI_SSID
+              value: {{ .Values.config.wifi_ssid | quote }}
+            - name: WIFI_PSK
+              value: {{ .Values.config.wifi_psk | quote }}
+            - name: WIFI_PASSWORD
+              value: {{ .Values.config.wifi_password | quote }}
+            - name: WEB_SERVER_PASSWORD
+              value: {{ .Values.config.web_server_password | quote }}
+            - name: ENCRYPTION_KEY
+              value: {{ .Values.config.encryption_key | quote }}
+            - name: OTA_PASSWORD
+              value: {{ .Values.config.ota_password | quote }}
+            - name: FALLBACK_PASSWORD
+              value: {{ .Values.config.fallback_password | quote }}
+
 
             {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}
