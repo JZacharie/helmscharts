@@ -767,6 +767,21 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/steampipe-powerpipe-kubernetes-0.11.21.tgz
     version: 0.11.21
+  stirling-pdf:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-01-24T09:57:41.670872408Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: Stirling-PDF Helm package
+    digest: b168580df2d7c84e947bbc6e0112e9e38cfb7a76552881688ce74d4dfcc9d26a
+    name: stirling-pdf
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/stirling-pdf-0.1.0/stirling-pdf-0.1.0.tgz
+    version: 0.1.0
   swingmusic:
   - annotations:
       artifacthub.io/changes: |-
@@ -927,4 +942,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-01-23T05:27:08.510460128Z"
+generated: "2026-01-24T09:57:41.670915849Z"
