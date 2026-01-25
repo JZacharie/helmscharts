@@ -123,4 +123,5 @@ mcp:
 slack:
   botToken: ""
   channelId: ""
+  botUserId: "U0AANDN92F5"
 

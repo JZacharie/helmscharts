@@ -156,6 +156,10 @@ spec:
             - name: SLACK_CHANNEL_ID
               value: {{ .Values.slack.channelId | quote }}
             {{- end }}
+            {{- if .Values.slack.botUserId }}
+            - name: SLACK_BOT_USER_ID
+              value: {{ .Values.slack.botUserId | quote }}
+            {{- end }}
 
             {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}
