@@ -148,6 +148,14 @@ spec:
             - name: MCP_TRIVY_URL
               value: {{ .Values.mcp.trivy_url | quote }}
             {{- end }}
+            {{- if .Values.slack.botToken }}
+            - name: SLACK_BOT_TOKEN
+              value: {{ .Values.slack.botToken | quote }}
+            {{- end }}
+            {{- if .Values.slack.channelId }}
+            - name: SLACK_CHANNEL_ID
+              value: {{ .Values.slack.channelId | quote }}
+            {{- end }}
 
             {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}

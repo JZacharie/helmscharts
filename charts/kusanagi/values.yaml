@@ -120,3 +120,7 @@ mcp:
   steampipe_url: "http://localhost:3000/mcp/steampipe"
   trivy_url: "http://localhost:3000/mcp/trivy"
 
+slack:
+  botToken: ""
+  channelId: ""
+
