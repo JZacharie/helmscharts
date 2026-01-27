@@ -91,7 +91,7 @@ alertmanager:
 env: []
  
 mqtt:
-  endpoint: "192.168.0.115"
+  host: "192.168.0.115"
   user: "joseph"
   password: "2f21ZxB5JC6XfujK"
 

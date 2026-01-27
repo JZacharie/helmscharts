@@ -65,9 +65,9 @@ spec:
               value: {{ .Values.alertmanager.url | quote }}
             {{- end }}
  
-            {{- if .Values.mqtt.endpoint }}
-            - name: MQTT_ENDPOINT
-              value: {{ .Values.mqtt.endpoint | quote }}
+            {{- if .Values.mqtt.host }}
+            - name: MQTT_HOST
+              value: {{ .Values.mqtt.host | quote }}
             {{- end }}
             {{- if .Values.mqtt.user }}
             - name: MQTT_USER
