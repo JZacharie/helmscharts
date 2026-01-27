@@ -43,7 +43,10 @@ spec:
              name: fundy-env-secrets
         env:
         - name: DATABASE_URL
-          value: {{ .Values.env.databases.jobs | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: fundy-env-secrets
+              key: JOBS_DATABASE_URL
         {{- if .Values.healthcheck.enabled }}
         livenessProbe:
           httpGet:

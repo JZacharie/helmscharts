@@ -43,7 +43,10 @@ spec:
              name: fundy-env-secrets
         env:
         - name: DATABASE_URL
-          value: {{ .Values.env.databases.builder | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: fundy-env-secrets
+              key: BUILDER_DATABASE_URL
         - name: BACKTESTING_PARALLELIZATION
           value: {{ .Values.env.backtesting.parallelization | quote }}
         - name: OPTIMIZER_SERVICE_URL
