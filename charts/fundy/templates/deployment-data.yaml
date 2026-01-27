@@ -38,23 +38,10 @@ spec:
         - name: http
           containerPort: 80
           protocol: TCP
-        env:
-        - name: CLICKHOUSE_HOST
-          value: {{ .Values.env.clickhouse.host | quote }}
-        - name: CLICKHOUSE_PORT
-          value: {{ .Values.env.clickhouse.port | quote }}
-        - name: CLICKHOUSE_USERNAME
-          value: {{ .Values.env.clickhouse.username | quote }}
-        - name: CLICKHOUSE_PASSWORD
-          value: {{ .Values.env.clickhouse.password | quote }}
-        - name: AMPLITUDE_API_KEY
-          value: {{ .Values.env.apiKeys.amplitude | quote }}
-        - name: FUNDY_COGNITO_JWKS_URL
-          value: {{ .Values.env.cognito.jwksUrl | quote }}
-        - name: SENTRY_BACKEND_DSN
-          value: {{ .Values.env.monitoring.sentryBackendDsn | quote }}
-        - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: {{ .Values.env.monitoring.otelExporterOtlpEndpoint | quote }}
+        envFrom:
+        - secretRef:
+             name: fundy-env-secrets
+
         {{- if .Values.healthcheck.enabled }}
         livenessProbe:
           httpGet:

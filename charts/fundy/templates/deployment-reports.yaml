@@ -38,13 +38,10 @@ spec:
         - name: http
           containerPort: 80
           protocol: TCP
+        envFrom:
+        - secretRef:
+             name: fundy-env-secrets
         env:
-        - name: FUNDY_COGNITO_JWKS_URL
-          value: {{ .Values.env.cognito.jwksUrl | quote }}
-        - name: SENTRY_BACKEND_DSN
-          value: {{ .Values.env.monitoring.sentryBackendDsn | quote }}
-        - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: {{ .Values.env.monitoring.otelExporterOtlpEndpoint | quote }}
         - name: BUILDER_SERVICE_URL
           value: "http://{{ include "fundy.fullname" . }}-builder-svc:80"
         - name: ANALYTICS_SERVICE_URL
