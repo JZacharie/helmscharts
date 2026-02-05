@@ -1,0 +1,127 @@
+# Default values for kusanagi
+replicaCount: 1
+
+image:
+  repository: ghcr.io/jzacharie/kusanagi
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: false
+  className: "nginx"
+  annotations: {}
+  hosts:
+    - host: kusanagi.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 1024Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Secret management
+secret:
+  # Base64 encoded kubeconfig (optional)
+  kubeConfig: ""
+  # OR use an existing secret
+  existingSecret: ""
+  existingSecretKey: "config"
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: http
+
+# Observability endpoints
+prometheus:
+  # URL for Prometheus API (leave empty to use default)
+  url: ""
+  # Default: http://kube-prometheus-stack-prometheus.kube-prometheus-stack.svc:9090
+
+alertmanager:
+  # URL for Alertmanager API (leave empty to use default)
+  url: ""
+  # Default: http://kube-prometheus-stack-alertmanager.kube-prometheus-stack.svc:9093
+
+env: []
+ 
+mqtt:
+  host: "192.168.0.115"
+  user: "joseph"
+  password: "2f21ZxB5JC6XfujK"
+
+config:
+  wifi_ssid: "zac_2G"
+  wifi_psk: "1342141006"
+  wifi_password: "1342141006"
+  web_server_password: "Superman69"
+  encryption_key: "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTI="
+  ota_password: "Superman69"
+  fallback_password: "Superman69"
+ 
+s3:
+  endpoint: "https://minio-170-api.zacharie.org"
+  access_key: "kusanagi"
+  secret_key: "Ph5jVRSIQNwyeRv4jZB9NtxyS5j9XqTrnDuqpmZT"
+  bucket: "kusanagi"
+ 
+ollama:
+  url: "http://192.168.0.52:11434/api/generate"
+  model: "ministral-3:14b"
+
+mcp:
+  kubernetes_url: "http://localhost:3000/mcp/kubernetes"
+  cilium_url: "http://localhost:3000/mcp/cilium"
+  steampipe_url: "http://localhost:3000/mcp/steampipe"
+  trivy_url: "http://localhost:3000/mcp/trivy"
+
+slack:
+  botToken: ""
+  channelId: ""
+  botUserId: "U0AANDN92F5"
+
