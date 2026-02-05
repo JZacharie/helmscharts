@@ -205,6 +205,34 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
     version: 0.5.2-rc
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update ghcr.io/coder/code-server to 4.93.1
+        - kind: changed
+          description: update docker.io/grafana/promtail to 3.2.1
+        - kind: changed
+          description: update docker.io/qmcgaw/gluetun to v3.39.1
+        - kind: fixed
+          description: properly handle empty paths in ingress configuration
+    apiVersion: v2
+    created: "2026-02-05T06:04:48.265696506Z"
+    description: Function library for Helm charts
+    digest: f31570b8bda4a59fc8f244ea3d233288955b0e161363f53f323167ba1899f382
+    home: https://github.com/zekker6/helm-charts/tree/main/charts/library/common
+    keywords:
+    - common
+    - library
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: common
+    type: library
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
+    version: 0.5.2-rc
   cursor:
   - annotations:
       artifacthub.io/changes: |-
@@ -842,6 +870,17 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/sim-0.1.1.tgz
     version: 0.1.1
+  simple-irc-server:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-02-05T06:04:48.519023069Z"
+    description: A Helm chart for simple-irc-server
+    digest: 403a5a335b848f31c742d94dd3257265aded3b9f8c0e2eff9e478f26f2f3f9f8
+    name: simple-irc-server
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/simple-irc-server-0.1.0/simple-irc-server-0.1.0.tgz
+    version: 0.1.0
   speaches:
   - annotations:
       artifacthub.io/changes: |-
@@ -1058,4 +1097,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-02-05T05:37:31.253713047Z"
+generated: "2026-02-05T06:04:48.519102477Z"
