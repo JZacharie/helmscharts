@@ -88,7 +88,9 @@ alertmanager:
   url: ""
   # Default: http://kube-prometheus-stack-alertmanager.kube-prometheus-stack.svc:9093
 
-env: []
+env:
+  - name: RUST_LOG
+    value: "warn"
  
 mqtt:
   host: "192.168.0.115"
