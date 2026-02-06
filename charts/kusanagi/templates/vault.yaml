@@ -1,0 +1,40 @@
+{{- if .Values.vault.enabled -}}
+apiVersion: external-secrets.io/v1
+kind: SecretStore
+metadata:
+  name: {{ include "kusanagi.fullname" . }}-vault
+  namespace: {{ .Release.Namespace }}
+spec:
+  provider:
+    vault:
+      server: {{ .Values.vault.address | quote }}
+      path: {{ .Values.vault.mountPath | quote }}
+      version: v2
+      auth:
+        tokenSecretRef:
+          name: {{ .Values.vault.auth.secretName }}
+          key: {{ .Values.vault.auth.secretKey }}
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: {{ include "kusanagi.fullname" . }}-slack-credentials
+  namespace: {{ .Release.Namespace }}
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    name: {{ include "kusanagi.fullname" . }}-vault
+    kind: SecretStore
+  target:
+    name: kusanagi-slack-credentials
+    creationPolicy: Owner
+  data:
+  - secretKey: bot-token
+    remoteRef:
+      key: {{ .Values.vault.secrets.slack.path }}
+      property: {{ .Values.vault.secrets.slack.botTokenKey }}
+  - secretKey: channel-id
+    remoteRef:
+      key: {{ .Values.vault.secrets.slack.path }}
+      property: {{ .Values.vault.secrets.slack.channelIdKey }}
+{{- end }}

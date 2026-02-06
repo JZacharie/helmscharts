@@ -123,7 +123,18 @@ mcp:
   trivy_url: "http://localhost:3000/mcp/trivy"
 
 slack:
-  botToken: ""
-  channelId: ""
   botUserId: "U0AANDN92F5"
+
+vault:
+  enabled: true
+  address: "https://vault.p.zacharie.org"
+  mountPath: "secret"
+  auth:
+    secretName: "vault-token"
+    secretKey: "token"
+  secrets:
+    slack:
+      path: "kusanagi/slack"
+      botTokenKey: "bot_token"
+      channelIdKey: "channel_id"
 

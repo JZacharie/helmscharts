@@ -148,6 +148,18 @@ spec:
             - name: MCP_TRIVY_URL
               value: {{ .Values.mcp.trivy_url | quote }}
             {{- end }}
+            {{- if .Values.vault.enabled }}
+            - name: SLACK_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: kusanagi-slack-credentials
+                  key: bot-token
+            - name: SLACK_CHANNEL_ID
+              valueFrom:
+                secretKeyRef:
+                  name: kusanagi-slack-credentials
+                  key: channel-id
+            {{- else }}
             {{- if .Values.slack.botToken }}
             - name: SLACK_BOT_TOKEN
               value: {{ .Values.slack.botToken | quote }}
@@ -155,6 +167,7 @@ spec:
             {{- if .Values.slack.channelId }}
             - name: SLACK_CHANNEL_ID
               value: {{ .Values.slack.channelId | quote }}
+            {{- end }}
             {{- end }}
             {{- if .Values.slack.botUserId }}
             - name: SLACK_BOT_USER_ID
