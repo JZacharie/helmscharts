@@ -15,6 +15,17 @@ serviceAccount:
 
 podAnnotations: {}
 
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
 service:
   type: ClusterIP
   port: 6667
@@ -37,6 +48,12 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
 
 config:
   # Config content to be placed in config.toml
