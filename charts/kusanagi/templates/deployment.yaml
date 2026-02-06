@@ -1,0 +1,204 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kusanagi.fullname" . }}
+  labels:
+    {{- include "kusanagi.labels" . | nindent 4 }}
+spec:
+  {{- with .Values.strategy }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "kusanagi.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "kusanagi.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "kusanagi.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- if or .Values.secret.kubeConfig .Values.secret.existingSecret }}
+            - name: kubeconfig
+              mountPath: "/app/.kube"
+              readOnly: true
+            {{- end }}
+          env:
+            {{- if or .Values.secret.kubeConfig .Values.secret.existingSecret }}
+            - name: KUBECONFIG
+              value: "/app/.kube/config"
+            {{- end }}
+            {{- if .Values.prometheus.url }}
+            - name: PROMETHEUS_URL
+              value: {{ .Values.prometheus.url | quote }}
+            {{- end }}
+            {{- if .Values.alertmanager.url }}
+            - name: ALERTMANAGER_URL
+              value: {{ .Values.alertmanager.url | quote }}
+            {{- end }}
+ 
+            {{- if .Values.mqtt.host }}
+            - name: MQTT_HOST
+              value: {{ .Values.mqtt.host | quote }}
+            {{- end }}
+            {{- if .Values.mqtt.user }}
+            - name: MQTT_USER
+              value: {{ .Values.mqtt.user | quote }}
+            {{- end }}
+            {{- if .Values.mqtt.password }}
+            - name: MQTT_PASSWORD
+              value: {{ .Values.mqtt.password | quote }}
+            {{- end }}
+            {{- if .Values.config.wifi_ssid }}
+            - name: WIFI_SSID
+              value: {{ .Values.config.wifi_ssid | quote }}
+            {{- end }}
+            {{- if .Values.config.wifi_psk }}
+            - name: WIFI_PSK
+              value: {{ .Values.config.wifi_psk | quote }}
+            {{- end }}
+            {{- if .Values.config.wifi_password }}
+            - name: WIFI_PASSWORD
+              value: {{ .Values.config.wifi_password | quote }}
+            {{- end }}
+            {{- if .Values.config.web_server_password }}
+            - name: WEB_SERVER_PASSWORD
+              value: {{ .Values.config.web_server_password | quote }}
+            {{- end }}
+            {{- if .Values.config.encryption_key }}
+            - name: ENCRYPTION_KEY
+              value: {{ .Values.config.encryption_key | quote }}
+            {{- end }}
+            {{- if .Values.config.ota_password }}
+            - name: OTA_PASSWORD
+              value: {{ .Values.config.ota_password | quote }}
+            {{- end }}
+            {{- if .Values.config.fallback_password }}
+            - name: FALLBACK_PASSWORD
+              value: {{ .Values.config.fallback_password | quote }}
+            {{- end }}
+ 
+            {{- if .Values.s3.endpoint }}
+            - name: S3_ENDPOINT
+              value: {{ .Values.s3.endpoint | quote }}
+            {{- end }}
+            {{- if .Values.s3.access_key }}
+            - name: S3_ACCESS_KEY
+              value: {{ .Values.s3.access_key | quote }}
+            {{- end }}
+            {{- if .Values.s3.secret_key }}
+            - name: S3_SECRET_KEY
+              value: {{ .Values.s3.secret_key | quote }}
+            {{- end }}
+            {{- if .Values.s3.bucket }}
+            - name: S3_BUCKET
+              value: {{ .Values.s3.bucket | quote }}
+            {{- end }}
+ 
+            {{- if .Values.ollama.url }}
+            - name: OLLAMA_URL
+              value: {{ .Values.ollama.url | quote }}
+            {{- end }}
+            {{- if .Values.ollama.model }}
+            - name: OLLAMA_MODEL
+              value: {{ .Values.ollama.model | quote }}
+            {{- end }}
+
+            {{- if .Values.mcp.kubernetes_url }}
+            - name: MCP_KUBERNETES_URL
+              value: {{ .Values.mcp.kubernetes_url | quote }}
+            {{- end }}
+            {{- if .Values.mcp.cilium_url }}
+            - name: MCP_CILIUM_URL
+              value: {{ .Values.mcp.cilium_url | quote }}
+            {{- end }}
+            {{- if .Values.mcp.steampipe_url }}
+            - name: MCP_STEAMPIPE_URL
+              value: {{ .Values.mcp.steampipe_url | quote }}
+            {{- end }}
+            {{- if .Values.mcp.trivy_url }}
+            - name: MCP_TRIVY_URL
+              value: {{ .Values.mcp.trivy_url | quote }}
+            {{- end }}
+            {{- if .Values.vault.enabled }}
+            - name: SLACK_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: kusanagi-slack-credentials
+                  key: bot-token
+            - name: SLACK_CHANNEL_ID
+              valueFrom:
+                secretKeyRef:
+                  name: kusanagi-slack-credentials
+                  key: channel-id
+            {{- else }}
+            {{- if .Values.slack.botToken }}
+            - name: SLACK_BOT_TOKEN
+              value: {{ .Values.slack.botToken | quote }}
+            {{- end }}
+            {{- if .Values.slack.channelId }}
+            - name: SLACK_CHANNEL_ID
+              value: {{ .Values.slack.channelId | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.slack.botUserId }}
+            - name: SLACK_BOT_USER_ID
+              value: {{ .Values.slack.botUserId | quote }}
+            {{- end }}
+
+            {{- with .Values.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- with .Values.envFrom }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        {{- if or .Values.secret.kubeConfig .Values.secret.existingSecret }}
+        - name: kubeconfig
+          secret:
+            secretName: {{ default (printf "%s-kubeconfig" (include "kusanagi.fullname" .)) .Values.secret.existingSecret }}
+            items:
+              - key: {{ .Values.secret.existingSecretKey | default "config" }}
+                path: config
+        {{- end }}
