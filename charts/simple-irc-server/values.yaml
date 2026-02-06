@@ -27,18 +27,21 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 6667
 
 ingress:
-  enabled: false
-  className: ""
-  annotations: {}
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    # IRC uses TCP, not HTTP, so we need TCP passthrough
+    nginx.ingress.kubernetes.io/backend-protocol: "TCP"
   hosts:
-    - host: chart-example.local
+    - host: irc.zacharie.org
       paths:
         - path: /
-          pathType: ImplementationSpecific
+          pathType: Prefix
   tls: []
 
 resources: {}
@@ -59,7 +62,7 @@ config:
   # Config content to be placed in config.toml
   content: |
     # Simple IRC Server configuration
-    server_name = "irc.example.com"
+    server_name = "irc.zacharie.org"
     bind_address = "0.0.0.0:6667"
     
     [logger]
