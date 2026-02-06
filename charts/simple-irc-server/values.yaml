@@ -29,6 +29,10 @@ securityContext: {}
 service:
   type: LoadBalancer
   port: 6667
+  # SSL/TLS port for IRCS
+  sslPort: 6697
+  # Enable SSL service
+  enableSSL: true
 
 ingress:
   enabled: true
@@ -42,7 +46,10 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
-  tls: []
+  tls:
+    - secretName: irc-tls-cert
+      hosts:
+        - irc.zacharie.org
 
 resources: {}
   # limits:
@@ -58,12 +65,29 @@ tolerations: []
 
 affinity: {}
 
+# SSL/TLS Configuration
+ssl:
+  enabled: true
+  # Name of the secret containing tls.crt and tls.key
+  secretName: "irc-tls-cert"
+  # If you want to use cert-manager, set this to true
+  certManager:
+    enabled: false
+    issuer: "letsencrypt-prod"
+
 config:
   # Config content to be placed in config.toml
   content: |
     # Simple IRC Server configuration
     server_name = "irc.zacharie.org"
     bind_address = "0.0.0.0:6667"
+    
+    # SSL/TLS Configuration
+    [ssl]
+    enabled = true
+    bind_address = "0.0.0.0:6697"
+    cert_file = "/etc/ssl/irc/tls.crt"
+    key_file = "/etc/ssl/irc/tls.key"
     
     [logger]
     level = "info"

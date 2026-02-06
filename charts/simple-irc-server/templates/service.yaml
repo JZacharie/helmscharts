@@ -11,5 +11,11 @@ spec:
       targetPort: irc
       protocol: TCP
       name: irc
+    {{- if .Values.service.enableSSL }}
+    - port: {{ .Values.service.sslPort }}
+      targetPort: ircs
+      protocol: TCP
+      name: ircs
+    {{- end }}
   selector:
     {{- include "simple-irc-server.selectorLabels" . | nindent 4 }}
