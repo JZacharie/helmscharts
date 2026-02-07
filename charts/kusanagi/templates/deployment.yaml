@@ -122,6 +122,8 @@ spec:
             - name: S3_BUCKET
               value: {{ .Values.s3.bucket | quote }}
             {{- end }}
+            - name: S3_REGION
+              value: "us-east-1"
  
             {{- if .Values.ollama.url }}
             - name: OLLAMA_URL
