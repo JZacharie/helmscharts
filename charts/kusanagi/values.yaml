@@ -71,14 +71,16 @@ livenessProbe:
   httpGet:
     path: /health
     port: http
-  timeoutSeconds: 5
+  initialDelaySeconds: 30
+  timeoutSeconds: 10
   failureThreshold: 5
 
 readinessProbe:
   httpGet:
     path: /health
     port: http
-  timeoutSeconds: 5
+  initialDelaySeconds: 30
+  timeoutSeconds: 10
   failureThreshold: 5
 
 # Observability endpoints
