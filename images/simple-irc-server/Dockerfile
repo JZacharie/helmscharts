@@ -2,8 +2,8 @@ FROM rust:1.93-bookworm as builder
 
 WORKDIR /usr/src/simple-irc-server
 
-# Clone the repository
-RUN git clone https://github.com/matszpk/simple-irc-server .
+# Copy local source
+COPY src/ .
 
 # Build release binary with default features (dns_lookup, tls_rustls are defaults or can be enabled)
 # README says: cargo build --release --features=dns_lookup,tls_rustls
