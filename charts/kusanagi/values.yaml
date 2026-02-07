@@ -96,6 +96,13 @@ alertmanager:
   url: ""
   # Default: http://kube-prometheus-stack-alertmanager.kube-prometheus-stack.svc:9093
 
+# Prometheus monitoring
+monitoring:
+  enabled: true
+  interval: "30s"
+  scrapeTimeout: "10s"
+  labels: {}
+
 env:
   - name: RUST_LOG
     value: "info"
