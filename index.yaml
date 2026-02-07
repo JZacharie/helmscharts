@@ -905,6 +905,16 @@ entries:
   simple-irc-server:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2026-02-07T10:55:01.66896188Z"
+    description: A Helm chart for simple-irc-server
+    digest: 7a909b0f74ffda75643618f86de7df9218d174795022b8ab20326b2d18d213c6
+    name: simple-irc-server
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/simple-irc-server-0.2.0/simple-irc-server-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2026-02-05T06:04:48.519023069Z"
     description: A Helm chart for simple-irc-server
     digest: 403a5a335b848f31c742d94dd3257265aded3b9f8c0e2eff9e478f26f2f3f9f8
@@ -1129,4 +1139,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-02-07T09:46:56.814727746Z"
+generated: "2026-02-07T10:55:01.669041698Z"
