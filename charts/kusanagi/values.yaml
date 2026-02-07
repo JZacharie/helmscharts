@@ -71,17 +71,19 @@ livenessProbe:
   httpGet:
     path: /health
     port: http
-  initialDelaySeconds: 30
-  timeoutSeconds: 10
-  failureThreshold: 5
+  initialDelaySeconds: 15
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
 
 readinessProbe:
   httpGet:
     path: /health
     port: http
-  initialDelaySeconds: 30
-  timeoutSeconds: 10
-  failureThreshold: 5
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
 
 # Observability endpoints
 prometheus:
