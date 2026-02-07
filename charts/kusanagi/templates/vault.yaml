@@ -1,21 +1,5 @@
 {{- if .Values.vault.enabled -}}
 apiVersion: external-secrets.io/v1
-kind: SecretStore
-metadata:
-  name: {{ include "kusanagi.fullname" . }}-vault
-  namespace: {{ .Release.Namespace }}
-spec:
-  provider:
-    vault:
-      server: {{ .Values.vault.address | quote }}
-      path: {{ .Values.vault.mountPath | quote }}
-      version: v2
-      auth:
-        tokenSecretRef:
-          name: {{ .Values.vault.auth.secretName }}
-          key: {{ .Values.vault.auth.secretKey }}
----
-apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: {{ include "kusanagi.fullname" . }}-slack-credentials
@@ -23,8 +7,8 @@ metadata:
 spec:
   refreshInterval: "1h"
   secretStoreRef:
-    name: {{ include "kusanagi.fullname" . }}-vault
-    kind: SecretStore
+    name: {{ .Values.vault.clusterSecretStore | default "vault-backend" }}
+    kind: ClusterSecretStore
   target:
     name: kusanagi-slack-credentials
     creationPolicy: Owner
