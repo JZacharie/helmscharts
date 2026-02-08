@@ -657,6 +657,16 @@ entries:
   maintenance:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2026-02-08T09:23:35.80953408Z"
+    description: Maintenance CronJobs for cluster operations
+    digest: ec9d590938c20eea4d5dff4f96d68eb4c4b49e19710e61d9836b5a3b9e9a74ae
+    name: maintenance
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/maintenance-0.2.1/maintenance-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2026-01-10T07:03:04.623045908Z"
     description: Maintenance CronJobs for node cleanup and other tasks
     digest: f09a489e356b13e3cb90ae733ff04f133a4aec7a1c5daa0609700a1bd1d26664
@@ -1150,4 +1160,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-02-08T07:10:40.061900182Z"
+generated: "2026-02-08T09:23:35.809629662Z"
