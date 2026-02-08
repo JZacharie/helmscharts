@@ -1,0 +1,801 @@
+apiVersion: v1
+entries:
+  appflowy:
+  - apiVersion: v2
+    created: "2026-02-08T08:09:54.889644692+01:00"
+    dependencies:
+    - condition: appflowy-cloud.enabled
+      name: appflowy-cloud
+      repository: ""
+      version: 0.1.5
+    - condition: appflowy-gotrue.enabled
+      name: appflowy-gotrue
+      repository: ""
+      version: 0.1.5
+    - condition: appflowy-admin.enabled
+      name: appflowy-admin
+      repository: ""
+      version: 0.1.4
+    - condition: appflowy-worker.enabled
+      name: appflowy-worker
+      repository: ""
+      version: 0.1.3
+    - condition: appflowy-web.enabled
+      name: appflowy-web
+      repository: ""
+      version: 0.1.10
+    - condition: global.ai.enabled
+      name: appflowy-ai
+      repository: ""
+      version: 0.1.3
+    description: AppFlowy Cloud Helm Chart
+    digest: f47f2277bcda11e9ca6cfdc18f43e0773e1369980417e1e1c500ad9360617ea4
+    name: appflowy
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/appflowy-0.3.13.tgz
+    version: 0.3.13
+  appflowy-sbx:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-02-08T08:09:54.890597036+01:00"
+    description: AppFlowy Cloud Sandbox - Custom chart based on docker-compose.yml
+    digest: b04580de32c1713db9b81e6918def0b76eeaeb45b1a55decfd6357e6cb944c44
+    keywords:
+    - appflowy
+    - collaboration
+    - productivity
+    maintainers:
+    - email: joseph@zacharie.org
+      name: JZacharie
+    name: appflowy-sbx
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/appflowy-sbx-0.1.0.tgz
+    version: 0.1.0
+  argocd-mobile-dashboard:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-02-08T08:09:54.891036393+01:00"
+    description: A mobile dashboard for ArgoCD
+    digest: d246a864f23f5dacea19eb34fbb98a9ce70a64947dc1c2078874000a2572fa5d
+    name: argocd-mobile-dashboard
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/argocd-mobile-dashboard-0.1.0.tgz
+    version: 0.1.0
+  chartdb:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update chartdb/chartdb docker tag to v1.7.0
+    apiVersion: v2
+    appVersion: 1.7.0
+    created: "2026-02-08T08:09:54.89329569+01:00"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: chartdb helm package
+    digest: 81aa0c15ce2bc1dd9e9b245487e4c0311bdd0a717f88ca0b1fdbb709db9145bf
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/chartdb
+    icon: https://www.chartdb.co/favicon-32x32.png
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: chartdb
+    sources:
+    - https://github.com/chartdbco/chartdb
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/chartdb
+    urls:
+    - https://jzacharie.github.io/helmscharts/chartdb-1.7.2.tgz
+    version: 1.7.2
+  common:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update ghcr.io/coder/code-server to 4.93.1
+        - kind: changed
+          description: update docker.io/grafana/promtail to 3.2.1
+        - kind: changed
+          description: update docker.io/qmcgaw/gluetun to v3.39.1
+        - kind: fixed
+          description: properly handle empty paths in ingress configuration
+    apiVersion: v2
+    created: "2026-02-08T08:09:54.895294984+01:00"
+    description: Function library for Helm charts
+    digest: 4264cc659fcc2076c7c052ea54db899c2e3ef68563aa4d559ad368a83b482a57
+    home: https://github.com/zekker6/helm-charts/tree/main/charts/library/common
+    keywords:
+    - common
+    - library
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: common
+    type: library
+    urls:
+    - https://jzacharie.github.io/helmscharts/common-0.5.2-rc.tgz
+    version: 0.5.2-rc
+  cursor:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update cursor/cursor docker tag to v1.7.0
+    apiVersion: v2
+    appVersion: 1.7.0
+    created: "2026-02-08T08:09:54.897638904+01:00"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: cursor helm package
+    digest: 17f1009b21c8501a4eb4fdf924af826212a1a5b020787c7330aec73dfe5f9557
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/cursor
+    icon: https://www.cursor.co/favicon-32x32.png
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: cursor
+    sources:
+    - https://github.com/cursorco/cursor
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/cursor
+    urls:
+    - https://jzacharie.github.io/helmscharts/cursor-0.1.0.tgz
+    version: 0.1.0
+  deploy-pilot:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-02-08T08:09:54.898268752+01:00"
+    description: A Helm chart for Deployment Pilot
+    digest: 6105f8f63fa85237c51e087b82eadeaa68ee85e535943748b863cab69b415b9a
+    name: deploy-pilot
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/deploy-pilot-0.1.0.tgz
+    version: 0.1.0
+  fundy:
+  - apiVersion: v2
+    appVersion: sha-6e9f6c2
+    created: "2026-02-08T08:09:54.906282687+01:00"
+    description: Helm chart for Fundy application - Financial data analysis platform
+      with microservices architecture
+    digest: 5e6ffe744031b7bc008b75ee2d5ade26a7f2bebf0c21a6263e95c4a806aacb90
+    keywords:
+    - fundy
+    - analytics
+    - microservices
+    maintainers:
+    - name: Joseph Zacharie
+    name: fundy
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/fundy-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
+    appVersion: sha-6e9f6c2
+    created: "2026-02-08T08:09:54.904774866+01:00"
+    description: Helm chart for Fundy application - Financial data analysis platform
+      with microservices architecture
+    digest: e5f1d5779b69ef8a51e324b84b8645ceffd35c211b6a53602a177ca14a626a08
+    keywords:
+    - fundy
+    - analytics
+    - microservices
+    maintainers:
+    - name: Joseph Zacharie
+    name: fundy
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/fundy-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: sha-6e9f6c2
+    created: "2026-02-08T08:09:54.90325755+01:00"
+    description: Helm chart for Fundy application - Financial data analysis platform
+      with microservices architecture
+    digest: c8afc2fc24e3979b7a85170b60249d094874f9648339d41eced460775b4e56c1
+    keywords:
+    - fundy
+    - analytics
+    - microservices
+    maintainers:
+    - name: Joseph Zacharie
+    name: fundy
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/fundy-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: sha-6e9f6c2
+    created: "2026-02-08T08:09:54.900808744+01:00"
+    description: Helm chart for Fundy application - Financial data analysis platform
+      with microservices architecture
+    digest: b52ee84f6e468b496b16a370a3b3d4c1ca933de6219b16940ddd59e680e49072
+    keywords:
+    - fundy
+    - analytics
+    - microservices
+    maintainers:
+    - name: Joseph Zacharie
+    name: fundy
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/fundy-0.1.0.tgz
+    version: 0.1.0
+  garage:
+  - apiVersion: v2
+    appVersion: v1.3.0
+    created: "2026-02-08T08:09:54.907209964+01:00"
+    description: S3-compatible object store for small self-hosted geo-distributed
+      deployments
+    digest: 1846e0363d9ee39e0d70843d00ee9d503a85634ed55eeaade85a02938ed93ea3
+    home: https://garagehq.deuxfleurs.fr/
+    icon: https://garagehq.deuxfleurs.fr/images/garage-logo.svg
+    keywords:
+    - geo-distributed
+    - read-after-write-consistency
+    - s3-compatible
+    name: garage
+    sources:
+    - https://git.deuxfleurs.fr/Deuxfleurs/garage.git
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/garage-0.7.2-rc.tgz
+    version: 0.7.2-rc
+  itop:
+  - apiVersion: v2
+    appVersion: 3.0.1
+    created: "2026-02-08T08:09:54.907891965+01:00"
+    description: A Helm chart for Kubernetes
+    digest: ce0928cb7299e61f2b671fa36ab219f6457260fa47833b58c890dc91624a3e2f
+    name: itop
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/itop-0.1.0.tgz
+    version: 0.1.0
+  kasm:
+  - annotations:
+      category: Virtual Desktop
+      images: |
+        - name: kasm-api
+          image: kasmweb/api:1.18.1
+        - name: kasm-manager
+          image: kasmweb/manager:1.18.1
+        - name: kasm-db
+          image: kasmweb/postgres:1.18.1
+        - name: kasm-proxy
+          image: kasmweb/proxy:1.18.1
+        - name: kasm-guac
+          image: kasmweb/kasm-guac:1.18.1
+        - name: rdp-gateway
+          image: kasmweb/rdp-gateway:1.18.1
+        - name: rdp-gateway
+          image: kasmweb/rdp-https-gateway:1.18.1
+    apiVersion: v2
+    appVersion: 1.18.1
+    created: "2026-02-08T08:09:54.910125429+01:00"
+    description: Kasm is a platform specializing in providing secure browser-based
+      workspaces for a wide range of applications and industries. Its main goal is
+      to provide isolated and secure environments that can be accessed via web browsers,
+      ensuring that users can perform tasks without risking the security of their
+      local systems.
+    digest: bfa9c17077d9ac95feaf2500ca3ecb130da0c0a90bf74a91faf5900f5df68363
+    home: https://kasm.com
+    icon: https://kasm-static-content.s3.amazonaws.com/icons/kasm-logo-small.png
+    keywords:
+    - kasm
+    - vdi
+    - workspaces
+    maintainers:
+    - name: Kasm Technologies, Inc.
+      url: https://github.com/kasmtech/kasm-helm
+    name: kasm
+    urls:
+    - https://jzacharie.github.io/helmscharts/kasm-1.1181.0.tgz
+    version: 1.1181.0
+  keda-waiting-page:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-02-08T08:09:54.911114716+01:00"
+    description: A Helm chart for the KEDA waiting page
+    digest: c8ed65ea7b2cad8623d4fa18738c3967059f3b5c1357abf15528ea1954909369
+    name: keda-waiting-page
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/keda-waiting-page-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-02-08T08:09:54.910628138+01:00"
+    description: A Helm chart for the KEDA waiting page
+    digest: 669dd55e34912d156259c825c4b3aeb2917276e4369f922fd7bf408ea2c19a5a
+    name: keda-waiting-page
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/keda-waiting-page-0.1.0.tgz
+    version: 0.1.0
+  linkwarden:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update linkwarden/linkwarden docker tag to v2.9.3
+    apiVersion: v2
+    appVersion: v2.9.3
+    created: "2026-02-08T08:09:54.915672578+01:00"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: linkwarden helm package
+    digest: 3bf57c6ab46d439a28c040ff11ea31bab9fb89b30dd318f66b1688c6ca4da210
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/linkwarden
+    icon: https://www.linkwarden.co/favicon-32x32.png
+    keywords:
+    - pdf-signature
+    - pdf-sign
+    - document-signing
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: linkwarden
+    sources:
+    - https://github.com/linkwardenco/linkwarden
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/linkwarden
+    urls:
+    - https://jzacharie.github.io/helmscharts/linkwarden-2.9.4.tgz
+    version: 2.9.4
+  maintenance:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-02-08T08:09:54.916807605+01:00"
+    description: Maintenance CronJobs for node cleanup and other tasks
+    digest: 1a2412d5f81426f06b943e14bad0620572ed8e103c5dd37ace575300f0a2c9c2
+    name: maintenance
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/maintenance-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-02-08T08:09:54.916277683+01:00"
+    description: Maintenance CronJobs for node cleanup and other tasks
+    digest: 0ace74827605c3eb5bcfdc59fb3145b396c69c90d225ff2050c8ce07a5d00613
+    name: maintenance
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/maintenance-0.1.0.tgz
+    version: 0.1.0
+  maker-management-platform:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2026-02-08T08:09:54.917306978+01:00"
+    description: A Helm chart for Maker Management Platform
+    digest: 13ea50f2884e1f155d1e5b22328816ad9807c6f6e7fc931340654ebfdf11b158
+    name: maker-management-platform
+    urls:
+    - https://jzacharie.github.io/helmscharts/maker-management-platform-0.1.0.tgz
+    version: 0.1.0
+  openai-whisper-asr-webservice:
+  - apiVersion: v2
+    appVersion: 1.7.0
+    created: "2026-02-08T08:09:54.919423708+01:00"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: openai-whisper-asr-webservice helm package
+    digest: 6f1363b15a3d33cf6ed96c3aa241d0dbbbe41a6383275269c4865599317d372d
+    kubeVersion: '>=1.16.0-0'
+    name: openai-whisper-asr-webservice
+    urls:
+    - https://jzacharie.github.io/helmscharts/openai-whisper-asr-webservice-0.1.2.tgz
+    version: 0.1.2
+  openobserve-collector:
+  - apiVersion: v2
+    appVersion: 0.136.0
+    created: "2026-02-08T08:09:54.921759288+01:00"
+    description: An opinionated installation of OTEL Collector for OpenObserve (forked
+      with custom env support)
+    digest: af12f7e433667d2c3359287971b9371af67a66b3925544ea155ebfa80c80d7c6
+    maintainers:
+    - email: hello@openobserve.ai
+      name: OpenObserve
+      url: https://openobserve.ai
+    name: openobserve-collector
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/openobserve-collector-0.4.1-custom.tgz
+    version: 0.4.1-custom
+  paperless-gpt:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update paperless-gpt/paperless-gpt docker tag to v0.24.0
+    apiVersion: v2
+    appVersion: 0.24.0
+    created: "2026-02-08T08:09:54.928364234+01:00"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: paperless-gpt helm package
+    digest: 3e5221368dfa83377d48e35c54aa6a0f84ab23fa391dcb4ba9db6d74410a2fa1
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/paperless-gpt
+    icon: https://www.paperless-gpt.co/favicon-32x32.png
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: paperless-gpt
+    sources:
+    - https://github.com/paperless-gptco/paperless-gpt
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/paperless-gpt
+    urls:
+    - https://jzacharie.github.io/helmscharts/paperless-gpt-0.2.0.tgz
+    version: 0.2.0
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update paperless-gpt/paperless-gpt docker tag to v1.7.0
+    apiVersion: v2
+    appVersion: 1.7.0
+    created: "2026-02-08T08:09:54.924412315+01:00"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: paperless-gpt helm package
+    digest: c7274efa6eaf776e5b3f5d4a9dcadd21bd959d27d8e8e05907d664effdf096b5
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/paperless-gpt
+    icon: https://www.paperless-gpt.co/favicon-32x32.png
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: paperless-gpt
+    sources:
+    - https://github.com/paperless-gptco/paperless-gpt
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/paperless-gpt
+    urls:
+    - https://jzacharie.github.io/helmscharts/paperless-gpt-0.1.0.tgz
+    version: 0.1.0
+  pd3f:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2026-02-08T08:09:54.929097144+01:00"
+    description: A Helm chart for PD3F application
+    digest: 46bdeb1bb735110f5842a9a8f00c075dcbe98debf83389efbc8208e5217c375c
+    name: pd3f
+    urls:
+    - https://jzacharie.github.io/helmscharts/pd3f-0.1.2.tgz
+    version: 0.1.2
+  proton-bridge:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-02-08T08:09:54.930627363+01:00"
+    description: Proton Mail Bridge for email clients
+    digest: da7c222a1b78bc2392e4423c906dba952e02687a4561970c5b236a2658c2967e
+    name: proton-bridge
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/proton-bridge-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-02-08T08:09:54.930107747+01:00"
+    description: Proton Mail Bridge for email clients
+    digest: af7e750220d3861af33b46765735d27bcaafb010cc6cab1196c9765516cf0cfc
+    name: proton-bridge
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/proton-bridge-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 3.9.1
+    created: "2026-02-08T08:09:54.929613649+01:00"
+    description: Proton Mail Bridge for email clients
+    digest: 3ce06f70abf3fc19eae509f045219c91ce8caf55769adadc67ae5e16eb927a59
+    name: proton-bridge
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/proton-bridge-0.1.0.tgz
+    version: 0.1.0
+  readur:
+  - annotations:
+      category: Document Management
+    apiVersion: v2
+    appVersion: latest
+    created: "2026-02-08T08:09:54.937515854+01:00"
+    dependencies:
+    - name: common
+      repository: https://bjw-s-labs.github.io/helm-charts
+      version: 4.1.2
+    description: Readur is a document management and OCR processing service that automatically
+      processes uploaded documents, extracts text using OCR, and makes content searchable.
+    digest: dc962a9990b88103c6078980800ad5bf43a168f6e22a924f2c83dbd1571d0ab3
+    home: https://github.com/readur/readur
+    icon: https://github.com/readur/readur/blob/main/assets/icon.png
+    keywords:
+    - document-management
+    - ocr
+    - text-extraction
+    - file-processing
+    - rust
+    - self-hosted
+    - document-search
+    - pdf
+    - tesseract
+    kubeVersion: '>= 1.19'
+    maintainers:
+    - name: readur
+      url: https://github.com/readur/readur
+    name: readur
+    sources:
+    - https://github.com/readur/readur
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/readur-0.2.6.tgz
+    version: 0.2.6
+  scale-manager:
+  - apiVersion: v2
+    appVersion: "1.5"
+    created: "2026-02-08T08:09:54.93815571+01:00"
+    description: Manage scale down and restore of Deployments & StatefulSets via CronJobs
+    digest: 990228218ae7eafe5623311a742ae26528e2ce63a8b8afa9fffc55a3d52ee044
+    name: scale-manager
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/scale-manager-0.9.5.tgz
+    version: 0.9.5
+  sim:
+  - annotations:
+      category: AI/ML Platform
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-02-08T08:09:54.940845904+01:00"
+    description: A Helm chart for Sim - AI agent workflow platform
+    digest: c281c8c995e25962ffcb7d33f0f4ba095ca3b1cecbf80b71ccb033b148b781eb
+    home: https://sim.ai
+    icon: https://raw.githubusercontent.com/simstudioai/sim/main/apps/sim/public/sim.svg
+    keywords:
+    - ai
+    - workflow
+    - automation
+    - agents
+    - nextjs
+    maintainers:
+    - email: help@sim.ai
+      name: Sim Team
+      url: https://sim.ai
+    name: sim
+    sources:
+    - https://github.com/simstudioai/sim
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/sim-0.1.1.tgz
+    version: 0.1.1
+  speaches:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update wud/wud docker tag to v2.9.3
+    apiVersion: v2
+    appVersion: 8.0.1
+    created: "2026-02-08T08:09:54.942956775+01:00"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: wud helm package
+    digest: ab79531d8b168fcb6646881ff9d4bd17df0d4d30ec0db194bd75f8b725967160
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/wud
+    icon: https://www.wud.co/favicon-32x32.png
+    keywords:
+    - docker
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: speaches
+    sources:
+    - https://github.com/wudco/wud
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/wud
+    urls:
+    - https://jzacharie.github.io/helmscharts/speaches-1.0.0.tgz
+    version: 1.0.0
+  steampipe-powerpipe-kubernetes:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2026-02-08T08:09:54.944246917+01:00"
+    description: A Helm chart for deploying turbot's Steampipe and Powerpipe to Kubernetes
+    digest: 6d25a31bd6549e02a78373efb49aac344732a6854d04f1585e04d7395e186627
+    name: steampipe-powerpipe-kubernetes
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/steampipe-powerpipe-kubernetes-0.11.21.tgz
+    version: 0.11.21
+  swingmusic:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update swingmusic/swingmusic docker tag to vv1.4.8
+    apiVersion: v2
+    appVersion: vv1.4.8
+    created: "2026-02-08T08:09:54.947020964+01:00"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: swingmusic helm package
+    digest: f5ccacada9e3226f1af5bcf2100952574b5065ce468de5ca941fea2338b434c6
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/swingmusic
+    icon: https://www.swingmusic.co/favicon-32x32.png
+    keywords:
+    - pdf-signature
+    - pdf-sign
+    - document-signing
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: swingmusic
+    sources:
+    - https://github.com/swingmusicco/swingmusic
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/swingmusic
+    urls:
+    - https://jzacharie.github.io/helmscharts/swingmusic-v1.4.10.tgz
+    version: v1.4.10
+  thelounge:
+  - apiVersion: v2
+    appVersion: 4.4.3
+    created: "2026-02-08T08:09:54.94736898+01:00"
+    description: A Helm chart for The Lounge - Modern web IRC client
+    digest: 79d9302a0458e5bf7aaa037667e5922fdfe7f081f5ec36aef0f474fbbad58d37
+    name: thelounge
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/thelounge-0.1.0.tgz
+    version: 0.1.0
+  traccar:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update traccar/traccar docker tag to v2.9.3
+    apiVersion: v2
+    appVersion: 8.0.1
+    created: "2026-02-08T08:09:54.949521092+01:00"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: traccar helm package
+    digest: 2180c06afe3a6f2b8fa7c0a5ebd0931b3b4fd7ad3e50df1a555f995006caa734
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/traccar
+    icon: https://www.traccar.co/favicon-32x32.png
+    keywords:
+    - docker
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: traccar
+    sources:
+    - https://github.com/traccarco/traccar
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/traccar
+    urls:
+    - https://jzacharie.github.io/helmscharts/traccar-8.0.1.tgz
+    version: 8.0.1
+  tts-api:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update tts-api/tts-api docker tag to vv1.4.8
+    apiVersion: v2
+    appVersion: vv1.4.8
+    created: "2026-02-08T08:09:54.952556896+01:00"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: tts-api helm package
+    digest: e8635fdf8f22a2eb7e203371074427edb8eacb74b05696180bdff5e5f8fae4c4
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/tts-api
+    icon: https://www.tts-api.co/favicon-32x32.png
+    keywords:
+    - pdf-signature
+    - pdf-sign
+    - document-signing
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: tts-api
+    sources:
+    - https://github.com/tts-apico/tts-api
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/tts-api
+    urls:
+    - https://jzacharie.github.io/helmscharts/tts-api-v1.0.0.tgz
+    version: v1.0.0
+  watchyourlan:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update watchyourlan/watchyourlan docker tag to v2.9.3
+    apiVersion: v2
+    appVersion: 8.0.1
+    created: "2026-02-08T08:09:54.954790142+01:00"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: watchyourlan helm package
+    digest: 86c3bae1e0583cdf1d0ef51cbff2ce7000dafeb733ed598b24d774f5eff17a0b
+    home: https://github.com/zekker6/helm-charts/tree/master/charts/apps/watchyourlan
+    icon: https://www.watchyourlan.co/favicon-32x32.png
+    keywords:
+    - docker
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: watchyourlan
+    sources:
+    - https://github.com/watchyourlanco/watchyourlan
+    - https://github.com/zekker6/helm-charts/tree/master/charts/apps/watchyourlan
+    urls:
+    - https://jzacharie.github.io/helmscharts/watchyourlan-2.0.4.tgz
+    version: 2.0.4
+  wh2pg-chart:
+  - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2026-02-08T08:09:54.955732073+01:00"
+    description: Webhook to PostgreSQL - Service to receive webhooks and store them
+      in PostgreSQL
+    digest: 8a447c357d07dfa5f2003326dd489b142394f312f4dbf973749e492a831714bc
+    home: https://github.com/JZacharie/wh2pg
+    keywords:
+    - webhook
+    - postgresql
+    - rust
+    maintainers:
+    - name: Joseph
+    name: wh2pg-chart
+    sources:
+    - https://github.com/JZacharie/wh2pg
+    type: application
+    urls:
+    - https://jzacharie.github.io/helmscharts/wh2pg-chart-1.2.0.tgz
+    version: 1.2.0
+  whisperx:
+  - apiVersion: v2
+    appVersion: 1.7.0
+    created: "2026-02-08T08:09:54.958295878+01:00"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: whisperx helm package
+    digest: c974d0611bc20b174e14d8ba6df3361c6e8f811540268a27824f0aa10af0f81f
+    kubeVersion: '>=1.16.0-0'
+    name: whisperx
+    urls:
+    - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
+    version: 0.1.2
+generated: "2026-02-08T08:09:54.885115175+01:00"
