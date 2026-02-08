@@ -1,0 +1,52 @@
+[package]
+name = "simple-irc-server"
+authors = ["Mateusz Szpakowski"]
+license = "LGPL-2.1-or-later"
+version = "0.1.8"
+edition = "2018"
+rust-version = "1.57"
+description = "Simple IRC server"
+repository = "https://github.com/matszpk/simple-irc-server"
+categories = ["network-programming"]
+keywords = ["irc"]
+
+[dependencies]
+tokio = { version = "1.0", features = [ "full" ] }
+tokio-util = { version = "0.7.0", features = [ "codec" ] }
+tokio-stream = "0.1"
+tracing = "0.1"
+futures = "0.3.0"
+toml = "0.5"
+serde = "1.0.0"
+serde_derive = "1.0.0"
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "3.0.0", features = ["derive"] }
+validator = { version = "0.14", features = [ "derive" ] }
+bytes = "1.1.0"
+const-table = "0.1.0"
+flagset = "0.4"
+argon2 = "0.4"
+rpassword = "6.0"
+tokio-rustls = { version = "0.23", optional = true }
+rustls = { version = "0.20", optional = true }
+rustls-pemfile = { version = "1.0", optional = true }
+tokio-openssl = { version = "0.6", optional = true }
+openssl = { version = "0.10", optional = true }
+lazy_static = "1.4"
+trust-dns-resolver = { version = "0.21", optional = true }
+
+[features]
+default = []
+# prefer rustls for almost systems
+tls_rustls = [ "rustls", "tokio-rustls", "rustls-pemfile" ]
+# use openssl if rustls with ring doesn't work - for example old non-SSE2 machines
+tls_openssl = [ "openssl", "tokio-openssl" ]
+dns_lookup = [ "trust-dns-resolver" ]
+
+[dependencies.tracing-subscriber]
+version = "0.3.1"
+default-features = false
+features = ["fmt", "ansi", "env-filter", "tracing-log"]
+
+[dev-dependencies]
+tokio = { version = "1.0", features = [ "full", "test-util" ] }
