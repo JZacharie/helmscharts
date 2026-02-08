@@ -21,7 +21,7 @@ RUN apt-get update && \
 WORKDIR /app
 
 # Copy Python dependencies from builder
-COPY --from=backend-builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=backend-builder /usr/local/lib/python3.14/site-packages /usr/local/lib/python3.14/site-packages
 COPY --from=backend-builder /usr/local/bin/gunicorn /usr/local/bin/gunicorn
 
 # Copy backend
@@ -36,10 +36,10 @@ COPY nginx-site.conf /etc/nginx/sites-available/default
 
 # Prepare directories and permissions for non-root user
 RUN mkdir -p /tmp/client_body \
-             /tmp/proxy \
-             /tmp/fastcgi \
-             /tmp/uwsgi \
-             /tmp/scgi && \
+    /tmp/proxy \
+    /tmp/fastcgi \
+    /tmp/uwsgi \
+    /tmp/scgi && \
     touch /tmp/nginx.pid && \
     chown -R www-data:www-data /usr/share/nginx/html && \
     chown -R www-data:www-data /tmp && \
