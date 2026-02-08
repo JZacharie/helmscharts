@@ -1,0 +1,6 @@
+apiVersion: v2
+name: thelounge
+description: A Helm chart for The Lounge - Modern web IRC client
+type: application
+version: 0.1.0
+appVersion: "4.4.3"

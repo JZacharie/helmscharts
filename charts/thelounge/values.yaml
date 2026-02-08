@@ -1,0 +1,78 @@
+image:
+  repository: ghcr.io/thelounge/thelounge
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+
+service:
+  type: ClusterIP
+  port: 9000
+
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: "The Lounge"
+    gethomepage.dev/description: "Modern web IRC client"
+    gethomepage.dev/group: "Productivity"
+    gethomepage.dev/icon: "https://raw.githubusercontent.com/thelounge/thelounge/master/client/img/logo-grey.svg"
+  hosts:
+    - host: thelounge.zacharie.org
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+resources: {}
+  # limits:
+  #   cpu: 500m
+  #   memory: 512Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# The Lounge configuration
+config:
+  # Pre-configure IRC networks
+  # This will be mounted as a config file
+  defaults:
+    name: "Simple IRC"
+    host: "irc.p.zacharie.org"
+    port: 6667
+    tls: false
+    rejectUnauthorized: false
+    nick: "lounge-user"
+    username: "lounge"
+    realname: "The Lounge User"
+    join: "#general"

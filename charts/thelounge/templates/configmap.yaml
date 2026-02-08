@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "thelounge.fullname" . }}-config
+  labels:
+    {{- include "thelounge.labels" . | nindent 4 }}
+data:
+  config.js: |
+    "use strict";
+
+    module.exports = {
+      public: false,
+      host: undefined,
+      port: 9000,
+      bind: undefined,
+      reverseProxy: true,
+      maxHistory: 10000,
+      https: {
+        enable: false,
+        key: "",
+        certificate: "",
+        ca: ""
+      },
+      theme: "default",
+      prefetch: false,
+      prefetchStorage: false,
+      prefetchMaxImageSize: 2048,
+      prefetchMaxSearchSize: 50,
+      prefetchTimeout: 5000,
+      fileUpload: {
+        enable: true,
+        maxFileSize: 10240
+      },
+      transports: ["websocket", "polling"],
+      leaveMessage: "The Lounge - https://thelounge.chat",
+      defaults: {
+        name: "{{ .Values.config.defaults.name }}",
+        host: "{{ .Values.config.defaults.host }}",
+        port: {{ .Values.config.defaults.port }},
+        password: "",
+        tls: {{ .Values.config.defaults.tls }},
+        rejectUnauthorized: {{ .Values.config.defaults.rejectUnauthorized }},
+        nick: "{{ .Values.config.defaults.nick }}",
+        username: "{{ .Values.config.defaults.username }}",
+        realname: "{{ .Values.config.defaults.realname }}",
+        join: "{{ .Values.config.defaults.join }}"
+      },
+      lockNetwork: false,
+      messageStorage: ["sqlite", "text"],
+      useHexIp: false,
+      webirc: null,
+      identd: {
+        enable: false,
+        port: 113
+      },
+      oidentd: null,
+      ldap: {
+        enable: false,
+        url: "ldaps://example.com",
+        tlsOptions: {},
+        primaryKey: "uid",
+        searchDN: {
+          rootDN: "ou=users,dc=example,dc=com",
+          rootPassword: "1234",
+          filter: "(objectClass=person)(memberOf=ou=accounts,dc=example,dc=com)",
+          base: "dc=example,dc=com",
+          scope: "sub"
+        }
+      },
+      debug: {
+        ips: false,
+        raw: false
+      }
+    };
