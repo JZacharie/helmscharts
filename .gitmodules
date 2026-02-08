@@ -1,0 +1,3 @@
+[submodule "images/simple-irc-server/src"]
+	path = images/simple-irc-server/src
+	url = https://github.com/matszpk/simple-irc-server
