@@ -1,6 +1,6 @@
 apiVersion: v2
 name: maintenance
-description: Maintenance CronJobs for node cleanup and other tasks
+description: Maintenance CronJobs for cluster operations
 type: application
-version: 0.2.0
+version: 0.2.1
 appVersion: "1.0.0"
