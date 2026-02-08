@@ -1011,6 +1011,17 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/swingmusic-v1.4.10.tgz
     version: v1.4.10
+  thelounge:
+  - apiVersion: v2
+    appVersion: 4.4.3
+    created: "2026-02-08T07:10:40.061796929Z"
+    description: A Helm chart for The Lounge - Modern web IRC client
+    digest: 62093fcbe0e01ed54bfc63f0709e1e6e7ba8d429659368690dbf79e20847b6a4
+    name: thelounge
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/thelounge-0.1.0/thelounge-0.1.0.tgz
+    version: 0.1.0
   traccar:
   - annotations:
       artifacthub.io/changes: |-
@@ -1139,4 +1150,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-02-07T10:55:01.669041698Z"
+generated: "2026-02-08T07:10:40.061900182Z"
