@@ -51,6 +51,9 @@ spec:
               mountPath: "/app/.kube"
               readOnly: true
             {{- end }}
+            {{- with .Values.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           env:
             {{- if or .Values.secret.kubeConfig .Values.secret.existingSecret }}
             - name: KUBECONFIG
@@ -203,4 +206,7 @@ spec:
             items:
               - key: {{ .Values.secret.existingSecretKey | default "config" }}
                 path: config
+        {{- end }}
+        {{- with .Values.volumes }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}

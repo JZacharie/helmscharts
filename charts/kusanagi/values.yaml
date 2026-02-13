@@ -153,3 +153,11 @@ vault:
       botTokenKey: "bot_token"
       channelIdKey: "channel_id"
 
+
+volumes:
+  - name: tmp-volume
+    emptyDir: {}
+
+volumeMounts:
+  - name: tmp-volume
+    mountPath: /tmp
