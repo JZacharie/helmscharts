@@ -28,7 +28,7 @@ flagset = "0.4"
 argon2 = "0.4"
 rpassword = "6.0"
 tokio-rustls = { version = "0.23", optional = true }
-rustls = { version = "0.20", optional = true }
+rustls = { version = "0.23", optional = true }
 rustls-pemfile = { version = "1.0", optional = true }
 tokio-openssl = { version = "0.6", optional = true }
 openssl = { version = "0.10", optional = true }
