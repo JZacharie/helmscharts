@@ -19,7 +19,7 @@ jobs:
       images: ${{ steps.set-matrix.outputs.images }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Discover Dockerfiles
         id: set-matrix
@@ -54,7 +54,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Prepare Image Name
         id: prepare
