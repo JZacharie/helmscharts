@@ -60,15 +60,22 @@ spec:
               # Process each node
               for NODE_IP in $NODE_IPS; do
                 echo ""
-                echo "=== Processing node: $NODE_IP ==="
+                echo "========================================================="
+                echo "NODE: $NODE_IP"
+                echo "========================================================="
                 
                 # Get node name for logging
                 NODE_NAME=$(kubectl get nodes -o jsonpath="{.items[?(@.status.addresses[0].address==\"$NODE_IP\")].metadata.name}")
-                echo "Node name: $NODE_NAME"
+                if [ -z "$NODE_NAME" ]; then
+                  echo "WARNING: Could not determine node name for $NODE_IP"
+                  NODE_NAME="unknown"
+                fi
+                echo "Name: $NODE_NAME"
                 
                 # Check if SSH is accessible
-                if ! ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 -i /root/.ssh/id_rsa joseph@$NODE_IP "echo 'SSH connection successful'" 2>/dev/null; then
-                  echo "ERROR: Cannot connect to $NODE_IP via SSH, skipping..."
+                echo "Testing SSH connectivity..."
+                if ! ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 -i /root/.ssh/id_rsa joseph@$NODE_IP "echo 'SSH connection successful'" 2>&1; then
+                  echo "ERROR: SSH connection failed for $NODE_IP. Verification of keys or firewall rules may be needed."
                   continue
                 fi
                 
@@ -78,8 +85,9 @@ spec:
                 # Check if it's a read-only system (Kairos)
                 IS_READONLY=$(ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "mount | grep -q 'on / type overlay' && echo 'true' || echo 'false'" 2>/dev/null || echo "false")
                 
-                echo "OS Info: $(echo "$OS_INFO" | grep PRETTY_NAME || echo 'Unknown')"
-                echo "Read-only filesystem: $IS_READONLY"
+                PRETTY_OS=$(echo "$OS_INFO" | grep PRETTY_NAME | cut -d'"' -f2 || echo 'Unknown')
+                echo "OS: $PRETTY_OS"
+                echo "Read-only: $IS_READONLY"
                 
                 # === Image Cleanup ===
                 {{- if .Values.imagePrune.excludedNodes }}
@@ -94,14 +102,14 @@ spec:
                 done
                 
                 if [ "$SKIP_PRUNE" = "true" ]; then
-                  echo "--- Skipping image cleanup (node is in excluded list) ---"
+                  echo "Action: Skipping image cleanup (node is in excluded list)"
                 else
                 {{- end }}
-                  echo "--- Cleaning up unused container images ---"
+                  echo "Action: Cleaning up unused container images..."
                   if ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "sudo crictl rmi --prune" 2>&1; then
-                    echo "✓ Image cleanup completed successfully"
+                    echo "Result: ✓ Image cleanup completed"
                   else
-                    echo "✗ Image cleanup failed"
+                    echo "Result: ✗ Image cleanup failed"
                   fi
                 {{- if .Values.imagePrune.excludedNodes }}
                 fi
@@ -109,37 +117,36 @@ spec:
                 
                 # === Package Updates ===
                 if [ "$IS_READONLY" = "true" ]; then
-                  echo "--- Skipping package updates (read-only system) ---"
-                  echo "Note: For Kairos systems, use Kubernetes-based upgrades: https://kairos.io/docs/upgrade/kubernetes/"
+                  echo "Action: Skipping package updates (read-only system)"
                 else
                   # Detect package manager
                   if echo "$OS_INFO" | grep -qi "debian\|ubuntu"; then
-                    echo "--- Updating Debian/Ubuntu packages ---"
+                    echo "Action: Updating Debian/Ubuntu packages..."
                     
                     # Update package lists
                     if ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "sudo apt-get update" 2>&1; then
-                      echo "✓ Package lists updated"
+                      echo "Step 1: ✓ Package lists updated"
                     else
-                      echo "✗ Failed to update package lists"
+                      echo "Step 1: ✗ Failed to update package lists"
                       continue
                     fi
                     
                     # Upgrade packages (non-interactive)
                     if ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold'" 2>&1; then
-                      echo "✓ Packages upgraded successfully"
+                      echo "Step 2: ✓ Packages upgraded"
                     else
-                      echo "✗ Package upgrade failed"
+                      echo "Step 2: ✗ Package upgrade failed"
                     fi
                     
                     # Clean up
                     ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "sudo apt-get autoremove -y && sudo apt-get clean" 2>&1 || true
-                    echo "✓ Package cleanup completed"
+                    echo "Step 3: ✓ Package cleanup completed"
                   else
-                    echo "--- Unsupported OS for package updates ---"
+                    echo "Action: Unsupported OS for package updates"
                   fi
                 fi
                 
-                echo "=== Completed maintenance for $NODE_IP ==="
+                echo "Status: Completed maintenance for $NODE_IP"
               done
               
               echo ""
