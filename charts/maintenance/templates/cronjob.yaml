@@ -1,0 +1,162 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "maintenance.fullname" . }}-node
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "maintenance.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "maintenance.selectorLabels" . | nindent 12 }}
+        spec:
+          serviceAccountName: {{ .Values.serviceAccount.name | default (include "maintenance.fullname" .) }}
+          restartPolicy: OnFailure
+          containers:
+          - name: maintenance
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            command: ["/bin/sh"]
+            args:
+            - -c
+            - |
+              set -e
+              
+              echo "=== Node Maintenance Job Started at $(date) ==="
+              
+              # Fix Alpine SSL issues by using http repositories temporarily
+              sed -i 's/https/http/g' /etc/apk/repositories
+              
+              # Install required packages
+              apk add --no-cache ca-certificates openssh-client curl
+              
+              # Restore https repositories
+              sed -i 's/http:/https:/g' /etc/apk/repositories
+              
+              # Setup SSH key with correct permissions
+              mkdir -p /root/.ssh
+              cp /ssh-key/id_rsa /root/.ssh/id_rsa
+              chmod 600 /root/.ssh/id_rsa
+              
+              # Install kubectl
+              curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+              chmod +x kubectl
+              mv kubectl /usr/local/bin/
+              
+              # Get all node IPs
+              echo "=== Discovering cluster nodes ==="
+              NODE_IPS=$(kubectl get nodes -o jsonpath='{range .items[*]}{.status.addresses[?(@.type=="InternalIP")].address}{"\n"}{end}')
+              
+              echo "Found nodes:"
+              echo "$NODE_IPS"
+              
+              # Process each node
+              for NODE_IP in $NODE_IPS; do
+                echo ""
+                echo "========================================================="
+                echo "NODE: $NODE_IP"
+                echo "========================================================="
+                
+                # Get node name for logging
+                NODE_NAME=$(kubectl get nodes -o jsonpath="{.items[?(@.status.addresses[0].address==\"$NODE_IP\")].metadata.name}")
+                if [ -z "$NODE_NAME" ]; then
+                  echo "WARNING: Could not determine node name for $NODE_IP"
+                  NODE_NAME="unknown"
+                fi
+                echo "Name: $NODE_NAME"
+                
+                # Check if SSH is accessible
+                echo "Testing SSH connectivity..."
+                if ! ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 -i /root/.ssh/id_rsa joseph@$NODE_IP "echo 'SSH connection successful'" 2>&1; then
+                  echo "ERROR: SSH connection failed for $NODE_IP. Verification of keys or firewall rules may be needed."
+                  continue
+                fi
+                
+                # Detect OS type
+                OS_INFO=$(ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "cat /etc/os-release" 2>/dev/null || echo "")
+                
+                # Check if it's a read-only system (Kairos)
+                IS_READONLY=$(ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "mount | grep -q 'on / type overlay' && echo 'true' || echo 'false'" 2>/dev/null || echo "false")
+                
+                PRETTY_OS=$(echo "$OS_INFO" | grep PRETTY_NAME | cut -d'"' -f2 || echo 'Unknown')
+                echo "OS: $PRETTY_OS"
+                echo "Read-only: $IS_READONLY"
+                
+                # === Image Cleanup ===
+                {{- if .Values.imagePrune.excludedNodes }}
+                # Check if this node should skip image pruning
+                EXCLUDED_NODES="{{ range .Values.imagePrune.excludedNodes }}{{ . }} {{ end }}"
+                SKIP_PRUNE=false
+                for EXCLUDED_NODE in $EXCLUDED_NODES; do
+                  if [ "$NODE_NAME" = "$EXCLUDED_NODE" ]; then
+                    SKIP_PRUNE=true
+                    break
+                  fi
+                done
+                
+                if [ "$SKIP_PRUNE" = "true" ]; then
+                  echo "Action: Skipping image cleanup (node is in excluded list)"
+                else
+                {{- end }}
+                  echo "Action: Cleaning up unused container images..."
+                  if ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "sudo crictl rmi --prune" 2>&1; then
+                    echo "Result: ✓ Image cleanup completed"
+                  else
+                    echo "Result: ✗ Image cleanup failed"
+                  fi
+                {{- if .Values.imagePrune.excludedNodes }}
+                fi
+                {{- end }}
+                
+                # === Package Updates ===
+                if [ "$IS_READONLY" = "true" ]; then
+                  echo "Action: Skipping package updates (read-only system)"
+                else
+                  # Detect package manager
+                  if echo "$OS_INFO" | grep -qi "debian\|ubuntu"; then
+                    echo "Action: Updating Debian/Ubuntu packages..."
+                    
+                    # Update package lists
+                    if ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "sudo apt-get update" 2>&1; then
+                      echo "Step 1: ✓ Package lists updated"
+                    else
+                      echo "Step 1: ✗ Failed to update package lists"
+                      continue
+                    fi
+                    
+                    # Upgrade packages (non-interactive)
+                    if ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold'" 2>&1; then
+                      echo "Step 2: ✓ Packages upgraded"
+                    else
+                      echo "Step 2: ✗ Package upgrade failed"
+                    fi
+                    
+                    # Clean up
+                    ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa joseph@$NODE_IP "sudo apt-get autoremove -y && sudo apt-get clean" 2>&1 || true
+                    echo "Step 3: ✓ Package cleanup completed"
+                  else
+                    echo "Action: Unsupported OS for package updates"
+                  fi
+                fi
+                
+                echo "Status: Completed maintenance for $NODE_IP"
+              done
+              
+              echo ""
+              echo "=== Node Maintenance Job Completed at $(date) ==="
+            volumeMounts:
+            - name: ssh-key
+              mountPath: /ssh-key
+              readOnly: true
+          volumes:
+          - name: ssh-key
+            secret:
+              secretName: ssh-key
+              defaultMode: 0400
