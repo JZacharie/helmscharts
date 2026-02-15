@@ -2,7 +2,7 @@ image:
   # -- image repository
   repository: luvx/chartdb
   # -- image tag
-  tag: "1.7.0"
+  tag: "1.18.1"
   # -- image pull policy
   pullPolicy: IfNotPresent
 
