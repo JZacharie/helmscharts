@@ -46,6 +46,8 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
             {{- if or .Values.secret.kubeConfig .Values.secret.existingSecret }}
             - name: kubeconfig
               mountPath: "/app/.kube"
@@ -199,6 +201,8 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
+        - name: tmp-volume
+          emptyDir: {}
         {{- if or .Values.secret.kubeConfig .Values.secret.existingSecret }}
         - name: kubeconfig
           secret:
