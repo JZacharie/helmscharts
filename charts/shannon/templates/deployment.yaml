@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "shannon.fullname" . }}
+  labels:
+    {{- include "shannon.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "shannon.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "shannon.selectorLabels" . | nindent 8 }}
+    spec:
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: shannon
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            privileged: true
+          env:
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "shannon.fullname" . }}-secrets
+                  key: anthropic-api-key
+                  optional: true
+            - name: CLAUDE_CODE_OAUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "shannon.fullname" . }}-secrets
+                  key: claude-code-oauth-token
+                  optional: true
+            - name: CLAUDE_CODE_MAX_OUTPUT_TOKENS
+              value: {{ .Values.shannon.maxOutputTokens | quote }}
+            - name: DOCKER_TLS_CERTDIR
+              value: ""
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: config
+              mountPath: /config
+            - name: docker-graph
+              mountPath: /var/lib/docker
+          command:
+            - sh
+            - -c
+            - |
+              # Start Docker daemon
+              dockerd-entrypoint.sh &
+              sleep 5
+              
+              # Wait for Docker
+              while ! docker info >/dev/null 2>&1; do
+                echo "Waiting for Docker..."
+                sleep 2
+              done
+              
+              echo "Docker is ready"
+              
+              # Clone Shannon if not present
+              if [ ! -d "/data/shannon" ]; then
+                apk add --no-cache git curl
+                git clone https://github.com/KeygraphHQ/shannon.git /data/shannon
+              fi
+              
+              cd /data/shannon
+              
+              # Keep container running for manual execution
+              echo "Shannon is ready"
+              tail -f /dev/null
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "shannon.fullname" . }}-data
+        - name: config
+          configMap:
+            name: {{ include "shannon.fullname" . }}-config
+        - name: docker-graph
+          emptyDir: {}

@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "openvas.fullname" . }}-pg-data
+  labels:
+    {{- include "openvas.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.pgData.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.pgData.size | quote }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "openvas.fullname" . }}-gvmd-data
+  labels:
+    {{- include "openvas.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.gvmdData.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.gvmdData.size | quote }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "openvas.fullname" . }}-plugins
+  labels:
+    {{- include "openvas.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.plugins.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.plugins.size | quote }}

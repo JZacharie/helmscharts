@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openvas.fullname" . }}-gsa
+  labels:
+    {{- include "openvas.labels" . | nindent 4 }}
+    app: gsa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "openvas.selectorLabels" . | nindent 6 }}
+      app: gsa
+  template:
+    metadata:
+      labels:
+        {{- include "openvas.selectorLabels" . | nindent 8 }}
+        app: gsa
+    spec:
+      containers:
+        - name: gsa
+          image: {{ .Values.gsa.image }}
+          resources:
+            {{- toYaml .Values.gsa.resources | nindent 12 }}
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "openvas.fullname" . }}-gsa
+  labels:
+    {{- include "openvas.labels" . | nindent 4 }}
+spec:
+  selector:
+    {{- include "openvas.selectorLabels" . | nindent 4 }}
+    app: gsa
+  ports:
+    - port: 80
+      targetPort: 80
+
+{{ if .Values.ingress.enabled -}}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "openvas.fullname" . }}-gsa
+  labels:
+    {{- include "openvas.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- if .Values.ingress.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host | quote }}
+      secretName: {{ .Values.ingress.tls.secretName }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.ingress.host | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "openvas.fullname" . }}-gsa
+                port:
+                  number: 80
+{{- end }}

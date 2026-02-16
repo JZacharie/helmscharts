@@ -1,0 +1,6 @@
+apiVersion: v2
+name: docx-editor
+description: A Helm chart for docx usage. DOCX Document Editor
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

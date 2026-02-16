@@ -1,0 +1,63 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "openvas.fullname" . }}-vuln-data-sync
+  labels:
+    {{- include "openvas.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.sync.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+            - name: vt-data
+              image: {{ .Values.sync.images.vt }}
+              env:
+                - name: FEED_RELEASE
+                  value: "24.10"
+              volumeMounts:
+                - name: vt-data
+                  mountPath: /mnt
+            - name: notus-data
+              image: {{ .Values.sync.images.notus }}
+              volumeMounts:
+                - name: notus-data
+                  mountPath: /mnt
+            - name: scap-data
+              image: {{ .Values.sync.images.scap }}
+              volumeMounts:
+                - name: scap-data
+                  mountPath: /mnt
+            - name: cert-bund-data
+              image: {{ .Values.sync.images.cert }}
+              volumeMounts:
+                - name: cert-data
+                  mountPath: /mnt
+            - name: dfn-cert-data
+              image: {{ .Values.sync.images.dfn }}
+              volumeMounts:
+                - name: cert-data
+                  mountPath: /mnt
+            - name: gpg-data
+              image: {{ .Values.sync.images.gpg }}
+              volumeMounts:
+                - name: gpg-data
+                  mountPath: /mnt
+          containers:
+            - name: sync-complete
+              image: busybox
+              command: ["sh", "-c", "echo 'Vulnerability data sync complete'"]
+          volumes:
+            - name: vt-data
+              persistentVolumeClaim:
+                claimName: {{ include "openvas.fullname" . }}-plugins
+            - name: notus-data
+              emptyDir: {}
+            - name: scap-data
+              emptyDir: {}
+            - name: cert-data
+              emptyDir: {}
+            - name: gpg-data
+              emptyDir: {}
+          restartPolicy: OnFailure

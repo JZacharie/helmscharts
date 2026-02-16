@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openvas.fullname" . }}-pg-gvm
+  labels:
+    {{- include "openvas.labels" . | nindent 4 }}
+    app: pg-gvm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "openvas.selectorLabels" . | nindent 6 }}
+      app: pg-gvm
+  template:
+    metadata:
+      labels:
+        {{- include "openvas.selectorLabels" . | nindent 8 }}
+        app: pg-gvm
+    spec:
+      containers:
+        - name: postgres
+          image: {{ .Values.postgresql.image }}
+          resources:
+            {{- toYaml .Values.postgresql.resources | nindent 12 }}
+          volumeMounts:
+            - name: pg-data
+              mountPath: /var/lib/postgresql
+            - name: pg-socket
+              mountPath: /var/run/postgresql
+      volumes:
+        - name: pg-data
+          persistentVolumeClaim:
+            claimName: {{ include "openvas.fullname" . }}-pg-data
+        - name: pg-socket
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "openvas.fullname" . }}-pg-gvm
+  labels:
+    {{- include "openvas.labels" . | nindent 4 }}
+spec:
+  selector:
+    {{- include "openvas.selectorLabels" . | nindent 4 }}
+    app: pg-gvm
+  ports:
+    - port: 5432
+      targetPort: 5432

@@ -1,0 +1,35 @@
+image:
+  repository: node
+  tag: 20-alpine
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: ragecheck.zacharie.org
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: ragecheck-tls
+      hosts:
+        - ragecheck.zacharie.org
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
