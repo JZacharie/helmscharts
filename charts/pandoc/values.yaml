@@ -1,0 +1,36 @@
+image:
+  repository: pandoc/latex
+  tag: "3.1"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: pandoc.zacharie.org
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: pandoc-tls
+      hosts:
+        - pandoc.zacharie.org
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 100m
+    memory: 256Mi

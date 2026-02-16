@@ -1,0 +1,51 @@
+image:
+  repository: docker
+  tag: 24-dind
+  pullPolicy: IfNotPresent
+
+replicaCount: 0
+
+shannon:
+  anthropicApiKey: ""
+  claudeCodeOauthToken: ""
+  maxOutputTokens: "64000"
+  config: |
+    # Shannon Lite Configuration
+    # See: https://github.com/KeygraphHQ/shannon
+    
+    # Maximum tokens for Claude Code
+    max_output_tokens: 64000
+    
+    # Vulnerability types to test
+    vuln_types:
+      - injection
+      - xss
+      - ssrf
+      - auth_bypass
+    
+    # Scanning settings
+    parallel_scans: 3
+    timeout_minutes: 60
+    
+    # Output settings
+    output_format: markdown
+    include_proof_of_concept: true
+
+persistence:
+  size: 10Gi
+  accessMode: ReadWriteOnce
+
+resources:
+  limits:
+    cpu: 4000m
+    memory: 8Gi
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+
+cronjob:
+  enabled: true
+  schedule: "0 0 * * 0"
+  suspend: true
+  targetUrl: "https://example.com"
+  targetRepo: "example-repo"

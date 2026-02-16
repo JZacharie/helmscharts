@@ -1,0 +1,6 @@
+apiVersion: v2
+name: pandoc
+description: A Helm chart for Pandoc - Universal Document Converter with REST API
+type: application
+version: 0.1.0
+appVersion: "3.1"

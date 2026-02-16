@@ -1,0 +1,46 @@
+image:
+  repository: node
+  tag: 20-alpine
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: docx.zacharie.org
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: docx-editor-tls
+      hosts:
+        - docx.zacharie.org
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+persistence:
+  enabled: true
+  size: 5Gi
+  accessMode: ReadWriteOnce
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+env:
+  PORT: "3000"
+  UPLOAD_DIR: "/data/documents"
+  NODE_ENV: "production"

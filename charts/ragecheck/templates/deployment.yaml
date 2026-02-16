@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ragecheck.fullname" . }}
+  labels:
+    {{- include "ragecheck.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "ragecheck.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ragecheck.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: app
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          workingDir: /app
+          command:
+            - sh
+            - -c
+            - |
+              # Clone and build the app
+              if [ ! -d ".git" ]; then
+                apk add --no-cache git
+                git clone https://github.com/aagoldberg/ragecheck.git /tmp/repo
+                cp -r /tmp/repo/* .
+                npm install
+                npm run build
+              fi
+              npm start
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.targetPort }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.targetPort }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          volumeMounts:
+            - name: app-data
+              mountPath: /app
+      volumes:
+        - name: app-data
+          emptyDir: {}

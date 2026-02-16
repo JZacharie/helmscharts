@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pandoc.fullname" . }}
+  labels:
+    {{- include "pandoc.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "pandoc.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "pandoc.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: pandoc
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - sh
+            - -c
+            - |
+              # Install Python
+              apt-get update && apt-get install -y python3
+              
+              # Write and run the API server
+              cat > /tmp/server.py << 'PYEOF'
+              $(cat /config/server.py)
+              PYEOF
+              
+              python3 /tmp/server.py
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "pandoc.fullname" . }}-api

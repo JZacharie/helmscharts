@@ -1,0 +1,90 @@
+ingress:
+  enabled: true
+  className: nginx
+  host: openvas.zacharie.org
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  tls:
+    enabled: false
+    secretName: openvas-tls
+
+persistence:
+  pgData:
+    size: 10Gi
+    accessMode: ReadWriteOnce
+  gvmdData:
+    size: 5Gi
+    accessMode: ReadWriteOnce
+  plugins:
+    size: 2Gi
+    accessMode: ReadWriteOnce
+
+redis:
+  image: registry.community.greenbone.net/community/redis-server:latest
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+postgresql:
+  image: registry.community.greenbone.net/community/pg-gvm:stable
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 200m
+      memory: 512Mi
+
+scanner:
+  openvasd:
+    image: registry.community.greenbone.net/community/openvas-scanner:stable
+    resources:
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+  ospd:
+    image: registry.community.greenbone.net/community/ospd-openvas:stable
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+      requests:
+        cpu: 300m
+        memory: 512Mi
+
+gvmd:
+  image: registry.community.greenbone.net/community/gvmd:stable
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 300m
+      memory: 512Mi
+
+gsa:
+  image: registry.community.greenbone.net/community/gsa:stable
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+sync:
+  schedule: "0 2 * * *"
+  images:
+    vt: registry.community.greenbone.net/community/vulnerability-tests:latest
+    notus: registry.community.greenbone.net/community/notus-data:latest
+    scap: registry.community.greenbone.net/community/scap-data:latest
+    cert: registry.community.greenbone.net/community/cert-bund-data:latest
+    dfn: registry.community.greenbone.net/community/dfn-cert-data:latest
+    gpg: registry.community.greenbone.net/community/gpg-data:latest

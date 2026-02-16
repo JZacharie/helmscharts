@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openvas.fullname" . }}-redis
+  labels:
+    {{- include "openvas.labels" . | nindent 4 }}
+    app: redis-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "openvas.selectorLabels" . | nindent 6 }}
+      app: redis-server
+  template:
+    metadata:
+      labels:
+        {{- include "openvas.selectorLabels" . | nindent 8 }}
+        app: redis-server
+    spec:
+      containers:
+        - name: redis
+          image: {{ .Values.redis.image }}
+          resources:
+            {{- toYaml .Values.redis.resources | nindent 12 }}
+          volumeMounts:
+            - name: redis-socket
+              mountPath: /run/redis
+      volumes:
+        - name: redis-socket
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "openvas.fullname" . }}-redis
+  labels:
+    {{- include "openvas.labels" . | nindent 4 }}
+spec:
+  selector:
+    {{- include "openvas.selectorLabels" . | nindent 4 }}
+    app: redis-server
+  ports:
+    - port: 6379
+      targetPort: 6379

@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openvas.fullname" . }}-gvmd
+  labels:
+    {{- include "openvas.labels" . | nindent 4 }}
+    app: gvmd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "openvas.selectorLabels" . | nindent 6 }}
+      app: gvmd
+  template:
+    metadata:
+      labels:
+        {{- include "openvas.selectorLabels" . | nindent 8 }}
+        app: gvmd
+    spec:
+      containers:
+        - name: gvmd
+          image: {{ .Values.gvmd.image }}
+          resources:
+            {{- toYaml .Values.gvmd.resources | nindent 12 }}
+          volumeMounts:
+            - name: gvmd-data
+              mountPath: /var/lib/gvm
+            - name: scap-data
+              mountPath: /var/lib/gvm/scap-data
+            - name: cert-data
+              mountPath: /var/lib/gvm/cert-data
+            - name: vt-data
+              mountPath: /var/lib/openvas/plugins
+      volumes:
+        - name: gvmd-data
+          persistentVolumeClaim:
+            claimName: {{ include "openvas.fullname" . }}-gvmd-data
+        - name: scap-data
+          emptyDir: {}
+        - name: cert-data
+          emptyDir: {}
+        - name: vt-data
+          persistentVolumeClaim:
+            claimName: {{ include "openvas.fullname" . }}-plugins
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "openvas.fullname" . }}-gvmd
+  labels:
+    {{- include "openvas.labels" . | nindent 4 }}
+spec:
+  selector:
+    {{- include "openvas.selectorLabels" . | nindent 4 }}
+    app: gvmd
+  ports:
+    - port: 9390
+      targetPort: 9390
