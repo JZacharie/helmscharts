@@ -1,6 +1,6 @@
 image:
-  repository: node
-  tag: 20-alpine
+  repository: ghcr.io/jzacharie/ragecheck
+  tag: latest
   pullPolicy: IfNotPresent
 
 replicaCount: 1
