@@ -5,4 +5,9 @@ metadata:
   labels:
     {{- include "shannon.labels" . | nindent 4 }}
 data:
-  config.yaml: {{ .Values.shannon.config | nindent 4 }}
+  config.yaml: |
+{{- if typeIs "string" .Values.shannon.config }}
+{{ .Values.shannon.config | indent 4 }}
+{{- else }}
+{{ .Values.shannon.config | toYaml | indent 4 }}
+{{- end }}
