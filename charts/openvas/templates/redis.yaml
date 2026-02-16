@@ -20,7 +20,18 @@ spec:
       containers:
         - name: redis
           image: {{ .Values.redis.image }}
+          command:
+            - redis-server
+            - --port
+            - "6379"
+            - --unixsocket
+            - /run/redis/redis.sock
+            - --unixsocketperm
+            - "770"
+            - --timeout
+            - "0"
           resources:
+
             {{- toYaml .Values.redis.resources | nindent 12 }}
           volumeMounts:
             - name: redis-socket
