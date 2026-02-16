@@ -25,8 +25,13 @@ spec:
             - |
               # Clone and build the app
               if [ ! -d ".git" ]; then
-                apk add --no-cache git
+                if command -v apk >/dev/null; then
+                  apk add --no-cache git
+                elif command -v apt-get >/dev/null; then
+                  apt-get update && apt-get install -y git
+                fi
                 git clone https://github.com/aagoldberg/ragecheck.git /tmp/repo
+
                 cp -r /tmp/repo/* .
                 npm install
                 npm run build
