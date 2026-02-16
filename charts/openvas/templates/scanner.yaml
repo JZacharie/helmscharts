@@ -76,6 +76,11 @@ spec:
             - /var/lib/notus/advisories
             - -m
             - "666"
+            - --redis-host
+            - {{ include "openvas.fullname" . }}-redis
+            - --redis-port
+            - "6379"
+
           resources:
             {{- toYaml .Values.scanner.ospd.resources | nindent 12 }}
           volumeMounts:
