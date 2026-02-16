@@ -272,6 +272,17 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/deploy-pilot-0.1.0.tgz
     version: 0.1.0
+  docx-editor:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-02-16T05:45:46.247822658Z"
+    description: A Helm chart for docx usage. DOCX Document Editor
+    digest: 7d2c8a094b0eb0b009849c6a412939af2a7b4dbd918cbd094a9042b6f8dbba82
+    name: docx-editor
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/docx-editor-0.1.0/docx-editor-0.1.0.tgz
+    version: 0.1.0
   fundy:
   - apiVersion: v2
     appVersion: sha-6e9f6c2
@@ -758,6 +769,29 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/openobserve-collector-0.4.1-custom.tgz
     version: 0.4.1-custom
+  openvas:
+  - apiVersion: v2
+    appVersion: "24.10"
+    created: "2026-02-16T05:45:46.514395378Z"
+    description: A Helm chart for Greenbone Vulnerability Scanner (OpenVAS)
+    digest: 7fb4e70ea2c994f2a4ec1441939c6ac37b5761503a3a9d2f4f87d27c97749c89
+    name: openvas
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/openvas-0.1.0/openvas-0.1.0.tgz
+    version: 0.1.0
+  pandoc:
+  - apiVersion: v2
+    appVersion: "3.1"
+    created: "2026-02-16T05:45:46.610353732Z"
+    description: A Helm chart for Pandoc - Universal Document Converter with REST
+      API
+    digest: 38bed38ed12ae7971083a162b98bc325405e5db382a1e69ef548e5f1848bba3f
+    name: pandoc
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/pandoc-0.1.0/pandoc-0.1.0.tgz
+    version: 0.1.0
   paperless-gpt:
   - annotations:
       artifacthub.io/changes: |-
@@ -869,6 +903,18 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/qwen3-tts-0.1.0/qwen3-tts-0.1.0.tgz
     version: 0.1.0
+  ragecheck:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-02-16T05:45:46.719612909Z"
+    description: A Helm chart for RageCheck - pattern detector for manipulative outrage
+      framing
+    digest: efffd6a32f4c8aa4a142cad1aad7142950c3af39dea71c35648101b0bb70648a
+    name: ragecheck
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/ragecheck-0.1.0/ragecheck-0.1.0.tgz
+    version: 0.1.0
   readur:
   - annotations:
       category: Document Management
@@ -916,6 +962,17 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/scale-manager-0.9.5.tgz
     version: 0.9.5
+  shannon:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-02-16T05:45:46.82795455Z"
+    description: A Helm chart for Shannon - Fully autonomous AI pentester
+    digest: 64dd9fbc3d1e8298bf7354902be1dc5b8847087159168226a405024098e51cc4
+    name: shannon
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/shannon-0.1.0/shannon-0.1.0.tgz
+    version: 0.1.0
   sim:
   - annotations:
       category: AI/ML Platform
@@ -1192,4 +1249,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-02-15T09:53:39.378397769Z"
+generated: "2026-02-16T05:45:46.922577774Z"
