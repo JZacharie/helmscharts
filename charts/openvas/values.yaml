@@ -44,7 +44,7 @@ scanner:
     image: registry.community.greenbone.net/community/openvas-scanner:stable
     resources:
       limits:
-        cpu: 2
+        cpu: 2000m
         memory: 4Gi
       requests:
         cpu: 500m
@@ -53,7 +53,7 @@ scanner:
     image: registry.community.greenbone.net/community/ospd-openvas:stable
     resources:
       limits:
-        cpu: 1000m
+        cpu: '1'
         memory: 2Gi
       requests:
         cpu: 300m
