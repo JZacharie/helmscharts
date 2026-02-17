@@ -2,5 +2,9 @@ apiVersion: v2
 name: openvas
 description: A Helm chart for Greenbone Vulnerability Scanner (OpenVAS)
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "24.10"
+dependencies:
+  - name: openvasd
+    version: 0.1.0
+    repository: oci://ghcr.io/greenbone/helm-charts
