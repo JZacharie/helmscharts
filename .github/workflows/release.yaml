@@ -1,0 +1,89 @@
+name: Release Charts
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4.3.1
+        
+      - name: Verify Git Remote
+        run: git remote -v
+
+      - name: Add Helm Repositories
+        run: |
+          helm repo add bjw-s https://bjw-s-labs.github.io/helm-charts
+          helm repo add zekker6 https://zekker6.github.io/helm-charts
+
+      - name: Update Helm dependencies
+        run: helm dependency update charts/appflowy
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.7.0
+        with:
+          skip_existing: 'true'
+        env:
+          CR_TOKEN: "${{ secrets.TOKEN }}"
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Charts to GHCR
+        run: |
+          # Detect changed charts
+          if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
+             echo "First push, checking all charts"
+             CHANGED_CHARTS=$(ls -d charts/*)
+          else
+             CHANGED_CHARTS=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep '^charts/' | cut -d/ -f1,2 | sort -u || true)
+          fi
+
+          for chart in $CHANGED_CHARTS; do
+            if [ -d "$chart" ] && [ -f "$chart/Chart.yaml" ]; then
+              echo "Processing changed chart: $chart"
+              helm dependency build "$chart"
+              helm package "$chart" --destination .cr-release-packages
+            fi
+          done
+          
+          if [ -d ".cr-release-packages" ]; then
+            for pkg in .cr-release-packages/*.tgz; do
+              if [ -f "$pkg" ]; then
+                OWNER_LOWER="$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')"
+                helm push "$pkg" oci://ghcr.io/$OWNER_LOWER/charts
+              fi
+            done
+          else
+            echo "No charts to push"
+          fi
+
+      - name: Deploy Landing Page
+        run: |
+          # The chart-releaser action handles the gh-pages branch
+          # We want to ensure our index.html is also there
+          git fetch origin gh-pages
+          git checkout gh-pages
+          git checkout main -- index.html
+          git add index.html
+          git commit -m "docs: update landing page [skip ci]" || echo "No changes to index.html"
+          git push origin gh-pages
+          git checkout main

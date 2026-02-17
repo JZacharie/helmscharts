@@ -603,10 +603,7 @@ impl super::MainState {
                             server: &self.config.name,
                             server_info: &format!(
                                 "Logged in at {}",
-                                DateTime::<Utc>::from_utc(
-                                    NaiveDateTime::from_timestamp(entry.signon as i64, 0),
-                                    Utc
-                                )
+                                DateTime::from_timestamp(entry.signon as i64, 0).unwrap_or_default()
                             ),
                         },
                     )

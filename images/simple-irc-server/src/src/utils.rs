@@ -515,7 +515,7 @@ lazy_static! {
 
 pub(crate) fn argon2_hash_password(password: &str) -> String {
     ARGON2
-        .hash_password(password.as_bytes(), ARGON2_SALT.as_str())
+        .hash_password(password.as_bytes(), &*ARGON2_SALT)
         .unwrap()
         .hash
         .unwrap()
@@ -530,7 +530,7 @@ pub(crate) fn argon2_verify_password<'a>(
         algorithm: argon2::Algorithm::Argon2id.ident(),
         version: Some(argon2::Version::V0x13.into()),
         params: password_hash::ParamsString::try_from(ARGON2.params()).unwrap(),
-        salt: Some(ARGON2_SALT.as_salt()),
+        salt: Some((*ARGON2_SALT).as_salt()),
         hash: Some(password_hash::Output::b64_decode(hash_str)?),
     };
     ARGON2.verify_password(password.as_bytes(), &password_hash)

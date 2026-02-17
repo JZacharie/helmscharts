@@ -20,21 +20,37 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Discover Dockerfiles
         id: set-matrix
         run: |
-          # Find all directories under images/ that contain a Dockerfile
+          # Determine candidate directories
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] || [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
+             echo "Full build triggered"
+             CANDIDATES=$(find images -name Dockerfile -exec dirname {} \;)
+          else
+             # Check if the workflow itself changed
+             if git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep -E '^.github/workflows/build-images.yaml'; then
+                echo "Workflow changed, full build"
+                CANDIDATES=$(find images -name Dockerfile -exec dirname {} \;)
+             else
+                echo "Incremental build"
+                CANDIDATES=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep '^images/' | cut -d/ -f1,2 | sort -u || true)
+             fi
+          fi
+          
           IMAGES=()
-          while IFS= read -r file; do
-             dir=$(dirname "$file")
-             # Strip leading ./ if present
-             dir=${dir#./}
-             IMAGES+=("$dir")
-          done < <(find images -name Dockerfile)
+          for dir in $CANDIDATES; do
+             if [ -f "$dir/Dockerfile" ]; then
+                # Strip leading ./ if present
+                clean_dir=${dir#./}
+                IMAGES+=("$clean_dir")
+             fi
+          done
           
           # Convert array to JSON using jq
-          # ubuntu-latest has jq installed
           JSON_OUTPUT=$(printf '%s\n' "${IMAGES[@]}" | jq -R . | jq -s -c .)
           
           echo "Found images directories: $JSON_OUTPUT"
