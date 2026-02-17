@@ -772,6 +772,20 @@ entries:
   openvas:
   - apiVersion: v2
     appVersion: "24.10"
+    created: "2026-02-17T04:44:04.382066876Z"
+    dependencies:
+    - name: openvasd
+      repository: oci://ghcr.io/greenbone/helm-charts
+      version: 0.1.0
+    description: A Helm chart for Greenbone Vulnerability Scanner (OpenVAS)
+    digest: ecc0b5701353aca71125c588cb9e3e1d16c8add138412152a4085d444213428f
+    name: openvas
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/openvas-0.1.1/openvas-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: "24.10"
     created: "2026-02-16T05:45:46.514395378Z"
     description: A Helm chart for Greenbone Vulnerability Scanner (OpenVAS)
     digest: 7fb4e70ea2c994f2a4ec1441939c6ac37b5761503a3a9d2f4f87d27c97749c89
@@ -1249,4 +1263,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-02-16T05:45:46.922577774Z"
+generated: "2026-02-17T04:44:04.889404545Z"
