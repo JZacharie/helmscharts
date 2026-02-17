@@ -14,14 +14,17 @@ spec:
       labels:
         {{- include "pandoc.selectorLabels" . | nindent 8 }}
     spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
       containers:
         - name: pandoc
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: Always
           command:
-            - sh
+            - /bin/sh
             - -c
             - |
+              set -e
               # Install Python
               if command -v apk >/dev/null; then
                 apk add --no-cache python3
@@ -29,11 +32,10 @@ spec:
                 apt-get update && apt-get install -y python3
               fi
 
-              
               # Copy and run the API server
-              cp /config/server.py /tmp/server.py
+              cp -f /config/server.py /tmp/server.py
               
-              python3 /tmp/server.py
+              exec python3 /tmp/server.py
           ports:
             - name: http
               containerPort: {{ .Values.service.targetPort }}
