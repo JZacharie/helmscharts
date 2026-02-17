@@ -11,7 +11,10 @@ RUN git clone --depth 1 https://github.com/aagoldberg/ragecheck.git .
 
 # Patch TypeScript error in poll-collector.ts
 # It tries to access discoveredPolls on a type that TypeScript thinks is {}
-RUN sed -i 's/(parsed.discoveredPolls || [])/((parsed as any).discoveredPolls || [])/g' src/lib/agents/survey/poll-collector.ts
+RUN node -e "const fs = require('fs'); \
+    const fn = 'src/lib/agents/survey/poll-collector.ts'; \
+    const content = fs.readFileSync(fn, 'utf8'); \
+    fs.writeFileSync(fn, content.replace('(parsed.discoveredPolls || [])', '((parsed as any).discoveredPolls || [])'));"
 
 # Install dependencies
 # Using npm clean-install for reproducible builds
