@@ -39,21 +39,27 @@ postgresql:
       cpu: 200m
       memory: 512Mi
 
-scanner:
+# OpenVASd official chart configuration
+openvasd:
   openvasd:
-    image: registry.community.greenbone.net/community/openvas-scanner:stable
-    resources:
-      limits:
-        cpu: 2000m
-        memory: 4Gi
-      requests:
-        cpu: 500m
-        memory: 1Gi
+    scanner_type: ospd
+    tls:
+      certificates:
+        deploy_server: false
+        deploy_client: false
+  service:
+    port: 80
+  resources:
+    limits:
+      cpu: "2"
+      memory: 4Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
   ospd:
-    image: registry.community.greenbone.net/community/ospd-openvas:stable
     resources:
       limits:
-        cpu: '1'
+        cpu: "1"
         memory: 2Gi
       requests:
         cpu: 300m
