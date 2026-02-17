@@ -39,14 +39,30 @@ postgresql:
       cpu: 200m
       memory: 512Mi
 
-# OpenVASd official chart configuration
+# OpenVAS (Scanner component) image
+openvas:
+  repository: registry.community.greenbone.net/community/openvas-scanner
+  tag: stable
+  pullPolicy: IfNotPresent
+
+# OSPD OpenVAS image
+ospd:
+  repository: registry.community.greenbone.net/community/ospd-openvas
+  tag: stable
+  pullPolicy: IfNotPresent
+
+# OpenVASd specific configuration
 openvasd:
-  openvasd:
-    scanner_type: ospd
-    tls:
-      certificates:
-        deploy_server: false
-        deploy_client: false
+  loglevel: INFO
+  mode: service
+  scanner_type: ospd # can be openvas or ospd
+  storage_type: redis # can be redis, in_memory, or fs
+  tls:
+    certificates:
+      deploy_server: true
+      deploy_client: true
+      serverSecretName: ingress-certificate
+      clientSecretName: client-certs
   service:
     port: 80
   resources:

@@ -1,0 +1,270 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openvas.fullname" . }}-openvasd
+  labels:
+    {{- include "openvas.labels" . | nindent 4 }}
+    app: openvasd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "openvas.selectorLabels" . | nindent 6 }}
+      app: openvasd
+  template:
+    metadata:
+      labels:
+        {{- include "openvas.selectorLabels" . | nindent 8 }}
+        app: openvasd
+    spec:
+      volumes:
+        - name: redis-socket
+          emptyDir: {}
+        - name: nasl-plugins
+          persistentVolumeClaim:
+            claimName: {{ include "openvas.fullname" . }}-plugins
+        - name: notus-data
+          emptyDir: {}
+        - name: openvas-config
+          emptyDir: {}
+        - name: ospd-config
+          emptyDir: {}
+        - name: ospd-socket
+          emptyDir: {}
+        - name: openvas-logs
+          emptyDir: {}
+        {{- if .Values.openvasd.tls.certificates.deploy_server }}
+        - name: ingress-certificate
+          secret:
+            secretName: {{ .Values.openvasd.tls.certificates.serverSecretName }}
+            items:
+              - key: key.pem
+                path: key.pem
+              - key: certs.pem
+                path: certs.pem
+        {{ end }}
+        {{- if .Values.openvasd.tls.certificates.deploy_client }}
+        - name: client-certs
+          secret:
+            secretName: {{ .Values.openvasd.tls.certificates.clientSecretName }}
+        {{ end }}
+      initContainers:
+        - name: create-dummy-openvas-log
+          image: "{{ .Values.openvas.repository }}:{{ .Values.openvas.tag }}"
+          volumeMounts:
+            - name: openvas-logs
+              mountPath: /mnt/ovc
+          command: ['sh', '-c']
+          args: ["touch /mnt/ovc/openvas.log"]
+        - name: openvas-config-fix
+          image: "{{ .Values.openvas.repository }}:{{ .Values.openvas.tag }}"
+          volumeMounts:
+            - name: openvas-config
+              mountPath: /mnt/ovc
+          command: ['sh', '-c']
+          {{- if .Values.openvasd.tls.certificates.deploy_server }}
+          args: ["sed 's/mqtt_server_uri = .*/openvasd_server = https:\\/\\/localhost:443/' /etc/openvas/openvas.conf > /mnt/ovc/openvas.conf; cp /etc/openvas/openvas_log.conf /mnt/ovc/"]
+          {{ else }}
+          args: ["sed 's/mqtt_server_uri = .*/openvasd_server = http:\\/\\/localhost:80/' /etc/openvas/openvas.conf > /mnt/ovc/openvas.conf; cp /etc/openvas/openvas_log.conf /mnt/ovc/"]
+          {{ end }}
+      containers:
+        # openvas log replicate
+        - name: openvas
+          image: "{{ .Values.openvas.repository }}:{{ .Values.openvas.tag }}"
+          imagePullPolicy: {{ .Values.openvas.pullPolicy }}
+          command: [ "tail", "-f", "/var/log/gvm/openvas.log" ]
+          volumeMounts:
+            - name: redis-socket
+              mountPath: /run/redis
+            - name: nasl-plugins
+              mountPath: /var/lib/openvas/plugins
+            - name: notus-data
+              mountPath: /var/lib/notus
+            - name: openvas-config
+              mountPath: /etc/openvas
+            {{- if .Values.openvasd.tls.certificates.deploy_server }}
+            - mountPath: "/etc/openvasd/tls/"
+              name: ingress-certificate
+              readOnly: true
+            {{ end }}
+            {{- if .Values.openvasd.tls.certificates.deploy_client }}
+            - mountPath: "/etc/openvasd/clientcerts"
+              name: client-certs
+              readOnly: true
+            {{ end }}
+            - name: openvas-logs
+              mountPath: /var/log/gvm
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_RAW
+          env:
+            {{- if .Values.openvasd.tls.certificates.deploy_server }}
+            - name: LISTENING
+              value: "0.0.0.0:443"
+            {{ else }}
+            - name: LISTENING
+              value: "0.0.0.0:80"
+            {{ end }}
+            - name: OPENVASD_LOG
+              value: {{ .Values.openvasd.loglevel | default "INFO" }}
+            {{- if .Values.openvasd.tls.certificates.deploy_server }}
+            - name: TLS_CERTS
+              value: "/etc/openvasd/tls/certs.pem"
+            - name: TLS_KEY
+              value: "/etc/openvasd/tls/key.pem"
+            {{ end }}
+            {{- if .Values.openvasd.tls.certificates.deploy_client }}
+            - name: TLS_CLIENT_CERTS
+              value: "/etc/openvasd/clientcerts/"
+            {{ end }}
+            - name: FEED_PATH
+              value: /var/lib/openvas/plugins
+            - name: NOTUS_ADVISORIES
+              value: /var/lib/notus/advisories
+            - name: NOTUS_PRODUCTS
+              value: /var/lib/notus/products
+            - name: ENABLE_GET_SCANS
+              value: "true"
+            - name: SCANNER_TYPE
+              value: {{ .Values.openvasd.scanner_type }}
+            - name: STORAGE_TYPE
+              value: "redis"
+            - name: REDIS_URL
+              value: "unix:///run/redis/redis.sock"
+            - name: OPENVASD_MODE
+              value: "service"
+        
+        - name: openvasd
+          image: "{{ .Values.openvas.repository }}:{{ .Values.openvas.tag }}"
+          imagePullPolicy: {{ .Values.openvas.pullPolicy }}
+          resources:
+            {{- toYaml .Values.openvasd.resources | nindent 12 }}
+          volumeMounts:
+            - name: redis-socket
+              mountPath: /run/redis
+            - name: nasl-plugins
+              mountPath: /var/lib/openvas/plugins
+            - name: notus-data
+              mountPath: /var/lib/notus
+            - name: openvas-config
+              mountPath: /etc/openvas
+            - name: ospd-socket
+              mountPath: /run/ospd/
+            - name: openvas-logs
+              mountPath: /var/log/gvm
+            {{- if .Values.openvasd.tls.certificates.deploy_server }}
+            - mountPath: "/etc/openvasd/tls/"
+              name: ingress-certificate
+              readOnly: true
+            {{ end }}
+            {{- if .Values.openvasd.tls.certificates.deploy_client }}
+            - mountPath: "/etc/openvasd/clientcerts"
+              name: client-certs
+              readOnly: true
+            {{ end }}
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_RAW
+          ports:
+            {{- if .Values.openvasd.tls.certificates.deploy_server }}
+            - containerPort: 443
+              protocol: TCP
+            {{ else }}
+            - containerPort: 80
+              protocol: TCP
+            {{ end }}
+          env:
+            {{- if .Values.openvasd.tls.certificates.deploy_server }}
+            - name: LISTENING
+              value: "0.0.0.0:443"
+            {{ else }}
+            - name: LISTENING
+              value: "0.0.0.0:80"
+            {{ end }}
+            - name: OSPD_SOCKET
+              value: /run/ospd/ospd-openvas.sock
+            - name: OPENVASD_LOG
+              value: {{ .Values.openvasd.loglevel | default "INFO" }}
+            {{- if .Values.openvasd.tls.certificates.deploy_server }}
+            - name: TLS_CERTS
+              value: "/etc/openvasd/tls/certs.pem"
+            - name: TLS_KEY
+              value: "/etc/openvasd/tls/key.pem"
+            {{ end }}
+            {{- if .Values.openvasd.tls.certificates.deploy_client }}
+            - name: TLS_CLIENT_CERTS
+              value: "/etc/openvasd/clientcerts/"
+            {{ end }}
+            - name: FEED_PATH
+              value: /var/lib/openvas/plugins
+            - name: NOTUS_ADVISORIES
+              value: /var/lib/notus/advisories
+            - name: NOTUS_PRODUCTS
+              value: /var/lib/notus/products
+            - name: ENABLE_GET_SCANS
+              value: "true"
+            - name: SCANNER_TYPE
+              value: {{ .Values.openvasd.scanner_type }}
+            {{- if eq .Values.openvasd.scanner_type "ospd" }}
+            - name: OSPD_SOCKET
+              value: "/run/ospd/"
+            - name: STORAGE_TYPE
+              value: "in_memory"
+            {{ else }}
+            - name: STORAGE_TYPE
+              value: "redis"
+            - name: REDIS_URL
+              value: "unix:///run/redis/redis.sock"
+            {{ end }}
+            - name: OPENVASD_MODE
+              value: "service"
+
+        {{- if eq .Values.openvasd.scanner_type "ospd" }}
+        - name: ospd
+          image: "{{ .Values.ospd.repository }}:{{ .Values.ospd.tag }}"
+          imagePullPolicy: {{ .Values.ospd.pullPolicy }}
+          resources:
+            {{- toYaml .Values.openvasd.ospd.resources | nindent 12 }}
+          volumeMounts:
+            - name: redis-socket
+              mountPath: /run/redis
+            - name: nasl-plugins
+              mountPath: /var/lib/openvas/plugins
+            - name: notus-data
+              mountPath: /var/lib/notus
+            - name: openvas-config
+              mountPath: /etc/openvas
+            - name: ospd-config
+              mountPath: /etc/gvm/
+            - name: ospd-socket
+              mountPath: /run/ospd/
+            - name: openvas-logs
+              mountPath: /var/log/gvm
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_RAW
+        {{ end }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "openvas.fullname" . }}-openvasd
+  labels:
+    {{- include "openvas.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.openvasd.service.port }}
+      targetPort: {{ if .Values.openvasd.tls.certificates.deploy_server }}443{{ else }}80{{ end }}
+      protocol: TCP
+      name: openvasd
+  selector:
+    {{- include "openvas.selectorLabels" . | nindent 4 }}
+    app: openvasd

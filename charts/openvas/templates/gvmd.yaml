@@ -31,6 +31,16 @@ spec:
               mountPath: /var/lib/gvm/cert-data
             - name: vt-data
               mountPath: /var/lib/openvas/plugins
+            {{- if .Values.openvasd.tls.certificates.deploy_client }}
+            - name: client-certs
+              mountPath: /etc/openvasd/clientcerts
+              readOnly: true
+            {{- end }}
+          env:
+            - name: OPENVASD_HOST
+              value: {{ include "openvas.fullname" . }}-openvasd
+            - name: OPENVASD_PORT
+              value: {{ .Values.openvasd.service.port | quote }}
       volumes:
         - name: gvmd-data
           persistentVolumeClaim:
@@ -42,6 +52,11 @@ spec:
         - name: vt-data
           persistentVolumeClaim:
             claimName: {{ include "openvas.fullname" . }}-plugins
+        {{- if .Values.openvasd.tls.certificates.deploy_client }}
+        - name: client-certs
+          secret:
+            secretName: {{ .Values.openvasd.tls.certificates.clientSecretName }}
+        {{- end }}
 ---
 apiVersion: v1
 kind: Service
