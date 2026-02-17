@@ -49,19 +49,32 @@ jobs:
 
       - name: Push Charts to GHCR
         run: |
-          for chart in charts/*; do
-            if [ -d "$chart" ]; then
+          # Detect changed charts
+          if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
+             echo "First push, checking all charts"
+             CHANGED_CHARTS=$(ls -d charts/*)
+          else
+             CHANGED_CHARTS=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep '^charts/' | cut -d/ -f1,2 | sort -u || true)
+          fi
+
+          for chart in $CHANGED_CHARTS; do
+            if [ -d "$chart" ] && [ -f "$chart/Chart.yaml" ]; then
+              echo "Processing changed chart: $chart"
               helm dependency build "$chart"
               helm package "$chart" --destination .cr-release-packages
             fi
           done
           
-          for pkg in .cr-release-packages/*.tgz; do
-            if [ -f "$pkg" ]; then
-              OWNER_LOWER="$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')"
-              helm push "$pkg" oci://ghcr.io/$OWNER_LOWER/charts
-            fi
-          done
+          if [ -d ".cr-release-packages" ]; then
+            for pkg in .cr-release-packages/*.tgz; do
+              if [ -f "$pkg" ]; then
+                OWNER_LOWER="$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')"
+                helm push "$pkg" oci://ghcr.io/$OWNER_LOWER/charts
+              fi
+            done
+          else
+            echo "No charts to push"
+          fi
 
       - name: Deploy Landing Page
         run: |
