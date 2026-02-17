@@ -10,11 +10,11 @@ RUN apk add --no-cache git
 RUN git clone --depth 1 https://github.com/aagoldberg/ragecheck.git .
 
 # Patch TypeScript error in poll-collector.ts
-# It tries to access discoveredPolls on a type that TypeScript thinks is {}
+# It tries to access properties on a type that TypeScript thinks is {}
 RUN node -e "const fs = require('fs'); \
     const fn = 'src/lib/agents/survey/poll-collector.ts'; \
     const content = fs.readFileSync(fn, 'utf8'); \
-    fs.writeFileSync(fn, content.replace('(parsed.discoveredPolls || [])', '((parsed as any).discoveredPolls || [])'));"
+    fs.writeFileSync(fn, content.replace(/parsed\./g, '(parsed as any).'));"
 
 # Install dependencies
 # Using npm clean-install for reproducible builds
