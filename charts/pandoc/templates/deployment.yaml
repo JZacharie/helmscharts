@@ -30,10 +30,8 @@ spec:
               fi
 
               
-              # Write and run the API server
-              cat > /tmp/server.py << 'PYEOF'
-              $(cat /config/server.py)
-              PYEOF
+              # Copy and run the API server
+              cp /config/server.py /tmp/server.py
               
               python3 /tmp/server.py
           ports:
