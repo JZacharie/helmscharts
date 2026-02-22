@@ -90,7 +90,7 @@ ENV PATH="/home/developer/.bun/bin:${PATH}"
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
     ~/.local/bin/uv tool install ruff && \
     curl -fsSL https://bun.sh/install | bash && \
-    curl -fsSL https://get.pnpm.io/install.sh | sh - && \
+    export SHELL=/bin/bash && curl -fsSL https://get.pnpm.io/install.sh | sh - && \
     ~/.bun/bin/bun add -g @biomejs/biome
 
 # VS Code (code-server)
