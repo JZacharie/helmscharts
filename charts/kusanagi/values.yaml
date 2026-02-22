@@ -1,5 +1,6 @@
 # Default values for kusanagi
 replicaCount: 1
+dnsPolicy: Default
 
 image:
   repository: ghcr.io/jzacharie/kusanagi
