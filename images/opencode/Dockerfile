@@ -1,22 +1,26 @@
-# OpenCode optimized image with dev tools
-# Base: official OpenCode Alpine image
-# Added: git, curl, python3, kubectl, helm, terraform, bash, openssh
-FROM ghcr.io/anomalyco/opencode:latest
+# Optimized OpenCode image with dev tools (Debian-based for glibc compatibility)
+# This fixes native module loading issues (like bun-pty) found in Alpine
+FROM debian:bookworm-slim
 
-# Install Alpine packages
-RUN apk add --no-cache \
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
     git \
     curl \
     bash \
     openssh-client \
     python3 \
-    py3-pip \
+    python3-pip \
     unzip \
     jq \
-    openssl \
-    gcompat \
-    libc6-compat \
-    ca-certificates
+    ca-certificates \
+    musl \
+    procps \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy opencode from official Alpine-based image
+# Note: The binary is musl-linked, but the native modules it extracts require glibc.
+# The 'musl' package on Debian provides the necessary runtime for the main binary.
+COPY --from=ghcr.io/anomalyco/opencode:latest /usr/local/bin/opencode /usr/local/bin/opencode
 
 # Install kubectl (latest stable)
 RUN KUBECTL_VERSION=$(curl -fsSL https://dl.k8s.io/release/stable.txt) && \
@@ -35,8 +39,16 @@ RUN TERRAFORM_VERSION=$(curl -fsSL https://api.releases.hashicorp.com/v1/release
     unzip -o /tmp/terraform.zip -d /usr/local/bin/ && \
     rm /tmp/terraform.zip
 
-# Create workspace directory
-RUN mkdir -p /home/opencode/workspace
+# Setup user and directories
+RUN groupadd -g 1000 opencode && \
+    useradd -m -u 1000 -g opencode -s /bin/bash opencode && \
+    mkdir -p /home/opencode/workspace && \
+    chown -R opencode:opencode /home/opencode
+
+# Environment
+ENV HOME=/home/opencode
+USER opencode
+WORKDIR /home/opencode
 
 # Default entrypoint
 ENTRYPOINT ["opencode"]
