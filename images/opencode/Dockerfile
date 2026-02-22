@@ -34,7 +34,10 @@ ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
 # Create 'developer' user (UID/GID 1000)
-RUN groupadd -g 1000 developer && \
+# Ubuntu 24.04 often has a default 'ubuntu' user with UID 1000; we remove it to avoid conflicts
+RUN if id -u 1000 >/dev/null 2>&1; then userdel -r $(id -un 1000); fi && \
+    if getent group 1000 >/dev/null 2>&1; then groupdel $(getent group 1000 | cut -d: -f1); fi && \
+    groupadd -g 1000 developer && \
     useradd -m -u 1000 -g developer -s /bin/bash developer && \
     echo "developer:10000:65536" > /etc/subuid && \
     echo "developer:10000:65536" > /etc/subgid
@@ -74,6 +77,13 @@ RUN curl -fsSL https://bun.sh/install | bash && \
     curl -fsSL https://get.pnpm.io/install.sh | sh -
 ENV PATH="/home/developer/.bun/bin:${PATH}"
 RUN bun add -g @biomejs/biome
+
+# --- VS Code (code-server) ---
+RUN curl -fsSL https://code-server.dev/install.sh | sh && \
+    mkdir -p ~/.local/share/code-server && \
+    mkdir -p ~/.config/code-server
+# Expose code-server port
+EXPOSE 8080
 
 # --- Productivity CLI ---
 
