@@ -14,6 +14,8 @@ RUN apk add --no-cache \
     unzip \
     jq \
     openssl \
+    gcompat \
+    libc6-compat \
     ca-certificates
 
 # Install kubectl (latest stable)
