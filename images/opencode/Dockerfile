@@ -58,6 +58,9 @@ RUN curl -fsSL -o /tmp/opencode.tar.gz "https://github.com/anomalyco/opencode/re
     tar -xzf /tmp/opencode.tar.gz -C /usr/local/bin/ && \
     rm /tmp/opencode.tar.gz
 
+# VS Code (code-server)
+RUN curl -fsSL https://code-server.dev/install.sh | sh
+
 # --- 5. Switch to Developer User for Toolchains ---
 USER developer
 WORKDIR /home/developer
@@ -93,9 +96,8 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
     export SHELL=/bin/bash && curl -fsSL https://get.pnpm.io/install.sh | sh - && \
     ~/.bun/bin/bun add -g @biomejs/biome
 
-# VS Code (code-server)
-RUN curl -fsSL https://code-server.dev/install.sh | sh && \
-    mkdir -p ~/.local/share/code-server ~/.config/code-server
+# VS Code (code-server) config cache directories
+RUN mkdir -p ~/.local/share/code-server ~/.config/code-server
 
 # --- 7. Productivity CLI (Precompiled binaries when possible) ---
 RUN mkdir -p /home/developer/bin && \
