@@ -14,5 +14,14 @@ fi
 mkdir -p "$HOME/.local/share/containers/storage"
 mkdir -p "$HOME/workspace"
 
+# Start code-server in the background
+# Password is set to the same as OPENCODE_SERVER_PASSWORD if provided
+if [ -n "$OPENCODE_SERVER_PASSWORD" ]; then
+    export PASSWORD="$OPENCODE_SERVER_PASSWORD"
+    code-server --bind-addr 0.0.0.0:8080 --auth password &
+else
+    code-server --bind-addr 0.0.0.0:8080 --auth none &
+fi
+
 # Execute OpenCode or provided command
 exec "$@"
