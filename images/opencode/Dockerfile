@@ -13,6 +13,7 @@ RUN apk add --no-cache \
     py3-pip \
     unzip \
     jq \
+    openssl \
     ca-certificates
 
 # Install kubectl (latest stable)
