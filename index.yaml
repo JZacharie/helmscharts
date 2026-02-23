@@ -708,6 +708,26 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/litellm-0.1.0/litellm-0.1.0.tgz
     version: 0.1.0
+  litellm-helm:
+  - apiVersion: v2
+    appVersion: v1.81.0-stable
+    created: "2026-02-23T12:14:02.038464377Z"
+    dependencies:
+    - condition: db.deployStandalone
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: '>=13.3.0'
+    - condition: redis.enabled
+      name: redis
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: '>=18.0.0'
+    description: Call all LLM APIs using the OpenAI format
+    digest: f0a4a4abf4dccff252b88dcc6349f53683981d1b37f8735044c12225810931f7
+    name: litellm-helm
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/litellm-helm-0.1.837/litellm-helm-0.1.837.tgz
+    version: 0.1.837
   maintenance:
   - apiVersion: v2
     appVersion: 1.0.0
@@ -1274,4 +1294,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-02-23T11:44:15.848386842Z"
+generated: "2026-02-23T12:14:02.038529599Z"
