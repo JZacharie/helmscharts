@@ -697,6 +697,17 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/linkwarden-2.9.4.tgz
     version: 2.9.4
+  litellm:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2026-02-23T11:44:15.754281009Z"
+    description: A Helm chart for Kubernetes
+    digest: 7978d8dc18df762c1484ffb6fa67955ad2a6066a52cae25d081b46616d5c7ca1
+    name: litellm
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/litellm-0.1.0/litellm-0.1.0.tgz
+    version: 0.1.0
   maintenance:
   - apiVersion: v2
     appVersion: 1.0.0
@@ -1263,4 +1274,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-02-17T04:44:04.889404545Z"
+generated: "2026-02-23T11:44:15.848386842Z"
