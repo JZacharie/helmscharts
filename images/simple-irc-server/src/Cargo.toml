@@ -21,7 +21,7 @@ serde = "1.0.0"
 serde_derive = "1.0.0"
 chrono = { version = "0.4", features = ["serde"] }
 clap = { version = "3.0.0", features = ["derive"] }
-validator = { version = "0.14", features = [ "derive" ] }
+validator = { version = "0.20", features = [ "derive" ] }
 bytes = "1.1.0"
 const-table = "0.1.0"
 flagset = "0.4"
