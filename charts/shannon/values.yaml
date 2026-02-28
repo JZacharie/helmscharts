@@ -1,6 +1,6 @@
 image:
   repository: docker
-  tag: 24-dind
+  tag: 29-dind
   pullPolicy: IfNotPresent
 
 replicaCount: 0
