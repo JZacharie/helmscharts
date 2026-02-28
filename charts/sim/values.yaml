@@ -709,7 +709,7 @@ telemetry:
   # OpenTelemetry Collector image
   image:
     repository: otel/opentelemetry-collector-contrib
-    tag: 0.91.0
+    tag: 0.146.1
     pullPolicy: IfNotPresent
   
   # Number of collector replicas
