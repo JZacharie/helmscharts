@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "opencode.fullname" . }}
+  labels:
+    {{- include "opencode.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: 7681
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 8080
+      targetPort: code
+      protocol: TCP
+      name: code
+  selector:
+    {{- include "opencode.selectorLabels" . | nindent 4 }}
