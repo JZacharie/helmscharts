@@ -1,0 +1,138 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/jzacharie/opencode
+  pullPolicy: Always
+  tag: "latest"
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  allowPrivilegeEscalation: true
+  capabilities:
+    add:
+      - SETFCAP
+
+service:
+  type: ClusterIP
+  port: 7681
+  codePort: 8080
+
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production-dns
+    gethomepage.dev/description: AI Coding Agent
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: AI
+    gethomepage.dev/icon: mdi-console
+    gethomepage.dev/name: OpenCode
+    gethomepage.dev/ping: opencode.p.zacharie.org
+    kubernetes.io/ingress.class: traefik
+  hosts:
+    - host: opencode.p.zacharie.org
+      paths:
+        - path: /
+          pathType: Prefix
+          port: 7681
+    - host: code.p.zacharie.org
+      paths:
+        - path: /
+          pathType: Prefix
+          port: 8080
+  tls:
+    - secretName: opencode-tls
+      hosts:
+        - opencode.p.zacharie.org
+        - code.p.zacharie.org
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 200m
+    memory: 512Mi
+
+persistence:
+  enabled: true
+  size: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClass: ""
+
+externalSecret:
+  enabled: true
+  refreshInterval: "1h"
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  remoteRefs:
+    LITELLM_API_KEY:
+      key: opencode
+      property: LITELLM_API_KEY
+    OPENCODE_SERVER_PASSWORD:
+      key: opencode
+      property: OPENCODE_SERVER_PASSWORD
+
+env:
+  LOCAL_ENDPOINT: "http://litellm.litellm.svc.cluster.local:4000/v1"
+  NODE_TLS_REJECT_UNAUTHORIZED: "0"
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+imagePullSecrets: []
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+opencodeConfig:
+  providers:
+    litellm:
+      name: "LiteLLM"
+      base_url: "http://litellm.litellm.svc.cluster.local:4000/v1/"
+      type: "openai-compat"
+      models:
+        - name: "GPT-OSS 120B"
+          id: "gpt-oss-120b"
+          context_window: 128000
+          default_max_tokens: 16000
+        - name: "Claude 3.7 Sonnet"
+          id: "claude-3.7-sonnet"
+          context_window: 200000
+          default_max_tokens: 16000
+        - name: "Gemini 3 Flash"
+          id: "gemini-3-flash"
+          context_window: 1000000
+          default_max_tokens: 16000
+        - name: "Qwen 3.5 Cloud"
+          id: "qwen3.5:cloud"
+          context_window: 128000
+          default_max_tokens: 16000
+        - name: "DeepSeek V3.2 Cloud"
+          id: "deepseek-v3.2:cloud"
+          context_window: 128000
+          default_max_tokens: 16000
+  agents:
+    coder:
+      model: "litellm.gpt-oss-120b"
+      reasoningEffort: "high"
