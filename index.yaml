@@ -784,6 +784,17 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/openai-whisper-asr-webservice-0.1.2.tgz
     version: 0.1.2
+  opencode:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-03-04T04:04:35.356284708Z"
+    description: A Helm chart for OpenCode AI Coding Agent
+    digest: 71fe5602994329d90f119172f595f7ed57b4d9b7275e0f1a08d5ce2a2eb834bf
+    name: opencode
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/opencode-0.1.0/opencode-0.1.0.tgz
+    version: 0.1.0
   openobserve-collector:
   - apiVersion: v2
     appVersion: 0.136.0
@@ -1294,4 +1305,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-02-23T12:14:02.038529599Z"
+generated: "2026-03-04T04:04:35.356361039Z"
