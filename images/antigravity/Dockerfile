@@ -55,11 +55,8 @@ RUN if id -u 1000 >/dev/null 2>&1; then userdel -r $(id -un 1000); fi && \
 
 # --- 4. System-Wide CLI Installations (Root) ---
 # Install Antigravity IDE (Replace with actual binary URL when available)
-RUN mkdir -p /opt/antigravity && \
-    echo "Placeholder for Antigravity IDE download. Using a mock binary script for now." && \
-    echo '#!/bin/bash\necho "Starting Antigravity Server on port 8080..." && sleep infinity' > /opt/antigravity/antigravity-server && \
-    chmod +x /opt/antigravity/antigravity-server && \
-    ln -s /opt/antigravity/antigravity-server /usr/local/bin/antigravity
+COPY antigravity-server.sh /usr/local/bin/antigravity
+RUN chmod +x /usr/local/bin/antigravity
 
 # RTK (AI Token Optimizer)
 RUN curl -fsSL "https://github.com/rtk-ai/rtk/releases/latest/download/rtk_amd64.deb" -o /tmp/rtk.deb && \
