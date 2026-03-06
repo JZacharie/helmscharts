@@ -79,7 +79,7 @@ externalSecret:
   remoteRefs:
     VNC_PASSWORD:
       key: antigravity
-      property: VNC_PASSWORD
+      property: ANTIGRAVITY_SERVER_PASSWORD
 
 env:
   DISPLAY_WIDTH: "1920"
@@ -98,6 +98,11 @@ autoscaling:
   enabled: false
 
 imagePullSecrets: []
-nodeSelector: {}
-tolerations: []
+nodeSelector:
+  kubernetes.io/hostname: vm169
+tolerations:
+  - key: "special-node"
+    operator: "Equal"
+    value: "gpu"
+    effect: "NoSchedule"
 affinity: {}
