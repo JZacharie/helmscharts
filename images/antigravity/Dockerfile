@@ -61,6 +61,11 @@ RUN mkdir -p /opt/antigravity && \
     chmod +x /opt/antigravity/antigravity-server && \
     ln -s /opt/antigravity/antigravity-server /usr/local/bin/antigravity
 
+# RTK (AI Token Optimizer)
+RUN curl -fsSL "https://github.com/rtk-ai/rtk/releases/latest/download/rtk_amd64.deb" -o /tmp/rtk.deb && \
+    dpkg -i /tmp/rtk.deb || apt-get install -f -y && \
+    rm /tmp/rtk.deb
+
 # --- 5. Switch to Developer User for Toolchains ---
 USER developer
 WORKDIR /home/developer
@@ -108,11 +113,24 @@ RUN mkdir -p /home/developer/bin && \
     curl -fsSL "https://github.com/sharkdp/bat/releases/download/${BAT_VERSION}/bat-${BAT_VERSION}-x86_64-unknown-linux-gnu.tar.gz" | tar -xz --strip-components=1 -C /home/developer/bin && \
     curl -fsSL "https://github.com/junegunn/fzf/releases/download/v${FZF_VERSION}/fzf-${FZF_VERSION}-linux_amd64.tar.gz" | tar -xz -C /home/developer/bin
 
-# Shell setup
+# Shell setup & RTK Aliases
 RUN echo 'eval "$(/home/developer/bin/starship init bash)"' >> ~/.bashrc && \
     echo 'eval "$(/home/developer/.local/bin/zoxide init bash)"' >> ~/.bashrc && \
-    echo 'alias ls="ls-eza"' >> ~/.bashrc && \
-    echo 'alias cat="bat"' >> ~/.bashrc
+    echo 'alias ls-native="ls-eza"' >> ~/.bashrc && \
+    echo 'alias cat-native="bat"' >> ~/.bashrc && \
+    echo 'alias ls="rtk ls"' >> ~/.bashrc && \
+    echo 'alias tree="rtk tree"' >> ~/.bashrc && \
+    echo 'alias cat="rtk read"' >> ~/.bashrc && \
+    echo 'alias grep="rtk grep"' >> ~/.bashrc && \
+    echo 'alias find="rtk find"' >> ~/.bashrc && \
+    echo 'alias diff="rtk diff"' >> ~/.bashrc && \
+    echo 'alias git="rtk git"' >> ~/.bashrc && \
+    echo 'alias docker="rtk docker"' >> ~/.bashrc && \
+    echo 'alias npm="rtk npm"' >> ~/.bashrc && \
+    echo 'alias pnpm="rtk pnpm"' >> ~/.bashrc && \
+    echo 'alias cargo="rtk cargo"' >> ~/.bashrc && \
+    echo 'alias go="rtk go"' >> ~/.bashrc && \
+    echo 'alias pip="rtk pip"' >> ~/.bashrc
 
 # --- 8. Final Config ---
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
