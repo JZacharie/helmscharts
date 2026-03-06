@@ -91,7 +91,8 @@ env:
   TZ: "Europe/Paris"
   ANTIGRAVITY_AUTO_UPDATE: "true"
   AUTOSTART_ANTIGRAVITY: "true"
-  OLLAMA_HOST: "http://192.168.0.52:11434"
+  NVIDIA_VISIBLE_DEVICES: "all"
+  NVIDIA_DRIVER_CAPABILITIES: "all"
   IDLE_CHECK_INTERVAL: "30"
   IDLE_TIMEOUT: "60"
   IDLE_PAUSE_ANTIGRAVITY: "false"
@@ -100,6 +101,11 @@ autoscaling:
   enabled: false
 
 imagePullSecrets: []
-nodeSelector: {}
-tolerations: []
+nodeSelector:
+  kubernetes.io/hostname: vm169
+tolerations:
+  - key: "special-node"
+    operator: "Equal"
+    value: "gpu"
+    effect: "NoSchedule"
 affinity: {}
