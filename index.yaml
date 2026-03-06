@@ -11,6 +11,17 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/antigravity-0.1.0/antigravity-0.1.0.tgz
     version: 0.1.0
+  antigravity-remote-docker:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-03-06T19:15:36.161306469Z"
+    description: A Helm chart for Antigravity Remote Docker
+    digest: 1ceeb55593cc80df284af0c0057b6875eb9ad6984ebe8b3db66eec53cf907642
+    name: antigravity-remote-docker
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/antigravity-remote-docker-0.1.0/antigravity-remote-docker-0.1.0.tgz
+    version: 0.1.0
   appflowy:
   - apiVersion: v2
     created: "2026-01-04T14:14:07.871325857+01:00"
@@ -1316,4 +1327,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-03-06T17:18:32.647948992Z"
+generated: "2026-03-06T19:15:36.161413319Z"
