@@ -1,0 +1,103 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/jzacharie/antigravity-remote
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 1000
+
+securityContext:
+  # runAsUser: 1000
+  # runAsGroup: 1000
+  # allowPrivilegeEscalation: true
+  capabilities:
+    add:
+      - NET_ADMIN
+
+service:
+  type: ClusterIP
+  port: 6080
+  vncPort: 5901
+
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production-dns
+    gethomepage.dev/description: Remote Environment
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: AI
+    gethomepage.dev/icon: mdi-console
+    gethomepage.dev/name: Antigravity Remote
+    gethomepage.dev/ping: remote.p.zacharie.org
+    kubernetes.io/ingress.class: traefik
+  hosts:
+    - host: remote.p.zacharie.org
+      paths:
+        - path: /
+          pathType: Prefix
+          port: 6080
+  tls:
+    - secretName: antigravity-remote-tls
+      hosts:
+        - remote.p.zacharie.org
+
+resources:
+  limits:
+    cpu: 8000m
+    memory: 16Gi
+    nvidia.com/gpu: 1
+  requests:
+    cpu: 1000m
+    memory: 4Gi
+
+persistence:
+  enabled: true
+  size: 50Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClass: ""
+
+externalSecret:
+  enabled: true
+  refreshInterval: "1h"
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  remoteRefs:
+    VNC_PASSWORD:
+      key: antigravity
+      property: VNC_PASSWORD
+
+env:
+  DISPLAY_WIDTH: "1920"
+  DISPLAY_HEIGHT: "1080"
+  DISPLAY_DEPTH: "24"
+  TZ: "Europe/Paris"
+  ANTIGRAVITY_AUTO_UPDATE: "true"
+  AUTOSTART_ANTIGRAVITY: "true"
+  NVIDIA_VISIBLE_DEVICES: "all"
+  NVIDIA_DRIVER_CAPABILITIES: "all"
+  IDLE_CHECK_INTERVAL: "30"
+  IDLE_TIMEOUT: "60"
+  IDLE_PAUSE_ANTIGRAVITY: "false"
+
+autoscaling:
+  enabled: false
+
+imagePullSecrets: []
+nodeSelector: {}
+tolerations: []
+affinity: {}
