@@ -1,0 +1,122 @@
+# =============================================================================
+# Antigravity Remote Docker - Docker Compose Configuration
+# =============================================================================
+# Usage:
+#   Start:    docker-compose up -d
+#   Stop:     docker-compose down
+#   Logs:     docker-compose logs -f
+#   Rebuild:  docker-compose up -d --build
+# =============================================================================
+
+services:
+  antigravity:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: antigravity-remote:latest
+    container_name: antigravity-remote
+
+    # =========================================================================
+    # GPU Configuration
+    # =========================================================================
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
+        limits:
+          memory: 16G
+          cpus: '8'
+
+    # =========================================================================
+    # Environment Variables
+    # =========================================================================
+    environment:
+      # Display settings - resolution auto-adjusts to browser window
+      - DISPLAY_WIDTH=${DISPLAY_WIDTH:-1920}
+      - DISPLAY_HEIGHT=${DISPLAY_HEIGHT:-1080}
+      - DISPLAY_DEPTH=24
+
+      # VNC password - CHANGE THIS!
+      - VNC_PASSWORD=${VNC_PASSWORD:-antigravity}
+
+      # Timezone
+      - TZ=${TZ:-America/Denver}
+
+      # Auto-update Antigravity
+      - ANTIGRAVITY_AUTO_UPDATE=true
+
+      # Auto-launch Antigravity fullscreen on connect
+      - AUTOSTART_ANTIGRAVITY=${AUTOSTART_ANTIGRAVITY:-true}
+
+      # NVIDIA runtime
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+
+      # Idle optimization settings
+      - IDLE_CHECK_INTERVAL=${IDLE_CHECK_INTERVAL:-30}
+      - IDLE_TIMEOUT=${IDLE_TIMEOUT:-60}
+      - IDLE_PAUSE_ANTIGRAVITY=${IDLE_PAUSE_ANTIGRAVITY:-false}
+
+    # =========================================================================
+    # Port Mappings
+    # =========================================================================
+    ports:
+      # noVNC web interface
+      - "6080:6080"
+      # Direct VNC access (optional, for native VNC clients)
+      - "5901:5901"
+
+    # =========================================================================
+    # Volume Mounts
+    # =========================================================================
+    volumes:
+      # Persistent workspace for your Antigravity projects
+      - ./data/workspace:/home/antigravity/workspace
+
+      # Persistent configuration
+      - ./data/config:/home/antigravity/.config
+
+      # Persistent Antigravity-specific data
+      - ./data/antigravity:/home/antigravity/.antigravity
+      # Share clipboard with host (Linux only)
+      # - /tmp/.X11-unix:/tmp/.X11-unix:ro
+
+      # =========================================================================
+      # Runtime Configuration
+      # =========================================================================
+      # Use NVIDIA runtime
+    runtime: nvidia
+
+    # Security - keep container isolated but functional
+    security_opt:
+      - seccomp:unconfined
+
+    # Capabilities for connection manager (iptables)
+    cap_add:
+      - NET_ADMIN
+
+    # Shared memory for better performance
+    shm_size: '2gb'
+
+    # Always restart unless stopped manually
+    restart: unless-stopped
+
+    # =========================================================================
+    # Health Check
+    # =========================================================================
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:6080/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+# =============================================================================
+# Networks (optional, for future expansion)
+# =============================================================================
+networks:
+  default:
+    name: antigravity-network
