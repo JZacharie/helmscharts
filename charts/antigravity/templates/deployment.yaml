@@ -1,0 +1,137 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "antigravity.fullname" . }}
+  labels:
+    {{- include "antigravity.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      {{- include "antigravity.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "antigravity.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "antigravity.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+      - name: init-home
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command:
+        - /bin/bash
+        - -c
+        - |
+          set -e
+          # We check if .bashrc exists to know if the PVC is empty
+          if [ ! -f /mnt/home/.bashrc ]; then
+            echo "First time initialization: seeding /mnt/home from /home/developer..."
+            shopt -s dotglob
+            cp -a /home/developer/* /mnt/home/ || true
+          else
+            echo "PVC already seeded. Skipping initialization."
+          fi
+          
+          # Initialize antigravity.json if it doesn't exist so user can edit it
+          if [ ! -f /mnt/home/.antigravity.json ] && [ -f /mnt/config/antigravity.json ]; then
+            echo "Copying default antigravity.json to home directory..."
+            cp /mnt/config/antigravity.json /mnt/home/.antigravity.json
+          fi
+
+          # Patch code-server for Copilot (fetch proprietary vsda module)
+          if [ ! -d "/mnt/home/vsda" ] || [ -z "$(ls -A /mnt/home/vsda 2>/dev/null)" ]; then
+            echo "Downloading proprietary VSDA library for Copilot authentication..."
+            mkdir -p /mnt/home/vsda
+            cd /tmp
+            curl -sSL https://update.code.visualstudio.com/latest/linux-x64/stable -o vscode.tar.gz
+            tar -xzf vscode.tar.gz VSCode-linux-x64/resources/app/node_modules/vsda/
+            cp -a VSCode-linux-x64/resources/app/node_modules/vsda/* /mnt/home/vsda/
+            rm -rf VSCode-linux-x64 vscode.tar.gz
+          fi
+
+          # Ensure home folder permissions are always correct for the user
+          chown -R 1000:1000 /mnt/home
+          if [ -f /mnt/home/.antigravity.json ]; then
+            chown 1000:1000 /mnt/home/.antigravity.json
+          fi
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - name: home
+          mountPath: /mnt/home
+        - name: config
+          mountPath: /mnt/config/antigravity.json
+          subPath: antigravity.json
+      containers:
+      - name: {{ .Chart.Name }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: EXTENSIONS_GALLERY
+          value: '{"serviceUrl":"https://marketplace.visualstudio.com/_apis/public/gallery","cacheUrl":"https://vscode.blob.core.windows.net/gallery/index","itemUrl":"https://marketplace.visualstudio.com/items","controlUrl":"","recommendationsUrl":""}'
+        - name: LOCAL_ENDPOINT
+          value: {{ .Values.env.LOCAL_ENDPOINT | quote }}
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "antigravity.fullname" . }}-secrets
+              key: LITELLM_API_KEY
+              optional: true
+        - name: HOME
+          value: "/home/developer"
+        - name: TERM
+          value: "xterm-256color"
+        - name: NODE_TLS_REJECT_UNAUTHORIZED
+          value: {{ .Values.env.NODE_TLS_REJECT_UNAUTHORIZED | quote }}
+        - name: ANTIGRAVITY_SERVER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "antigravity.fullname" . }}-secrets
+              key: ANTIGRAVITY_SERVER_PASSWORD
+              optional: true
+        ports:
+        - containerPort: {{ .Values.service.port }}
+          name: http
+          protocol: TCP
+        - containerPort: {{ .Values.service.codePort }}
+          name: code
+          protocol: TCP
+        volumeMounts:
+        - name: home
+          mountPath: /home/developer
+        - name: home
+          mountPath: /usr/lib/code-server/lib/vscode/node_modules/vsda
+          subPath: vsda
+        - name: fuse
+          mountPath: /dev/fuse
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "antigravity.fullname" . }}-config
+      - name: home
+        persistentVolumeClaim:
+          claimName: {{ include "antigravity.fullname" . }}-home
+      - name: fuse
+        hostPath:
+          path: /dev/fuse
+      dnsPolicy: Default
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
