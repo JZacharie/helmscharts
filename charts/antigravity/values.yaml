@@ -28,7 +28,7 @@ securityContext:
 
 service:
   type: ClusterIP
-  port: 7681
+  port: 80
   codePort: 8080
 
 ingress:
@@ -48,7 +48,7 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
-          port: 7681
+          port: 80
     - host: code.p.zacharie.org
       paths:
         - path: /

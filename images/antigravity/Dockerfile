@@ -135,6 +135,6 @@ USER root
 RUN chmod +x /usr/local/bin/entrypoint.sh
 USER developer
 
-EXPOSE 7681 8080
+EXPOSE 80 8080
 ENTRYPOINT ["entrypoint.sh"]
-CMD ["antigravity", "web", "--hostname", "0.0.0.0", "--port", "7681"]
+CMD ["antigravity", "web", "--hostname", "0.0.0.0", "--port", "80"]
