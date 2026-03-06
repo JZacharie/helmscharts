@@ -7,8 +7,8 @@ for arg in "$@"; do
 done
 
 echo "Starting Mock Antigravity Server on port $PORT..."
-mkdir -p /opt/antigravity/web
-cat << 'HTML' > /opt/antigravity/web/index.html
+mkdir -p /tmp/antigravity-web
+cat << 'HTML' > /tmp/antigravity-web/index.html
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,7 +30,7 @@ cat << 'HTML' > /opt/antigravity/web/index.html
 HTML
 
 if command -v bun >/dev/null 2>&1; then
-    exec bun -e "const port = $PORT; console.log('Listening on ' + port); Bun.serve({port, fetch(req) { return new Response(Bun.file('/opt/antigravity/web/index.html'), {headers: {'Content-Type': 'text/html'}}); }})"
+    exec bun -e "const port = $PORT; console.log('Listening on ' + port); Bun.serve({port, fetch(req) { return new Response(Bun.file('/tmp/antigravity-web/index.html'), {headers: {'Content-Type': 'text/html'}}); }})"
 else
-    cd /opt/antigravity/web && exec python3 -m http.server $PORT
+    cd /tmp/antigravity-web && exec python3 -m http.server $PORT
 fi
