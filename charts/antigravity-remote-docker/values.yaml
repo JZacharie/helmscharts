@@ -6,7 +6,7 @@ image:
   tag: "latest"
 
 nameOverride: ""
-runtimeClassName: ""
+runtimeClassName: nvidia
 imagePullSecrets: []
 nodeSelector: {}
 tolerations: []
