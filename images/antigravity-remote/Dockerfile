@@ -82,6 +82,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     # Window management (for auto-maximize)
     wmctrl \
     xdotool \
+    # Build and tool dependencies
+    unzip \
+    xz-utils \
+    pkg-config \
+    libssl-dev \
+    lsb-release \
+    software-properties-common \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 # =============================================================================
@@ -134,10 +142,38 @@ RUN groupadd -g ${GID} ${USER} \
     && chmod 0440 /etc/sudoers.d/${USER}
 
 # =============================================================================
+# Install Cloud Tools (kubectl, Helm, Terraform)
+# =============================================================================
+RUN export KUBECTL_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt | tr -d '\n' | tr -d '\r') \
+    && curl -L "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl \
+    && chmod +x /usr/local/bin/kubectl \
+    && curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash \
+    && curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list \
+    && apt-get update && apt-get install -y terraform \
+    && rm -rf /var/lib/apt/lists/*
+
+# =============================================================================
 # Configure VNC and Desktop
 # =============================================================================
 RUN mkdir -p /home/${USER}/.vnc /home/${USER}/.config \
     && chown -R ${USER}:${USER} /home/${USER}
+
+# =============================================================================
+# Install Development Toolchains (Rust, Go, Python-uv)
+# =============================================================================
+USER ${USER}
+WORKDIR /home/${USER}
+ENV PATH="/home/${USER}/.local/bin:/home/${USER}/bin:/home/${USER}/.cargo/bin:/usr/local/go/bin:${PATH}" \
+    GOROOT="/usr/local/go" \
+    GOPATH="/home/${USER}/go-workspace"
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable \
+    && curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && GO_VERSION=1.23.0 \
+    && curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" | sudo tar -xz -C /usr/local
+
+USER root
 
 # =============================================================================
 # Copy Configuration Files
