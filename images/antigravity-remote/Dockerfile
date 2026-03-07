@@ -145,12 +145,12 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --de
     && curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh \
     && /home/${USER}/.local/bin/rtk init -g --auto-patch
 
-# Add RTK aliases
-RUN for tool in git kubectl helm terraform rustc cargo go python python3 pip uv ls grep rg cat mc psql; do \
-    echo "alias $tool='rtk $tool'" >> /home/${USER}/.bashrc; \
-    done
-
 USER root
+
+# Add RTK aliases globally
+RUN for tool in git kubectl helm terraform rustc cargo go python python3 pip uv ls grep rg cat mc psql docker; do \
+    echo "alias $tool='rtk $tool'" >> /etc/bash.bashrc; \
+    done
 
 # Copy Configuration and Scripts
 COPY --chown=${USER}:${USER} config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -171,7 +171,6 @@ VOLUME ["/home/${USER}/workspace", "/home/${USER}/.config"]
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
     CMD curl -f http://localhost:${NOVNC_PORT}/ || exit 1
 
-USER ${USER}
 WORKDIR /home/${USER}
 ENTRYPOINT ["/opt/scripts/entrypoint.sh"]
 CMD ["supervisord"]
