@@ -16,15 +16,15 @@ echo "==========================================="
 # Set VNC Password
 # =============================================================================
 echo "Setting VNC password..."
-mkdir -p ~/.vnc
-echo "${VNC_PASSWORD:-antigravity}" | vncpasswd -f > ~/.vnc/passwd
-chmod 600 ~/.vnc/passwd
+mkdir -p /home/${USER}/.vnc
+echo "${VNC_PASSWORD:-antigravity}" | vncpasswd -f > /home/${USER}/.vnc/passwd
+chmod 600 /home/${USER}/.vnc/passwd
 
 # =============================================================================
 # Create VNC xstartup
 # =============================================================================
 echo "Configuring VNC xstartup..."
-cat > ~/.vnc/xstartup << 'EOF'
+cat > /home/${USER}/.vnc/xstartup << 'EOF'
 #!/bin/bash
 unset SESSION_MANAGER
 unset DBUS_SESSION_BUS_ADDRESS
@@ -47,21 +47,20 @@ chmod 700 "$XDG_RUNTIME_DIR"
 # Antigravity is auto-launched by supervisor after desktop is ready
 exec startxfce4
 EOF
-chmod +x ~/.vnc/xstartup
+chmod +x /home/${USER}/.vnc/xstartup
 
-chmod +x ~/.vnc/xstartup
 
 # =============================================================================
 # Initialize Configuration
 # =============================================================================
 echo "Initializing configuration..."
-mkdir -p ~/.config/xfce4/xfconf/xfce-perchannel-xml
+mkdir -p /home/${USER}/.config/xfce4/xfconf/xfce-perchannel-xml
 
 # Apply default panel configuration if not present
-if [ ! -f ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml ]; then
+if [ ! -f /home/${USER}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml ]; then
     echo "Applying custom panel configuration..."
     if [ -f /opt/defaults/xfce4-panel.xml ]; then
-        cp /opt/defaults/xfce4-panel.xml ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+        cp /opt/defaults/xfce4-panel.xml /home/${USER}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
     else
         echo "Warning: Default panel config not found at /opt/defaults/xfce4-panel.xml"
     fi
@@ -77,12 +76,12 @@ fi
 # Create directories
 # =============================================================================
 echo "Creating workspace directories..."
-mkdir -p ~/workspace ~/.config ~/.antigravity ~/Desktop
+mkdir -p /home/${USER}/workspace /home/${USER}/.config /home/${USER}/.antigravity /home/${USER}/Desktop
 
 # Create FreeLens Desktop Shortcut
-if [ ! -f ~/Desktop/Freelens.desktop ]; then
+if [ ! -f /home/${USER}/Desktop/Freelens.desktop ]; then
     echo "Creating FreeLens desktop shortcut..."
-    cat > ~/Desktop/Freelens.desktop << 'EOF'
+    cat > /home/${USER}/Desktop/Freelens.desktop << 'EOF'
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -94,14 +93,15 @@ Path=
 Terminal=false
 StartupNotify=false
 EOF
-    chmod +x ~/Desktop/Freelens.desktop
+    chmod +x /home/${USER}/Desktop/Freelens.desktop
 fi
 
 # =============================================================================
 # Fix permissions
 # =============================================================================
 echo "Fixing permissions..."
-sudo chown -R $(id -u):$(id -g) ~ 2>/dev/null || true
+chown -R ${USER}:${USER} /home/${USER}/.vnc /home/${USER}/.config /home/${USER}/Desktop /home/${USER}/.antigravity 2>/dev/null || true
+chown ${USER}:${USER} /home/${USER} 2>/dev/null || true
 
 # =============================================================================
 # Check for Antigravity updates (if enabled)
