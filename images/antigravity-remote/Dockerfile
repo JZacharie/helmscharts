@@ -37,7 +37,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 RUN curl -L "https://github.com/freelensapp/freelens/releases/download/v${FREELENS_VERSION}/Freelens-${FREELENS_VERSION}-linux-amd64.deb" -o freelens.deb
 
 # --- Stage 2: Final Image ---
-FROM nvidia/cuda:12.6.3-runtime-ubuntu22.04
+FROM nvidia/cuda:12.6.3-runtime-ubuntu24.04
 
 LABEL maintainer="raphl"
 LABEL description="Google Antigravity with noVNC remote access and GPU support"
@@ -122,6 +122,7 @@ RUN tar -xz -C /usr/local -f /tmp/go.tar.gz \
 # Create Non-Root User
 RUN groupadd -g ${GID} ${USER} \
     && useradd -m -u ${UID} -g ${GID} -s /bin/bash ${USER} \
+    && groupadd -f docker \
     && usermod -aG docker ${USER} \
     && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/${USER} \
     && chmod 0440 /etc/sudoers.d/${USER}
