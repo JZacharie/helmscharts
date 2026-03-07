@@ -62,7 +62,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     adwaita-icon-theme \
     elementary-xfce-icon-theme \
     gnome-icon-theme \
-    highcolor-icon-theme \
+    hicolor-icon-theme \
     papirus-icon-theme \
     # noVNC dependencies
     python3 \
