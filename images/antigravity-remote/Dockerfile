@@ -36,6 +36,9 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 # Download FreeLens
 RUN curl -L "https://github.com/freelensapp/freelens/releases/download/v${FREELENS_VERSION}/Freelens-${FREELENS_VERSION}-linux-amd64.deb" -o freelens.deb
 
+# Download MinIO Client
+RUN curl -fsSL https://dl.min.io/client/mc/release/linux-amd64/mc -o mc
+
 # --- Stage 2: Final Image ---
 FROM nvidia/cuda:12.9.1-runtime-ubuntu24.04
 
@@ -77,6 +80,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     nano btop vim git htop procps net-tools wmctrl xdotool atril \
     unzip xz-utils pkg-config libssl-dev lsb-release \
     software-properties-common build-essential \
+    postgresql-client \
     && locale-gen en_US.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
 
@@ -112,11 +116,13 @@ COPY --from=downloader /opt/websockify /opt/websockify
 COPY --from=downloader /tmp/go.tar.gz /tmp/go.tar.gz
 COPY --from=downloader /tmp/aws /tmp/aws_install
 COPY --from=downloader /tmp/freelens.deb /tmp/freelens.deb
+COPY --from=downloader /tmp/mc /usr/local/bin/mc
 
 # Install Go, AWS CLI, and FreeLens
 RUN tar -xz -C /usr/local -f /tmp/go.tar.gz \
     && /tmp/aws_install/install \
     && apt-get update && apt-get install -y /tmp/freelens.deb \
+    && chmod +x /usr/local/bin/mc \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
 # Create Non-Root User
@@ -138,7 +144,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --de
     && /home/${USER}/.local/bin/rtk init -g --auto-patch
 
 # Add RTK aliases
-RUN for tool in git kubectl helm terraform rustc cargo go python python3 pip uv ls grep rg cat; do \
+RUN for tool in git kubectl helm terraform rustc cargo go python python3 pip uv ls grep rg cat mc psql; do \
     echo "alias $tool='rtk $tool'" >> /home/${USER}/.bashrc; \
     done
 
