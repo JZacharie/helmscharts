@@ -155,10 +155,7 @@ vault:
       channelIdKey: "channel_id"
 
 
-volumes:
-  - name: tmp-volume
-    emptyDir: {}
 
-volumeMounts:
-  - name: tmp-volume
-    mountPath: /tmp
+volumes: []
+
+volumeMounts: []
