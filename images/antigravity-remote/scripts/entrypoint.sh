@@ -75,8 +75,16 @@ fi
 # =============================================================================
 # Create directories
 # =============================================================================
-echo "Creating workspace directories..."
-mkdir -p /home/${USER}/workspace /home/${USER}/.config /home/${USER}/.antigravity /home/${USER}/Desktop
+echo "Creating workspace and config directories..."
+# Important: ensure .local and .antigravity are explicitly created and persisted
+mkdir -p /home/${USER}/workspace \
+         /home/${USER}/.config \
+         /home/${USER}/.local \
+         /home/${USER}/.antigravity \
+         /home/${USER}/.ssh \
+         /home/${USER}/Desktop \
+         /home/${USER}/bin \
+         /home/${USER}/go-workspace
 
 # Create FreeLens Desktop Shortcut
 if [ ! -f /home/${USER}/Desktop/Freelens.desktop ]; then
@@ -100,7 +108,17 @@ fi
 # Fix permissions
 # =============================================================================
 echo "Fixing permissions..."
-chown -R ${USER}:${USER} /home/${USER}/.vnc /home/${USER}/.config /home/${USER}/Desktop /home/${USER}/.antigravity 2>/dev/null || true
+# Ensure all persistence-critical directories are owned by the user
+chown -R ${USER}:${USER} \
+    /home/${USER}/.vnc \
+    /home/${USER}/.config \
+    /home/${USER}/.local \
+    /home/${USER}/.antigravity \
+    /home/${USER}/.ssh \
+    /home/${USER}/Desktop \
+    /home/${USER}/workspace \
+    2>/dev/null || true
+
 chown ${USER}:${USER} /home/${USER} 2>/dev/null || true
 
 # =============================================================================

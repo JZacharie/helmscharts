@@ -40,12 +40,11 @@ spec:
         command: ["/bin/bash", "-c"]
         args:
           - |
-            if [ -z "$(ls -A /mnt/home | grep -v 'lost+found')" ]; then
-              echo "Initializing home directory..."
-              cp -a /home/antigravity/. /mnt/home/
-            else
-              echo "Home directory already initialized (found data other than lost+found)."
-            fi
+            echo "Initializing/Checking home directory..."
+            # Copy missing items from image to PVC but don't overwrite
+            # Use -n (no-clobber) to avoid overwriting user data
+            cp -an /home/antigravity/. /mnt/home/
+            
             echo "Enforcing ownership..."
             chown -R 1000:1000 /mnt/home
         volumeMounts:
