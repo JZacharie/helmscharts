@@ -11,10 +11,15 @@ ARG NOVNC_VERSION=1.6.0
 ARG WEBSOCKIFY_VERSION=0.13.0
 ARG GO_VERSION=1.26.1
 ARG FREELENS_VERSION=1.8.1
+ARG HELM_VERSION=3.17.1
 
 RUN apk add --no-cache curl tar unzip
 
 WORKDIR /tmp
+
+# Download Helm
+RUN mkdir -p /tmp/helm \
+    && curl -fsSL "https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz" | tar -xz -C /tmp/helm --strip-components=1
 
 # Download noVNC
 RUN mkdir -p /opt/novnc \
@@ -116,13 +121,14 @@ COPY --from=downloader /opt/websockify /opt/websockify
 COPY --from=downloader /tmp/go.tar.gz /tmp/go.tar.gz
 COPY --from=downloader /tmp/aws /tmp/aws_install
 COPY --from=downloader /tmp/freelens.deb /tmp/freelens.deb
-COPY --from=downloader /tmp/mc /usr/local/bin/mc
+COPY --from=downloader /usr/local/bin/mc /usr/local/bin/mc
+COPY --from=downloader /tmp/helm/helm /usr/local/bin/helm
 
 # Install Go, AWS CLI, and FreeLens
 RUN tar -xz -C /usr/local -f /tmp/go.tar.gz \
     && /tmp/aws_install/install \
     && apt-get update && apt-get install -y /tmp/freelens.deb \
-    && chmod +x /usr/local/bin/mc \
+    && chmod +x /usr/local/bin/mc /usr/local/bin/helm \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
 # Create Non-Root User
