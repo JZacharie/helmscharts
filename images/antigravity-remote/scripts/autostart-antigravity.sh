@@ -9,6 +9,12 @@
 sleep 3
 
 # Launch Antigravity maximized using wmctrl or xdotool
+# Only if enabled via environment variable
+if [ "${ANTIGRAVITY_AUTOSTART}" = "false" ]; then
+    echo "[Autostart] Antigravity launch disabled by environment variable"
+    exit 0
+fi
+
 # First, start Antigravity
 antigravity &
 

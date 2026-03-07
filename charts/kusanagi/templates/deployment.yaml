@@ -37,8 +37,9 @@ spec:
           image: busybox:latest
           command: ['sh', '-c', 'mkdir -p /tmp/kusanagi-logs && chmod 755 /tmp/kusanagi-logs']
           volumeMounts:
-            - name: tmp-volume
-              mountPath: /tmp
+            {{- with .Values.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -56,8 +57,6 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            - name: tmp-volume
-              mountPath: /tmp
             {{- if or .Values.secret.kubeConfig .Values.secret.existingSecret }}
             - name: kubeconfig
               mountPath: "/app/.kube"
@@ -215,8 +214,6 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        - name: tmp-volume
-          emptyDir: {}
         {{- if or .Values.secret.kubeConfig .Values.secret.existingSecret }}
         - name: kubeconfig
           secret:

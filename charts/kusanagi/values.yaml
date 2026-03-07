@@ -156,6 +156,10 @@ vault:
 
 
 
-volumes: []
+volumes:
+  - name: tmp-volume
+    emptyDir: {}
 
-volumeMounts: []
+volumeMounts:
+  - name: tmp-volume
+    mountPath: /tmp
