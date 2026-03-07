@@ -67,11 +67,35 @@ if [ ! -f ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml ]; then
     fi
 fi
 
+# Set default icon theme if not set
+if ! xfconf-query -c xsettings -p /Net/IconThemeName >/dev/null 2>&1; then
+    echo "Setting default icon theme to Papirus-Dark..."
+    xfconf-query -c xsettings -p /Net/IconThemeName -s "Papirus-Dark" --create -t string
+fi
+
 # =============================================================================
 # Create directories
 # =============================================================================
 echo "Creating workspace directories..."
-mkdir -p ~/workspace ~/.config ~/.antigravity
+mkdir -p ~/workspace ~/.config ~/.antigravity ~/Desktop
+
+# Create FreeLens Desktop Shortcut
+if [ ! -f ~/Desktop/Freelens.desktop ]; then
+    echo "Creating FreeLens desktop shortcut..."
+    cat > ~/Desktop/Freelens.desktop << 'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Freelens
+Comment=Kubernetes IDE
+Exec=Freelens --no-sandbox
+Icon=Freelens
+Path=
+Terminal=false
+StartupNotify=false
+EOF
+    chmod +x ~/Desktop/Freelens.desktop
+fi
 
 # =============================================================================
 # Fix permissions

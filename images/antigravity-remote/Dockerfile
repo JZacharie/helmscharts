@@ -56,8 +56,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-dejavu \
     fonts-liberation \
     fonts-noto \
+    fonts-roboto \
+    fonts-font-awesome \
     gtk2-engines-pixbuf \
     adwaita-icon-theme \
+    elementary-xfce-icon-theme \
+    gnome-icon-theme \
+    highcolor-icon-theme \
+    papirus-icon-theme \
     # noVNC dependencies
     python3 \
     python3-pip \
@@ -74,6 +80,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-transport-https \
     # Utilities
     nano \
+    btop \
     vim \
     git \
     htop \
@@ -82,6 +89,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     # Window management (for auto-maximize)
     wmctrl \
     xdotool \
+    # PDF Reader
+    atril \
     # Build and tool dependencies
     unzip \
     xz-utils \
@@ -138,6 +147,7 @@ RUN mkdir -p /etc/apt/keyrings \
 # =============================================================================
 RUN groupadd -g ${GID} ${USER} \
     && useradd -m -u ${UID} -g ${GID} -s /bin/bash ${USER} \
+    && usermod -aG docker ${USER} \
     && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/${USER} \
     && chmod 0440 /etc/sudoers.d/${USER}
 
@@ -147,10 +157,26 @@ RUN groupadd -g ${GID} ${USER} \
 RUN export KUBECTL_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt | tr -d '\n' | tr -d '\r') \
     && curl -L "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl \
     && chmod +x /usr/local/bin/kubectl \
-    && curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash \
     && curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg \
     && echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list \
-    && apt-get update && apt-get install -y terraform \
+    && apt-get update && apt-get install -y terraform docker.io \
+    && rm -rf /var/lib/apt/lists/*
+
+# =============================================================================
+# Install AWS CLI v2
+# =============================================================================
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+    && unzip awscliv2.zip \
+    && ./aws/install \
+    && rm -rf aws awscliv2.zip
+
+# =============================================================================
+# Install FreeLens
+# =============================================================================
+RUN curl -L "https://github.com/freelensapp/freelens/releases/download/v1.8.1/Freelens-1.8.1-linux-amd64.deb" -o /tmp/freelens.deb \
+    && apt-get update \
+    && apt-get install -y /tmp/freelens.deb \
+    && rm /tmp/freelens.deb \
     && rm -rf /var/lib/apt/lists/*
 
 # =============================================================================
@@ -171,7 +197,26 @@ ENV PATH="/home/${USER}/.local/bin:/home/${USER}/bin:/home/${USER}/.cargo/bin:/u
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable \
     && curl -LsSf https://astral.sh/uv/install.sh | sh \
     && GO_VERSION=1.23.0 \
-    && curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" | sudo tar -xz -C /usr/local
+    && curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" | sudo tar -xz -C /usr/local \
+    && curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh \
+    && /home/${USER}/.local/bin/rtk init -g --auto-patch
+
+# Add RTK aliases to bashrc
+RUN echo 'alias git="rtk git"' >> /home/${USER}/.bashrc \
+    && echo 'alias kubectl="rtk kubectl"' >> /home/${USER}/.bashrc \
+    && echo 'alias helm="rtk helm"' >> /home/${USER}/.bashrc \
+    && echo 'alias terraform="rtk terraform"' >> /home/${USER}/.bashrc \
+    && echo 'alias rustc="rtk rustc"' >> /home/${USER}/.bashrc \
+    && echo 'alias cargo="rtk cargo"' >> /home/${USER}/.bashrc \
+    && echo 'alias go="rtk go"' >> /home/${USER}/.bashrc \
+    && echo 'alias python="rtk python"' >> /home/${USER}/.bashrc \
+    && echo 'alias python3="rtk python3"' >> /home/${USER}/.bashrc \
+    && echo 'alias pip="rtk pip"' >> /home/${USER}/.bashrc \
+    && echo 'alias uv="rtk uv"' >> /home/${USER}/.bashrc \
+    && echo 'alias ls="rtk ls"' >> /home/${USER}/.bashrc \
+    && echo 'alias grep="rtk grep"' >> /home/${USER}/.bashrc \
+    && echo 'alias rg="rtk rg"' >> /home/${USER}/.bashrc \
+    && echo 'alias cat="rtk cat"' >> /home/${USER}/.bashrc
 
 USER root
 
