@@ -126,7 +126,9 @@ RUN tar -xz -C /usr/local -f /tmp/go.tar.gz \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
 # Create Non-Root User
-RUN groupadd -g ${GID} ${USER} \
+RUN touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu \
+    && echo 'root:root' | chpasswd \
+    && groupadd -g ${GID} ${USER} \
     && useradd -m -u ${UID} -g ${GID} -s /bin/bash ${USER} \
     && groupadd -f docker \
     && usermod -aG docker ${USER} \
