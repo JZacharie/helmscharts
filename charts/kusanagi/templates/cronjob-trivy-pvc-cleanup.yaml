@@ -3,6 +3,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ include "kusanagi.fullname" . }}-trivy-pvc-cleanup
+  namespace: {{ .Values.trivyPvcCleanup.namespace | default "trivy-system" }}
   labels:
     {{- include "kusanagi.labels" . | nindent 4 }}
 spec:
@@ -36,5 +37,5 @@ spec:
           volumes:
           - name: trivy-data
             persistentVolumeClaim:
-              claimName: trivy-operator-pvc
+              claimName: {{ .Values.trivyPvcCleanup.pvcName | default "trivy-operator-pvc" }}
 {{- end }}
