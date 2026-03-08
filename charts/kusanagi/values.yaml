@@ -163,3 +163,11 @@ volumes:
 volumeMounts:
   - name: tmp-volume
     mountPath: /tmp
+
+# S3 Cleanup job
+reportsCleanup:
+  enabled: true
+  # Run hourly by default
+  schedule: "0 * * * *"
+  # Match Trivy scannerReportTTL
+  olderThan: "24h"
