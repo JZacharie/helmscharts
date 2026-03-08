@@ -121,7 +121,7 @@ COPY --from=downloader /opt/websockify /opt/websockify
 COPY --from=downloader /tmp/go.tar.gz /tmp/go.tar.gz
 COPY --from=downloader /tmp/aws /tmp/aws_install
 COPY --from=downloader /tmp/freelens.deb /tmp/freelens.deb
-COPY --from=downloader /usr/local/bin/mc /usr/local/bin/mc
+COPY --from=downloader /tmp/mc /usr/local/bin/mc
 COPY --from=downloader /tmp/helm/helm /usr/local/bin/helm
 
 # Install Go, AWS CLI, and FreeLens
