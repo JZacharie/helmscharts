@@ -7,6 +7,7 @@ metadata:
     {{- include "maintenance.labels" . | nindent 4 }}
 spec:
   schedule: {{ .Values.schedule | quote }}
+  suspend: {{ .Values.suspend | default false }}
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
