@@ -171,3 +171,9 @@ reportsCleanup:
   schedule: "0 * * * *"
   # Match Trivy scannerReportTTL
   olderThan: "24h"
+
+# Trivy PVC Cleanup job
+trivyPvcCleanup:
+  enabled: true
+  # Run hourly by default
+  schedule: "0 * * * *"

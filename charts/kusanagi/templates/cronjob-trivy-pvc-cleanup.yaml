@@ -1,0 +1,40 @@
+{{- if .Values.trivyPvcCleanup.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "kusanagi.fullname" . }}-trivy-pvc-cleanup
+  labels:
+    {{- include "kusanagi.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.trivyPvcCleanup.schedule | quote }}
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: {{ include "kusanagi.fullname" . }}-trivy-pvc-cleanup
+          labels:
+            {{- include "kusanagi.selectorLabels" . | nindent 12 }}
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: cleanup
+            image: alpine:latest
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Starting cleanup of files older than 24 hours in /trivy-data..."
+              find /trivy-data -type f -mmin +1440 -not -path "/trivy-data/lost+found/*" -exec rm -f {} \;
+              echo "Cleanup completed."
+            volumeMounts:
+            - name: trivy-data
+              mountPath: /trivy-data
+          volumes:
+          - name: trivy-data
+            persistentVolumeClaim:
+              claimName: trivy-operator-pvc
+{{- end }}
