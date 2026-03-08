@@ -177,3 +177,7 @@ trivyPvcCleanup:
   enabled: true
   # Run hourly by default
   schedule: "0 * * * *"
+  # Namespace where the PVC is located
+  namespace: "trivy-system"
+  # Name of the PVC to mount
+  pvcName: "trivy-operator-pvc"
