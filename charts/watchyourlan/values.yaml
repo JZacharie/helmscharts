@@ -2,7 +2,7 @@ image:
   # -- image repository
   repository: aceberg/watchyourlan
   # -- image tag
-  tag: "2.0.4"
+  tag: "2.1.4"
   # -- image pull policy
   pullPolicy: IfNotPresent
 
