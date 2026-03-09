@@ -27,23 +27,34 @@ spec:
             - /bin/sh
             - -c
             - |
-              mc alias set myminio "$S3_ENDPOINT" "$S3_ACCESS_KEY" "$S3_SECRET_KEY" && \
-              mc rm --recursive --force --older-than {{ .Values.reportsCleanup.olderThan }} myminio/"$S3_BUCKET"/
+              set -xe
+              echo "=== Starting S3 reports cleanup ==="
+              echo "Endpoint: $S3_ENDPOINT"
+              echo "Bucket:   $S3_BUCKET"
+              echo "OlderThan: {{ .Values.reportsCleanup.olderThan }}"
+              mc alias set myminio "$S3_ENDPOINT" "$S3_ACCESS_KEY" "$S3_SECRET_KEY"
+              mc rm --recursive --force --older-than {{ .Values.reportsCleanup.olderThan }} myminio/"$S3_BUCKET"/ || echo "No files to remove or removal completed."
+              echo "=== Cleanup done ==="
             env:
-            {{- if .Values.s3.endpoint }}
             - name: S3_ENDPOINT
-              value: {{ .Values.s3.endpoint | quote }}
-            {{- end }}
+              value: {{ .Values.s3.endpoint | default "https://minio-170-api.zacharie.org" | quote }}
+            - name: S3_BUCKET
+              value: {{ .Values.s3.bucket | default "kusanagi-news" | quote }}
             {{- if .Values.s3.access_key }}
             - name: S3_ACCESS_KEY
               value: {{ .Values.s3.access_key | quote }}
-            {{- end }}
-            {{- if .Values.s3.secret_key }}
             - name: S3_SECRET_KEY
               value: {{ .Values.s3.secret_key | quote }}
-            {{- end }}
-            {{- if .Values.s3.bucket }}
-            - name: S3_BUCKET
-              value: {{ .Values.s3.bucket | quote }}
+            {{- else }}
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kusanagi-secrets
+                  key: S3_ACCESS_KEY
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kusanagi-secrets
+                  key: S3_SECRET_KEY
             {{- end }}
 {{- end }}
