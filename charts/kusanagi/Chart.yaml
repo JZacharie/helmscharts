@@ -2,8 +2,8 @@ apiVersion: v2
 name: kusanagi
 description: Agent controller for K3s improvements
 type: application
-version: 0.3.10
-appVersion: "0.3.10"
+version: 0.3.11
+appVersion: "0.3.11"
 keywords:
   - kusanagi
   - agent
