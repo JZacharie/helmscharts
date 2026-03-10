@@ -32,8 +32,8 @@ spec:
               echo "Endpoint: $S3_ENDPOINT"
               echo "Bucket:   $S3_BUCKET"
               echo "OlderThan: {{ .Values.reportsCleanup.olderThan }}"
-              mc alias set myminio "$S3_ENDPOINT" "$S3_ACCESS_KEY" "$S3_SECRET_KEY"
-              mc rm --recursive --force --older-than {{ .Values.reportsCleanup.olderThan }} myminio/"$S3_BUCKET"/ || echo "No files to remove or removal completed."
+              mc alias set --insecure myminio "$S3_ENDPOINT" "$S3_ACCESS_KEY" "$S3_SECRET_KEY"
+              mc rm --insecure --recursive --force --older-than {{ .Values.reportsCleanup.olderThan }} myminio/"$S3_BUCKET"/ || echo "No files to remove or removal completed."
               echo "=== Cleanup done ==="
             env:
             - name: S3_ENDPOINT
