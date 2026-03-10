@@ -50,7 +50,7 @@ parsr:
 redis:
   image:
     repository: redis
-    tag: 6-alpine
+    tag: 8-alpine
     pullPolicy: IfNotPresent
   
   service:
