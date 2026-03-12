@@ -2,7 +2,7 @@ image:
   # -- image repository
   repository: icereed/paperless-gpt
   # -- image tag
-  tag: "v0.24.0"
+  tag: "v0.25.1"
   # -- image pull policy
   pullPolicy: IfNotPresent
 
