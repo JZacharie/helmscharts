@@ -166,7 +166,7 @@ volumeMounts:
 
 # S3 Cleanup job
 reportsCleanup:
-  enabled: true
+  enabled: false
   # Run hourly by default
   schedule: "0 * * * *"
   # Match Trivy scannerReportTTL
