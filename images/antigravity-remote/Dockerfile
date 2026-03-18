@@ -45,7 +45,7 @@ RUN curl -L "https://github.com/freelensapp/freelens/releases/download/v${FREELE
 RUN curl -fsSL https://dl.min.io/client/mc/release/linux-amd64/mc -o mc
 
 # --- Stage 2: Final Image ---
-FROM nvidia/cuda:13.1.1-runtime-ubuntu24.04
+FROM nvidia/cuda:13.2.0-runtime-ubuntu24.04
 
 LABEL maintainer="raphl"
 LABEL description="Google Antigravity with noVNC remote access and GPU support"
