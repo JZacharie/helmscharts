@@ -1,0 +1,83 @@
+# Default values for inova-monitoring
+replicaCount: 1
+
+image:
+  repository: ghcr.io/jzacharie/inova-monitoring
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: false
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations: {}
+  hosts:
+    - host: inova-monitoring.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+env: []
+
+# PostgreSQL connection
+postgresql:
+  host: "localhost"
+  port: "5432"
+  user: "postgres"
+  password: "changeme"
+  db: "inova_monitoring"
+
+# Prometheus
+prometheus:
+  url: "http://kube-prometheus-stack-prometheus.kube-prometheus-stack.svc:9090"
+
+# SSO (optional)
+sso:
+  clientId: ""
+  clientSecret: ""
+  authUrl: ""
+  tokenUrl: ""
+
+# Application
+app:
+  debug: "false"
+  secretKey: "change-me-in-production"

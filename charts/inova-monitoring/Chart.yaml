@@ -1,0 +1,13 @@
+apiVersion: v2
+name: inova-monitoring
+description: Real-time monitoring platform for Inova Apps instances
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - inova
+  - monitoring
+  - postgresql
+  - prometheus
+maintainers:
+  - name: Joseph
