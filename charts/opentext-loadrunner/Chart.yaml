@@ -1,0 +1,9 @@
+apiVersion: v2
+name: opentext-loadrunner
+description: A Helm chart for OpenText LoadRunner Enterprise components in Kubernetes
+version: 0.1.0
+appVersion: "2024.1"
+type: application
+maintainers:
+  - name: JZacharie
+    email: joseph@zacharie.org

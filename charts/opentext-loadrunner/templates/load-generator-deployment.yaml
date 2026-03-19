@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "opentext-loadrunner.fullname" . }}-load-generator
+  labels:
+    {{- include "opentext-loadrunner.labels" . | nindent 4 }}
+    component: load-generator
+spec:
+  replicas: {{ .Values.loadGenerator.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "opentext-loadrunner.selectorLabels" . | nindent 6 }}
+      component: load-generator
+  template:
+    metadata:
+      labels:
+        {{- include "opentext-loadrunner.selectorLabels" . | nindent 8 }}
+        component: load-generator
+    spec:
+      containers:
+        - name: load-generator
+          image: "{{ .Values.loadGenerator.image.repository }}:{{ .Values.loadGenerator.image.tag }}"
+          imagePullPolicy: {{ .Values.loadGenerator.image.pullPolicy }}
+          ports:
+            - name: agent
+              containerPort: 54345
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.loadGenerator.resources | nindent 12 }}
