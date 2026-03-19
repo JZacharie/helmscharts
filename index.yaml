@@ -1403,6 +1403,34 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
     version: 0.5.2-rc
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update ghcr.io/coder/code-server to 4.93.1
+        - kind: changed
+          description: update docker.io/grafana/promtail to 3.2.1
+        - kind: changed
+          description: update docker.io/qmcgaw/gluetun to v3.39.1
+        - kind: fixed
+          description: properly handle empty paths in ingress configuration
+    apiVersion: v2
+    created: "2026-03-19T09:43:59.724367463Z"
+    description: Function library for Helm charts
+    digest: d6616dc1049ba8660420b0c66663f252decb956fff45df415545e1ac0921b70b
+    home: https://github.com/zekker6/helm-charts/tree/main/charts/library/common
+    keywords:
+    - common
+    - library
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: common
+    type: library
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
+    version: 0.5.2-rc
   cursor:
   - annotations:
       artifacthub.io/changes: |-
@@ -1576,6 +1604,24 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/garage-0.7.2-rc.tgz
     version: 0.7.2-rc
+  inova-monitoring:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2026-03-19T09:43:59.851826007Z"
+    description: Real-time monitoring platform for Inova Apps instances
+    digest: 3ff33cbcbe74f95602bb521cc0708a3af0ef4a32975328d34a74074904ed25f6
+    keywords:
+    - inova
+    - monitoring
+    - postgresql
+    - prometheus
+    maintainers:
+    - name: Joseph
+    name: inova-monitoring
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/inova-monitoring-0.1.0/inova-monitoring-0.1.0.tgz
+    version: 0.1.0
   itop:
   - apiVersion: v2
     appVersion: 3.0.1
@@ -2194,6 +2240,21 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/openobserve-collector-0.4.1-custom/openobserve-collector-0.4.1-custom.tgz
     version: 0.4.1-custom
+  - apiVersion: v2
+    appVersion: 0.136.0
+    created: "2026-03-19T09:44:00.160524443Z"
+    description: An opinionated installation of OTEL Collector for OpenObserve (forked
+      with custom env support)
+    digest: 496330e45d224eb03383d7697819c42b4258b9b56b496b18d33bc3a47948b885
+    maintainers:
+    - email: hello@openobserve.ai
+      name: OpenObserve
+      url: https://openobserve.ai
+    name: openobserve-collector
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/openobserve-collector-0.4.1-custom/openobserve-collector-0.4.1-custom.tgz
+    version: 0.4.1-custom
   openvas:
   - apiVersion: v2
     appVersion: "24.10"
@@ -2688,4 +2749,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-03-18T05:06:11.776360973Z"
+generated: "2026-03-19T09:44:00.532921777Z"
