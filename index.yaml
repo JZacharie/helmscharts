@@ -2255,6 +2255,20 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/openobserve-collector-0.4.1-custom/openobserve-collector-0.4.1-custom.tgz
     version: 0.4.1-custom
+  opentext-loadrunner:
+  - apiVersion: v2
+    appVersion: "2024.1"
+    created: "2026-03-19T13:10:47.334889906Z"
+    description: A Helm chart for OpenText LoadRunner Enterprise components in Kubernetes
+    digest: 0212aa6019c32289053db425a3c32097b68cde3ab932f330104f79e0156c9281
+    maintainers:
+    - email: joseph@zacharie.org
+      name: JZacharie
+    name: opentext-loadrunner
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/opentext-loadrunner-0.1.0/opentext-loadrunner-0.1.0.tgz
+    version: 0.1.0
   openvas:
   - apiVersion: v2
     appVersion: "24.10"
@@ -2749,4 +2763,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-03-19T09:44:00.532921777Z"
+generated: "2026-03-19T13:10:47.335562208Z"
