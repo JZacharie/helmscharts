@@ -1,0 +1,53 @@
+# Default values for opentext-loadrunner.
+
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+
+controller:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: opentext/lre-controller
+    tag: "2024.1"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+  persistence:
+    enabled: true
+    size: 50Gi
+
+loadGenerator:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: opentext/lre-load-generator
+    tag: "2024.1"
+    pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: loadrunner.example.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "opentext-loadrunner.fullname" . }}-controller
+  labels:
+    {{- include "opentext-loadrunner.labels" . | nindent 4 }}
+    component: controller
+spec:
+  type: {{ .Values.controller.service.type }}
+  ports:
+    - port: {{ .Values.controller.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "opentext-loadrunner.selectorLabels" . | nindent 4 }}
+    component: controller

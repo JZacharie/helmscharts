@@ -1,0 +1,18 @@
+{{- if .Values.controller.persistence.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "opentext-loadrunner.fullname" . }}-controller
+  labels:
+    {{- include "opentext-loadrunner.labels" . | nindent 4 }}
+    component: controller
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.controller.persistence.size }}
+  {{- if .Values.global.storageClass }}
+  storageClassName: {{ .Values.global.storageClass }}
+  {{- end }}
+{{- end }}

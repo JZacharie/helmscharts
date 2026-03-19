@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "opentext-loadrunner.fullname" . }}-controller
+  labels:
+    {{- include "opentext-loadrunner.labels" . | nindent 4 }}
+    component: controller
+spec:
+  replicas: {{ .Values.controller.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "opentext-loadrunner.selectorLabels" . | nindent 6 }}
+      component: controller
+  template:
+    metadata:
+      labels:
+        {{- include "opentext-loadrunner.selectorLabels" . | nindent 8 }}
+        component: controller
+    spec:
+      containers:
+        - name: controller
+          image: "{{ .Values.controller.image.repository }}:{{ .Values.controller.image.tag }}"
+          imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.controller.service.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.controller.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/opt/OV
+      volumes:
+        - name: data
+          {{- if .Values.controller.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "opentext-loadrunner.fullname" . }}-controller
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
