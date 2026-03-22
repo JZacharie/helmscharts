@@ -1515,6 +1515,34 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
     version: 0.5.2-rc
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update ghcr.io/coder/code-server to 4.93.1
+        - kind: changed
+          description: update docker.io/grafana/promtail to 3.2.1
+        - kind: changed
+          description: update docker.io/qmcgaw/gluetun to v3.39.1
+        - kind: fixed
+          description: properly handle empty paths in ingress configuration
+    apiVersion: v2
+    created: "2026-03-22T06:17:25.852649715Z"
+    description: Function library for Helm charts
+    digest: 9e10a6685e60cbe6ba2f2a5c125ce412a6b50dbeb6d553a19a8a15cada1b7145
+    home: https://github.com/zekker6/helm-charts/tree/main/charts/library/common
+    keywords:
+    - common
+    - library
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: common
+    type: library
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
+    version: 0.5.2-rc
   cursor:
   - annotations:
       artifacthub.io/changes: |-
@@ -2339,6 +2367,21 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/openobserve-collector-0.4.1-custom/openobserve-collector-0.4.1-custom.tgz
     version: 0.4.1-custom
+  - apiVersion: v2
+    appVersion: 0.136.0
+    created: "2026-03-22T06:17:26.033839416Z"
+    description: An opinionated installation of OTEL Collector for OpenObserve (forked
+      with custom env support)
+    digest: c70b8804c0a66120ac8561efe66e5158e11ce7bb57e60726b80f6e4ab7defe74
+    maintainers:
+    - email: hello@openobserve.ai
+      name: OpenObserve
+      url: https://openobserve.ai
+    name: openobserve-collector
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/openobserve-collector-0.4.1-custom/openobserve-collector-0.4.1-custom.tgz
+    version: 0.4.1-custom
   opentext-loadrunner:
   - apiVersion: v2
     appVersion: "2024.1"
@@ -2847,4 +2890,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-03-20T16:13:07.762808163Z"
+generated: "2026-03-22T06:17:26.034073233Z"
