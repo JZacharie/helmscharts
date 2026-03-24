@@ -33,23 +33,29 @@ spec:
           - |
             set -e
             echo "Waiting for PostgreSQL to be ready..."
-            until pg_isready -h {{ .Values.database.host }} -p {{ .Values.database.port }} -U {{ .Values.database.username }}; do
+            until pg_isready; do
               echo "Waiting for database..."
               sleep 2
             done
             
             echo "Creating database if not exists..."
-            PGPASSWORD={{ .Values.database.password }} psql -h {{ .Values.database.host }} -p {{ .Values.database.port }} -U {{ .Values.database.username }} -d postgres <<EOF
-            SELECT 'CREATE DATABASE {{ .Values.database.name }}' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '{{ .Values.database.name }}')\gexec
+            psql -d postgres <<EOF
+            SELECT 'CREATE DATABASE {{ include "appflowy-sbx.databaseName" . }}' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '{{ include "appflowy-sbx.databaseName" . }}')\gexec
             EOF
             
             echo "Enabling pgvector extension..."
-            PGPASSWORD={{ .Values.database.password }} psql -h {{ .Values.database.host }} -p {{ .Values.database.port }} -U {{ .Values.database.username }} -d {{ .Values.database.name }} <<EOF
+            psql -d {{ include "appflowy-sbx.databaseName" . }} <<EOF
             CREATE EXTENSION IF NOT EXISTS vector;
             EOF
             
             echo "Database setup completed successfully"
         env:
+          - name: PGUSER
+            value: {{ include "appflowy-sbx.databaseUser" . | quote }}
+          - name: PGHOST
+            value: {{ include "appflowy-sbx.databaseHost" . | quote }}
+          - name: PGPORT
+            value: {{ include "appflowy-sbx.databasePort" . | quote }}
           - name: PGPASSWORD
             valueFrom:
               secretKeyRef:
