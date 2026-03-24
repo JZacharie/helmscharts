@@ -129,6 +129,30 @@ S3/MinIO URL
 {{- .Values.s3.url }}
 {{- end }}
 
+{{- define "appflowy-sbx.databaseUser" -}}
+{{- $db := .Values.database | default dict }}
+{{- $globalDb := (index .Values "global" "database") | default dict }}
+{{- default $db.username $globalDb.username | default "postgres" }}
+{{- end }}
+
+{{- define "appflowy-sbx.databaseHost" -}}
+{{- $db := .Values.database | default dict }}
+{{- $globalDb := (index .Values "global" "database") | default dict }}
+{{- default $db.host $globalDb.host | default "localhost" }}
+{{- end }}
+
+{{- define "appflowy-sbx.databasePort" -}}
+{{- $db := .Values.database | default dict }}
+{{- $globalDb := (index .Values "global" "database") | default dict }}
+{{- default $db.port $globalDb.port | default 5432 }}
+{{- end }}
+
+{{- define "appflowy-sbx.databaseName" -}}
+{{- $db := .Values.database | default dict }}
+{{- $globalDb := (index .Values "global" "database") | default dict }}
+{{- default $db.name $globalDb.name | default "appflowy" }}
+{{- end }}
+
 {{/*
 Node selector
 */}}
