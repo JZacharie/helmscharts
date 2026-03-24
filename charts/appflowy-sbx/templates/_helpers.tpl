@@ -75,8 +75,10 @@ Database URL for appflowy
 {{- define "appflowy-sbx.databaseUrl" -}}
 {{- $db := .Values.database | default dict }}
 {{- $globalDb := (index .Values "global" "database") | default dict }}
+{{- $globalSecretPostgres := (((index .Values "global" "secret" | default dict).postgres | default dict).appflowy | default dict).postgresPassword | default dict }}
+{{- $globalSecretAdmin := (((index .Values "global" "secret" | default dict).postgres | default dict).adminPassword | default dict) }}
 {{- $user := default $db.username $globalDb.username | default "postgres" }}
-{{- $pass := default $db.password $globalDb.password | default "" }}
+{{- $pass := default $db.password (default $globalDb.password (default $globalSecretPostgres.value (default $globalSecretAdmin.value | default ""))) }}
 {{- $host := default $db.host $globalDb.host | default "localhost" }}
 {{- $port := default $db.port $globalDb.port | default 5432 }}
 {{- $name := default $db.name $globalDb.name | default "appflowy" }}
@@ -89,8 +91,10 @@ Database URL for gotrue with search_path
 {{- define "appflowy-sbx.gotrueDatabaseUrl" -}}
 {{- $db := .Values.database | default dict }}
 {{- $globalDb := (index .Values "global" "database") | default dict }}
+{{- $globalSecretPostgres := (((index .Values "global" "secret" | default dict).postgres | default dict).appflowy | default dict).postgresPassword | default dict }}
+{{- $globalSecretAdmin := (((index .Values "global" "secret" | default dict).postgres | default dict).adminPassword | default dict) }}
 {{- $user := default $db.username $globalDb.username | default "postgres" }}
-{{- $pass := default $db.password $globalDb.password | default "" }}
+{{- $pass := default $db.password (default $globalDb.password (default $globalSecretPostgres.value (default $globalSecretAdmin.value | default ""))) }}
 {{- $host := default $db.host $globalDb.host | default "localhost" }}
 {{- $port := default $db.port $globalDb.port | default 5432 }}
 {{- $name := default $db.name $globalDb.name | default "appflowy" }}
