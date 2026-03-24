@@ -22,6 +22,19 @@ Create a default fully qualified app name.
 {{- end }}
 
 {{/*
+Create the name of the secret to use
+*/}}
+{{- define "appflowy-sbx.secretName" -}}
+{{- if .Values.secret -}}
+{{- default (include "appflowy-sbx.fullname" .) .Values.secret.name }}
+{{- else if (index .Values "global" "secret") -}}
+{{- default (include "appflowy-sbx.fullname" .) (index .Values "global" "secret" "name") }}
+{{- else -}}
+{{- printf "%s-secret" (include "appflowy-sbx.fullname" .) }}
+{{- end -}}
+{{- end }}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "appflowy-sbx.chart" -}}
@@ -60,14 +73,28 @@ app.kubernetes.io/component: {{ .component }}
 Database URL for appflowy
 */}}
 {{- define "appflowy-sbx.databaseUrl" -}}
-{{- printf "postgres://%s:%s@%s:%d/%s" .Values.database.username .Values.database.password .Values.database.host (.Values.database.port | int) .Values.database.name }}
+{{- $db := .Values.database | default dict }}
+{{- $globalDb := (index .Values "global" "database") | default dict }}
+{{- $user := default $db.username $globalDb.username | default "postgres" }}
+{{- $pass := default $db.password $globalDb.password | default "" }}
+{{- $host := default $db.host $globalDb.host | default "localhost" }}
+{{- $port := default $db.port $globalDb.port | default 5432 }}
+{{- $name := default $db.name $globalDb.name | default "appflowy" }}
+{{- printf "postgres://%s:%s@%s:%d/%s" $user $pass $host ($port | int) $name }}
 {{- end }}
 
 {{/*
 Database URL for gotrue with search_path
 */}}
 {{- define "appflowy-sbx.gotrueDatabaseUrl" -}}
-{{- printf "postgres://%s:%s@%s:%d/%s?search_path=auth" .Values.database.username .Values.database.password .Values.database.host (.Values.database.port | int) .Values.database.name }}
+{{- $db := .Values.database | default dict }}
+{{- $globalDb := (index .Values "global" "database") | default dict }}
+{{- $user := default $db.username $globalDb.username | default "postgres" }}
+{{- $pass := default $db.password $globalDb.password | default "" }}
+{{- $host := default $db.host $globalDb.host | default "localhost" }}
+{{- $port := default $db.port $globalDb.port | default 5432 }}
+{{- $name := default $db.name $globalDb.name | default "appflowy" }}
+{{- printf "postgres://%s:%s@%s:%d/%s?search_path=auth" $user $pass $host ($port | int) $name }}
 {{- end }}
 
 {{/*
@@ -88,7 +115,7 @@ AppFlowy Cloud base URL (internal)
 Redis URL
 */}}
 {{- define "appflowy-sbx.redisUrl" -}}
-{{- .Values.redis.uri }}
+{{- default .Values.redis.uri (index .Values "global" "redis" "uri" | default "") }}
 {{- end }}
 
 {{/*

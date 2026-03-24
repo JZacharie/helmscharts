@@ -37,7 +37,7 @@ spec:
           - name: GOTRUE_ADMIN_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                name: {{ include "appflowy-sbx.secretName" . }}
                 key: GOTRUE_ADMIN_PASSWORD
           
           # Basic configuration
@@ -52,7 +52,7 @@ spec:
           - name: GOTRUE_JWT_SECRET
             valueFrom:
               secretKeyRef:
-                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                name: {{ include "appflowy-sbx.secretName" . }}
                 key: GOTRUE_JWT_SECRET
           - name: GOTRUE_JWT_EXP
             value: {{ .Values.jwt.exp | quote }}
@@ -65,7 +65,7 @@ spec:
           - name: DATABASE_URL
             valueFrom:
               secretKeyRef:
-                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                name: {{ include "appflowy-sbx.secretName" . }}
                 key: GOTRUE_DATABASE_URL
           - name: API_EXTERNAL_URL
             value: {{ .Values.baseUrl | quote }}
@@ -82,7 +82,7 @@ spec:
           - name: GOTRUE_SMTP_PASS
             valueFrom:
               secretKeyRef:
-                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                name: {{ include "appflowy-sbx.secretName" . }}
                 key: GOTRUE_SMTP_PASS
           - name: GOTRUE_SMTP_ADMIN_EMAIL
             value: {{ .Values.smtp.email | quote }}

@@ -54,12 +54,12 @@ spec:
           - name: APPFLOWY_S3_ACCESS_KEY
             valueFrom:
               secretKeyRef:
-                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                name: {{ include "appflowy-sbx.secretName" . }}
                 key: S3_ACCESS_KEY
           - name: APPFLOWY_S3_SECRET_KEY
             valueFrom:
               secretKeyRef:
-                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                name: {{ include "appflowy-sbx.secretName" . }}
                 key: S3_SECRET_KEY
           - name: APPFLOWY_S3_BUCKET
             value: {{ .Values.s3.bucket | quote }}
@@ -70,7 +70,7 @@ spec:
           - name: AI_DATABASE_URL
             valueFrom:
               secretKeyRef:
-                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                name: {{ include "appflowy-sbx.secretName" . }}
                 key: DATABASE_URL
           
           # Redis
@@ -91,7 +91,7 @@ spec:
           - name: APPFLOWY_GOTRUE_JWT_SECRET
             valueFrom:
               secretKeyRef:
-                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                name: {{ include "appflowy-sbx.secretName" . }}
                 key: GOTRUE_JWT_SECRET
         
         livenessProbe:

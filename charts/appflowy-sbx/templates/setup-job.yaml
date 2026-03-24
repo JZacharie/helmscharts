@@ -53,7 +53,7 @@ spec:
           - name: PGPASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ include "appflowy-sbx.fullname" . }}-secret
+                name: {{ include "appflowy-sbx.secretName" . }}
                 key: POSTGRES_PASSWORD
         {{- with .Values.setupJob.resources }}
         resources:
