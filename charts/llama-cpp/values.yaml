@@ -1,0 +1,25 @@
+image:
+  repository: ghcr.io/ggml-org/llama.cpp
+  tag: server-cuda
+  pullPolicy: IfNotPresent
+
+service:
+  main:
+    ports:
+      http:
+        port: 8080
+
+ingress:
+  main:
+    enabled: false
+
+persistence:
+  models:
+    enabled: false
+    mountPath: /models
+
+nodeSelector: {}
+affinity: {}
+tolerations: []
+
+args: ["--model", "/models/model.gguf", "--host", "0.0.0.0", "--port", "8080"]
