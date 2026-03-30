@@ -1,0 +1,6 @@
+apiVersion: v2
+name: outline
+description: A custom Helm chart for Outline Wiki
+type: application
+version: 0.1.0
+appVersion: "1.6.1"
