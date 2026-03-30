@@ -29,7 +29,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "outline.fullname" . }}
+                name: {{ include "outline.fullname" $ }}
                 port:
                   number: {{ $.Values.service.port }}
           {{- end }}

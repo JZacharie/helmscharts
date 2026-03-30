@@ -100,11 +100,13 @@ spec:
             - name: SMTP_SECURE
               value: {{ .Values.smtp.secure | quote }}
             # Extra Env from existing Secret (Postgres/Redis passwords)
+          {{- if .Values.extraSecretNamesForEnvFrom }}
           envFrom:
             {{- range .Values.extraSecretNamesForEnvFrom }}
             - secretRef:
                 name: {{ . }}
             {{- end }}
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
