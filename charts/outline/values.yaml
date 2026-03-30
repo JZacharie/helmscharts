@@ -1,0 +1,125 @@
+replicaCount: 1
+
+image:
+  repository: outlinewiki/outline
+  pullPolicy: IfNotPresent
+  tag: "1.6.1"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  fsGroup: 1001
+
+securityContext:
+  runAsUser: 1001
+  runAsGroup: 1001
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations: {}
+  hosts:
+    - host: outline.p.zacharie.org
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: tls-zacharie-org
+      hosts:
+        - outline.p.zacharie.org
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1024Mi
+  requests:
+    cpu: 100m
+    memory: 768Mi
+
+livenessProbe:
+  httpGet:
+    path: /_health
+  initialDelaySeconds: 10
+  periodSeconds: 30
+
+readinessProbe:
+  httpGet:
+    path: /_health
+  initialDelaySeconds: 30
+  periodSeconds: 30
+
+nodeSelector:
+  kubernetes.io/arch: amd64
+
+tolerations: []
+affinity: {}
+
+# App Specific
+url: "https://outline.p.zacharie.org"
+secretKey: ""
+utilsSecret: ""
+defaultLanguage: "en_US"
+
+web:
+  forceHttps: true
+
+logging:
+  level: info
+
+fileStorage:
+  s3:
+    bucket: outline
+    accessKeyId: ""
+    secretAccessKey: ""
+    region: us-east-1
+    bucketUrl: ""
+    forcePathStyle: true
+    acl: private
+
+auth:
+  google:
+    enabled: true
+    clientId: ""
+    clientSecret: ""
+  github:
+    enabled: false
+    clientId: ""
+    clientSecret: ""
+
+smtp:
+  host: ""
+  port: 587
+  username: ""
+  password: ""
+  fromEmail: ""
+  replyEmail: ""
+  tlsCiphers: ""
+  secure: true
+
+# Extra Env from existing Secret (Postgres/Redis passwords)
+extraSecretNamesForEnvFrom: 
+  - outline-secrets
+
+externalRedis:
+  host: "dragonfly.dragonfly.svc.cluster.local"
+  port: 6379
+
+externalPostgresql:
+  host: "cluster-pg-rw.pg-prd.svc"
+  port: 5432
+  username: "app"
+  database: "outline"

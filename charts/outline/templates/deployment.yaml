@@ -1,0 +1,135 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "outline.fullname" . }}
+  labels:
+    {{- include "outline.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "outline.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "outline.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["node", "./build/server/index.js"]
+          env:
+            - name: URL
+              value: {{ .Values.url | quote }}
+            - name: PORT
+              value: {{ .Values.service.port | quote }}
+            - name: NODE_ENV
+              value: "production"
+            - name: DATABASE_URL
+              value: "postgres://{{ .Values.externalPostgresql.username }}:$(postgres-password)@{{ .Values.externalPostgresql.host }}:{{ .Values.externalPostgresql.port }}/{{ .Values.externalPostgresql.database }}"
+            - name: REDIS_URL
+              value: "redis://:$(redis-password)@{{ .Values.externalRedis.host }}:{{ .Values.externalRedis.port }}/0"
+            - name: SECRET_KEY
+              value: {{ .Values.secretKey | quote }}
+            - name: UTILS_SECRET
+              value: {{ .Values.utilsSecret | quote }}
+            - name: DEFAULT_LANGUAGE
+              value: {{ .Values.defaultLanguage | quote }}
+            - name: FORCE_HTTPS
+              value: {{ .Values.web.forceHttps | quote }}
+            - name: LOG_LEVEL
+              value: {{ .Values.logging.level | quote }}
+            # Storage (S3)
+            - name: STORAGE_CONNECTION_LIMIT
+              value: {{ .Values.fileStorage.uploadMaxSize | quote }}
+            - name: AWS_ACCESS_KEY_ID
+              value: {{ .Values.fileStorage.s3.accessKeyId | quote }}
+            - name: AWS_SECRET_ACCESS_KEY
+              value: {{ .Values.fileStorage.s3.secretAccessKey | quote }}
+            - name: AWS_REGION
+              value: {{ .Values.fileStorage.s3.region | quote }}
+            - name: AWS_S3_UPLOAD_BUCKET_URL
+              value: {{ .Values.fileStorage.s3.bucketUrl | quote }}
+            - name: AWS_S3_UPLOAD_BUCKET_NAME
+              value: {{ .Values.fileStorage.s3.bucket | quote }}
+            - name: AWS_S3_FORCE_PATH_STYLE
+              value: {{ .Values.fileStorage.s3.forcePathStyle | quote }}
+            - name: AWS_S3_ACL
+              value: {{ .Values.fileStorage.s3.acl | quote }}
+            # Auth
+            {{- if .Values.auth.google.enabled }}
+            - name: GOOGLE_CLIENT_ID
+              value: {{ .Values.auth.google.clientId | quote }}
+            - name: GOOGLE_CLIENT_SECRET
+              value: {{ .Values.auth.google.clientSecret | quote }}
+            {{- end }}
+            {{- if .Values.auth.github.enabled }}
+            - name: GITHUB_CLIENT_ID
+              value: {{ .Values.auth.github.clientId | quote }}
+            - name: GITHUB_CLIENT_SECRET
+              value: {{ .Values.auth.github.clientSecret | quote }}
+            {{- end }}
+            # SMTP
+            - name: SMTP_HOST
+              value: {{ .Values.smtp.host | quote }}
+            - name: SMTP_PORT
+              value: {{ .Values.smtp.port | quote }}
+            - name: SMTP_USERNAME
+              value: {{ .Values.smtp.username | quote }}
+            - name: SMTP_PASSWORD
+              value: {{ .Values.smtp.password | quote }}
+            - name: SMTP_FROM_EMAIL
+              value: {{ .Values.smtp.fromEmail | quote }}
+            - name: SMTP_REPLY_EMAIL
+              value: {{ .Values.smtp.replyEmail | quote }}
+            - name: SMTP_TLS_CIPHERS
+              value: {{ .Values.smtp.tlsCiphers | quote }}
+            - name: SMTP_SECURE
+              value: {{ .Values.smtp.secure | quote }}
+            # Extra Env from existing Secret (Postgres/Redis passwords)
+          envFrom:
+            {{- range .Values.extraSecretNamesForEnvFrom }}
+            - secretRef:
+                name: {{ . }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}:
+              httpGet:
+                path: {{ .Values.livenessProbe.httpGet.path }}
+                port: http
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}:
+              httpGet:
+                path: {{ .Values.readinessProbe.httpGet.path }}
+                port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
