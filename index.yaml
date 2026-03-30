@@ -1711,6 +1711,34 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
     version: 0.5.2-rc
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: update ghcr.io/coder/code-server to 4.93.1
+        - kind: changed
+          description: update docker.io/grafana/promtail to 3.2.1
+        - kind: changed
+          description: update docker.io/qmcgaw/gluetun to v3.39.1
+        - kind: fixed
+          description: properly handle empty paths in ingress configuration
+    apiVersion: v2
+    created: "2026-03-30T17:52:30.352316727Z"
+    description: Function library for Helm charts
+    digest: e064a42e8b24705d359b93c1f596aeac3b34b29ea75aabda19de31238ae3632c
+    home: https://github.com/zekker6/helm-charts/tree/main/charts/library/common
+    keywords:
+    - common
+    - library
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@zekker.dev
+      name: zekker6
+      url: https://github.com/zekker6/
+    name: common
+    type: library
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
+    version: 0.5.2-rc
   cursor:
   - annotations:
       artifacthub.io/changes: |-
@@ -2679,6 +2707,17 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/openvas-0.1.0/openvas-0.1.0.tgz
     version: 0.1.0
+  outline:
+  - apiVersion: v2
+    appVersion: 1.6.1
+    created: "2026-03-30T17:52:30.61249604Z"
+    description: A custom Helm chart for Outline Wiki
+    digest: 250d747666906c13fe932145006ff76c3b0e84d1199109f775e74bb659f8d3e9
+    name: outline
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/outline-0.1.0/outline-0.1.0.tgz
+    version: 0.1.0
   pandoc:
   - apiVersion: v2
     appVersion: "3.1"
@@ -3148,4 +3187,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-03-29T09:08:28.676224568Z"
+generated: "2026-03-30T17:52:30.612713841Z"
