@@ -42,10 +42,14 @@ spec:
               value: "postgres://{{ .Values.externalPostgresql.username }}:$(postgres-password)@{{ .Values.externalPostgresql.host }}:{{ .Values.externalPostgresql.port }}/{{ .Values.externalPostgresql.database }}"
             - name: REDIS_URL
               value: "redis://:$(redis-password)@{{ .Values.externalRedis.host }}:{{ .Values.externalRedis.port }}/0"
+            {{- if .Values.secretKey }}
             - name: SECRET_KEY
               value: {{ .Values.secretKey | quote }}
+            {{- end }}
+            {{- if .Values.utilsSecret }}
             - name: UTILS_SECRET
               value: {{ .Values.utilsSecret | quote }}
+            {{- end }}
             - name: DEFAULT_LANGUAGE
               value: {{ .Values.defaultLanguage | quote }}
             - name: FORCE_HTTPS
@@ -55,10 +59,14 @@ spec:
             # Storage (S3)
             - name: STORAGE_CONNECTION_LIMIT
               value: {{ .Values.fileStorage.uploadMaxSize | quote }}
+            {{- if .Values.fileStorage.s3.accessKeyId }}
             - name: AWS_ACCESS_KEY_ID
               value: {{ .Values.fileStorage.s3.accessKeyId | quote }}
+            {{- end }}
+            {{- if .Values.fileStorage.s3.secretAccessKey }}
             - name: AWS_SECRET_ACCESS_KEY
               value: {{ .Values.fileStorage.s3.secretAccessKey | quote }}
+            {{- end }}
             - name: AWS_REGION
               value: {{ .Values.fileStorage.s3.region | quote }}
             - name: AWS_S3_UPLOAD_BUCKET_URL
@@ -71,16 +79,24 @@ spec:
               value: {{ .Values.fileStorage.s3.acl | quote }}
             # Auth
             {{- if .Values.auth.google.enabled }}
+            {{- if .Values.auth.google.clientId }}
             - name: GOOGLE_CLIENT_ID
               value: {{ .Values.auth.google.clientId | quote }}
+            {{- end }}
+            {{- if .Values.auth.google.clientSecret }}
             - name: GOOGLE_CLIENT_SECRET
               value: {{ .Values.auth.google.clientSecret | quote }}
             {{- end }}
+            {{- end }}
             {{- if .Values.auth.github.enabled }}
+            {{- if .Values.auth.github.clientId }}
             - name: GITHUB_CLIENT_ID
               value: {{ .Values.auth.github.clientId | quote }}
+            {{- end }}
+            {{- if .Values.auth.github.clientSecret }}
             - name: GITHUB_CLIENT_SECRET
               value: {{ .Values.auth.github.clientSecret | quote }}
+            {{- end }}
             {{- end }}
             # SMTP
             - name: SMTP_HOST
@@ -89,8 +105,10 @@ spec:
               value: {{ .Values.smtp.port | quote }}
             - name: SMTP_USERNAME
               value: {{ .Values.smtp.username | quote }}
+            {{- if .Values.smtp.password }}
             - name: SMTP_PASSWORD
               value: {{ .Values.smtp.password | quote }}
+            {{- end }}
             - name: SMTP_FROM_EMAIL
               value: {{ .Values.smtp.fromEmail | quote }}
             - name: SMTP_REPLY_EMAIL
