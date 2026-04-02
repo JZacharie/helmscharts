@@ -2668,6 +2668,21 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/openobserve-collector-0.4.1-custom/openobserve-collector-0.4.1-custom.tgz
     version: 0.4.1-custom
+  - apiVersion: v2
+    appVersion: 0.136.0
+    created: "2026-04-02T04:35:16.593910068Z"
+    description: An opinionated installation of OTEL Collector for OpenObserve (forked
+      with custom env support)
+    digest: 076a8c59bd28dc6ffb643246ad7f6351e2b226a1db25fc7d9c60733d41602687
+    maintainers:
+    - email: hello@openobserve.ai
+      name: OpenObserve
+      url: https://openobserve.ai
+    name: openobserve-collector
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/openobserve-collector-0.4.1-custom/openobserve-collector-0.4.1-custom.tgz
+    version: 0.4.1-custom
   opentext-loadrunner:
   - apiVersion: v2
     appVersion: "2024.1"
@@ -3187,4 +3202,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-03-30T17:52:30.612713841Z"
+generated: "2026-04-02T04:35:16.765033065Z"
