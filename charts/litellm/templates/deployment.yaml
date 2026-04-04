@@ -16,6 +16,7 @@ spec:
   selector:
     matchLabels:
       {{- include "litellm.selectorLabels" . | nindent 6 }}
+  revisionHistoryLimit: 3
   template:
     metadata:
       annotations:

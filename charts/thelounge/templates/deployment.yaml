@@ -9,6 +9,7 @@ spec:
   selector:
     matchLabels:
       {{- include "thelounge.selectorLabels" . | nindent 6 }}
+  revisionHistoryLimit: 3
   template:
     metadata:
       annotations:
