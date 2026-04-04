@@ -11,6 +11,7 @@ spec:
   selector:
     matchLabels:
       {{- include "itop.selectorLabels" . | nindent 6 }}
+  revisionHistoryLimit: 3
   template:
     metadata:
       {{- with .Values.podAnnotations }}

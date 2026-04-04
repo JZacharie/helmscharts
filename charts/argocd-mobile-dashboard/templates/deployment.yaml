@@ -9,6 +9,7 @@ spec:
   selector:
     matchLabels:
       {{- include "argocd-mobile-dashboard.selectorLabels" . | nindent 6 }}
+  revisionHistoryLimit: 3
   template:
     metadata:
       labels:

@@ -11,6 +11,7 @@ spec:
   selector:
     matchLabels:
       {{- include "wh2pg.selectorLabels" . | nindent 6 }}
+  revisionHistoryLimit: 3
   template:
     metadata:
       annotations:
