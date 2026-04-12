@@ -63,17 +63,17 @@ spec:
             {{- end }}
             {{- if eq $serviceName "orchestrator" }}
             - name: EXTRACTOR_URL
-              value: "http://{{ include "keryx.fullname" $ }}-extractor:{{ $.Values.services.extractor.servicePort }}"
+              value: "http://{{ include "keryx.fullname" $ }}-extractor:{{ $.Values.services.extractor.servicePort | default 80 }}"
             - name: DEWATERMARK_URL
-              value: "http://{{ include "keryx.fullname" $ }}-dewatermark:{{ $.Values.services.dewatermark.servicePort }}"
+              value: "http://{{ include "keryx.fullname" $ }}-dewatermark:{{ $.Values.services.dewatermark.servicePort | default 80 }}"
             - name: VOICE_EXTRACTOR_URL
-              value: "http://{{ include "keryx.fullname" $ }}-voice-extractor:{{ $.Values.services.voice_extractor.servicePort }}"
+              value: "http://{{ include "keryx.fullname" $ }}-voice-extractor:{{ (index $.Values.services "voice-extractor").servicePort | default 80 }}"
             - name: VIDEO_COMPOSER_URL
-              value: "http://{{ include "keryx.fullname" $ }}-video-composer:{{ $.Values.services.video_composer.servicePort }}"
+              value: "http://{{ include "keryx.fullname" $ }}-video-composer:{{ (index $.Values.services "video-composer").servicePort | default 80 }}"
             - name: VIDEO_GENERATOR_URL
-              value: "http://{{ include "keryx.fullname" $ }}-video-generator:{{ $.Values.services.video_generator.servicePort }}"
+              value: "http://{{ include "keryx.fullname" $ }}-video-generator:{{ (index $.Values.services "video-generator").servicePort | default 80 }}"
             - name: VOICE_CLONER_URL
-              value: "http://{{ include "keryx.fullname" $ }}-voice-cloner:{{ $.Values.services.voice_cloner.servicePort }}"
+              value: "http://{{ include "keryx.fullname" $ }}-voice-cloner:{{ (index $.Values.services "voice-cloner").servicePort | default 80 }}"
             {{- end }}
             {{- with $service.env }}
             {{- range $name, $value := . }}
