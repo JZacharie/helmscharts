@@ -1,0 +1,25 @@
+image:
+  repository: vllm/vllm-openai
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  main:
+    ports:
+      http:
+        port: 8000
+
+ingress:
+  main:
+    enabled: false
+
+persistence:
+  models:
+    enabled: false
+    mountPath: /root/.cache/huggingface
+
+nodeSelector: {}
+affinity: {}
+tolerations: []
+
+args: ["--model", "facebook/opt-125m", "--host", "0.0.0.0", "--port", "8000"]
