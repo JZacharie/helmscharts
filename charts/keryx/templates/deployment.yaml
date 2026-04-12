@@ -82,7 +82,11 @@ spec:
             {{- with $service.env }}
             {{- range $name, $value := . }}
             - name: {{ $name }}
+              {{- if kindIs "map" $value }}
+              {{- toYaml $value | nindent 14 }}
+              {{- else }}
               value: {{ $value | quote }}
+              {{- end }}
             {{- end }}
             {{- end }}
           securityContext:
