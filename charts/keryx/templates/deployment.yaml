@@ -1,0 +1,114 @@
+{{- range $serviceName, $service := .Values.services }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "keryx.fullname" $ }}-{{ $serviceName }}
+  labels:
+    {{- include "keryx.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $serviceName }}
+spec:
+  replicas: {{ default 1 $service.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "keryx.selectorLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: {{ $serviceName }}
+  template:
+    metadata:
+      labels:
+        {{- include "keryx.selectorLabels" $ | nindent 8 }}
+        app.kubernetes.io/component: {{ $serviceName }}
+    spec:
+      {{- with $.Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if $service.gpu }}
+      runtimeClassName: {{ default "nvidia" $service.runtimeClassName }}
+      {{- end }}
+      containers:
+        - name: {{ $serviceName }}
+          image: "{{ $service.image }}:{{ default $.Values.global.image.tag $service.imageTag }}"
+          imagePullPolicy: {{ $.Values.global.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ $service.containerPort }}
+              protocol: TCP
+          env:
+            - name: REDIS_URL
+            {{- if $.Values.global.redis.existingSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.global.redis.existingSecret }}
+                  key: {{ default "REDIS_URL" $.Values.global.redis.existingSecretKey }}
+            {{- else }}
+              value: {{ $.Values.global.redis.url | quote }}
+            {{- end }}
+            - name: S3_ENDPOINT
+              value: {{ $.Values.global.s3.endpoint | quote }}
+            - name: S3_BUCKET
+              value: {{ $.Values.global.s3.bucket | quote }}
+            - name: S3_REGION
+              value: {{ $.Values.global.s3.region | quote }}
+            - name: AWS_ACCESS_KEY_ID
+              value: {{ $.Values.global.s3.accessKey | quote }}
+            - name: AWS_SECRET_ACCESS_KEY
+            {{- if $.Values.global.s3.existingSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.global.s3.existingSecret }}
+                  key: {{ default "AWS_SECRET_ACCESS_KEY" $.Values.global.s3.existingSecretKey }}
+            {{- else }}
+              value: {{ $.Values.global.s3.secretKey | quote }}
+            {{- end }}
+            {{- if eq $serviceName "orchestrator" }}
+            - name: EXTRACTOR_URL
+              value: "http://{{ include "keryx.fullname" $ }}-extractor:{{ $.Values.services.extractor.servicePort }}"
+            - name: DEWATERMARK_URL
+              value: "http://{{ include "keryx.fullname" $ }}-dewatermark:{{ $.Values.services.dewatermark.servicePort }}"
+            - name: VOICE_EXTRACTOR_URL
+              value: "http://{{ include "keryx.fullname" $ }}-voice-extractor:{{ $.Values.services.voice_extractor.servicePort }}"
+            - name: VIDEO_COMPOSER_URL
+              value: "http://{{ include "keryx.fullname" $ }}-video-composer:{{ $.Values.services.video_composer.servicePort }}"
+            - name: VIDEO_GENERATOR_URL
+              value: "http://{{ include "keryx.fullname" $ }}-video-generator:{{ $.Values.services.video_generator.servicePort }}"
+            - name: VOICE_CLONER_URL
+              value: "http://{{ include "keryx.fullname" $ }}-voice-cloner:{{ $.Values.services.voice_cloner.servicePort }}"
+            {{- end }}
+            {{- with $service.env }}
+            {{- range $name, $value := . }}
+            - name: {{ $name }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+          resources:
+            {{- if $service.resources }}
+            {{- toYaml $service.resources | nindent 12 }}
+            {{- else }}
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            {{- end }}
+          {{- if $service.persistence }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ $service.persistence.mountPath }}
+          {{- end }}
+      {{- with $.Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if $service.persistence }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "keryx.fullname" $ }}-{{ $serviceName }}
+      {{- end }}
+{{- end }}

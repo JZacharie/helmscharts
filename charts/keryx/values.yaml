@@ -1,0 +1,153 @@
+# Default values for keryx.
+# This is a YAML-formatted file.
+
+global:
+  s3:
+    endpoint: "https://minio-170-api.zacharie.org"
+    bucket: "keryx"
+    region: "us-east-1"
+    accessKey: "keryx"
+    secretKey: "REDACTED"
+    existingSecret: ""
+    existingSecretKey: "AWS_SECRET_ACCESS_KEY"
+  redis:
+    url: "redis://localhost:6379"
+    existingSecret: ""
+    existingSecretKey: "REDIS_URL"
+  image:
+    pullPolicy: Always
+    tag: "latest"
+  nodeSelector:
+    env: prd
+  tolerations:
+    - key: "special-node"
+      operator: "Equal"
+      value: "gpu"
+      effect: "NoSchedule"
+
+services:
+  orchestrator:
+    name: orchestrator
+    image: ghcr.io/jzacharie/keryx-orchestrator
+    containerPort: 3000
+    servicePort: 80
+    env:
+      RUST_LOG: "info"
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 4Gi
+      requests:
+        cpu: 500m
+        memory: 2Gi
+    ingress:
+      enabled: true
+      className: "traefik"
+      annotations:
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/name: "Keryx Orchestrator"
+        gethomepage.dev/group: "AI Pipeline"
+        gethomepage.dev/icon: "mdi-video-input-component"
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      hosts:
+        - host: keryx.p.zacharie.org
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - hosts:
+            - keryx.p.zacharie.org
+          secretName: tls-zacharie-org
+
+  frontend:
+    name: frontend
+    image: ghcr.io/jzacharie/keryx-frontend
+    containerPort: 3000
+    servicePort: 80
+    env:
+      NEXT_PUBLIC_API_URL: "https://keryx.p.zacharie.org"
+    ingress:
+      enabled: true
+      className: "traefik"
+      hosts:
+        - host: keryx-app.p.zacharie.org
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - hosts:
+            - keryx-app.p.zacharie.org
+          secretName: tls-zacharie-org
+
+  diffusion-engine:
+    name: diffusion-engine
+    image: ghcr.io/jzacharie/keryx-diffusion-engine
+    containerPort: 8000
+    servicePort: 8000
+    gpu: true
+    resources:
+      limits:
+        nvidia.com/gpu: 1
+        memory: 16Gi
+    env:
+      MODEL_ID: "stabilityai/sdxl-turbo"
+
+  extractor:
+    name: extractor
+    image: ghcr.io/jzacharie/keryx-extractor
+    containerPort: 8010
+    servicePort: 8010
+
+  dewatermark:
+    name: dewatermark
+    image: ghcr.io/jzacharie/keryx-dewatermark
+    containerPort: 8011
+    servicePort: 8011
+    gpu: true
+    resources:
+      limits:
+        nvidia.com/gpu: 1
+
+  voice-extractor:
+    name: voice-extractor
+    image: ghcr.io/jzacharie/keryx-voice-extractor
+    containerPort: 8012
+    servicePort: 8012
+    env:
+      OLLAMA_URL: "http://ollama.ai.svc.cluster.local:11434"
+
+  video-composer:
+    name: video-composer
+    image: ghcr.io/jzacharie/keryx-video-composer
+    containerPort: 8013
+    servicePort: 8013
+
+  video-generator:
+    name: video-generator
+    image: ghcr.io/jzacharie/keryx-video-generator
+    containerPort: 8014
+    servicePort: 8014
+    gpu: true
+    resources:
+      limits:
+        nvidia.com/gpu: 1
+
+  voice-cloner:
+    name: voice-cloner
+    image: ghcr.io/jzacharie/keryx-voice-cloner
+    containerPort: 9880
+    servicePort: 9880
+    gpu: true
+    resources:
+      limits:
+        nvidia.com/gpu: 1
+    persistence:
+      enabled: true
+      size: 10Gi
+      mountPath: /root/.local/share/tts
+
+  pptx-builder:
+    name: pptx-builder
+    image: ghcr.io/jzacharie/keryx-pptx-builder
+    containerPort: 8002
+    servicePort: 8002
