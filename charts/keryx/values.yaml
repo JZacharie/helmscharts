@@ -26,9 +26,9 @@ global:
       effect: "NoSchedule"
 
 services:
-  orchestrator:
-    name: orchestrator
-    image: ghcr.io/jzacharie/keryx-orchestrator
+  ingestor:
+    name: ingestor
+    image: ghcr.io/jzacharie/keryx-ingestor
     containerPort: 3000
     servicePort: 80
     env:
@@ -45,18 +45,18 @@ services:
       className: "traefik"
       annotations:
         gethomepage.dev/enabled: "true"
-        gethomepage.dev/name: "Keryx Orchestrator"
+        gethomepage.dev/name: "Keryx Ingestor"
         gethomepage.dev/group: "AI Pipeline"
         gethomepage.dev/icon: "mdi-video-input-component"
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
       hosts:
-        - host: keryx.p.zacharie.org
+        - host: ingestor.p.zacharie.org
           paths:
             - path: /
               pathType: Prefix
       tls:
         - hosts:
-            - keryx.p.zacharie.org
+            - ingestor.p.zacharie.org
           secretName: tls-zacharie-org
 
   frontend:
@@ -65,7 +65,7 @@ services:
     containerPort: 3000
     servicePort: 80
     env:
-      NEXT_PUBLIC_API_URL: "https://keryx.p.zacharie.org"
+      NEXT_PUBLIC_API_URL: "https://ingestor.p.zacharie.org"
     ingress:
       enabled: true
       className: "traefik"
