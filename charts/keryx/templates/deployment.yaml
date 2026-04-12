@@ -39,7 +39,7 @@ spec:
           imagePullPolicy: {{ $.Values.global.image.pullPolicy }}
           envFrom:
             - secretRef:
-                name: {{ include "keryx.fullname" $ }}-secrets
+                name: keryx-secrets
           ports:
             - name: http
               containerPort: {{ $service.containerPort }}
