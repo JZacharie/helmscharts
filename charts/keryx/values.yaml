@@ -49,6 +49,7 @@ services:
         gethomepage.dev/group: "AI Pipeline"
         gethomepage.dev/icon: "mdi-video-input-component"
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.middlewares: default-cors-middleware@kubernetescrd
       hosts:
         - host: ingestor.p.zacharie.org
           paths:
