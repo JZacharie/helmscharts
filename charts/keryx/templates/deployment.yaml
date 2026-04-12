@@ -37,6 +37,9 @@ spec:
         - name: {{ $serviceName }}
           image: "{{ $service.image }}:{{ default $.Values.global.image.tag $service.imageTag }}"
           imagePullPolicy: {{ $.Values.global.image.pullPolicy }}
+          envFrom:
+            - secretRef:
+                name: {{ include "keryx.fullname" $ }}-secrets
           ports:
             - name: http
               containerPort: {{ $service.containerPort }}
