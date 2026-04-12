@@ -12,6 +12,9 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  {{- if $service.persistence.storageClass }}
+  storageClassName: {{ $service.persistence.storageClass }}
+  {{- end }}
   resources:
     requests:
       storage: {{ $service.persistence.size }}
