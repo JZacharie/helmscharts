@@ -19,6 +19,9 @@ spec:
         {{- include "keryx.selectorLabels" $ | nindent 8 }}
         app.kubernetes.io/component: {{ $serviceName }}
     spec:
+      {{- if eq $serviceName "ingestor" }}
+      serviceAccountName: {{ include "keryx.fullname" $ }}-orchestrator-sa
+      {{- end }}
       {{- with $.Values.global.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
