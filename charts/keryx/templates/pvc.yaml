@@ -1,0 +1,20 @@
+{{- range $serviceName, $service := .Values.services }}
+{{- if $service.persistence }}
+{{- if $service.persistence.enabled }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "keryx.fullname" $ }}-{{ $serviceName }}
+  labels:
+    {{- include "keryx.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $serviceName }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ $service.persistence.size }}
+{{- end }}
+{{- end }}
+{{- end }}
