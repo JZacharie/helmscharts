@@ -26,6 +26,10 @@ spec:
       {{- if $service.gpu }}
       runtimeClassName: {{ default "nvidia" $service.runtimeClassName }}
       {{- end }}
+      securityContext:
+        runAsNonRoot: {{ if $service.securityContext }}{{ default true $service.securityContext.runAsNonRoot }}{{ else }}true{{ end }}
+        runAsUser: {{ if $service.securityContext }}{{ default 1000 $service.securityContext.runAsUser }}{{ else }}1000{{ end }}
+        runAsGroup: {{ if $service.securityContext }}{{ default 1000 $service.securityContext.runAsGroup }}{{ else }}1000{{ end }}
       containers:
         - name: {{ $serviceName }}
           image: "{{ $service.image }}:{{ default $.Values.global.image.tag $service.imageTag }}"
@@ -61,7 +65,7 @@ spec:
             {{- else }}
               value: {{ $.Values.global.s3.secretKey | quote }}
             {{- end }}
-            {{- if eq $serviceName "orchestrator" }}
+            {{- if eq $serviceName "ingestor" }}
             - name: EXTRACTOR_URL
               value: "http://{{ include "keryx.fullname" $ }}-extractor:{{ $.Values.services.extractor.servicePort | default 80 }}"
             - name: DEWATERMARK_URL
@@ -71,7 +75,7 @@ spec:
             - name: VIDEO_COMPOSER_URL
               value: "http://{{ include "keryx.fullname" $ }}-video-composer:{{ (index $.Values.services "video-composer").servicePort | default 80 }}"
             - name: VIDEO_GENERATOR_URL
-              value: "http://{{ include "keryx.fullname" $ }}-video-generator:{{ (index $.Values.services "video-generator").servicePort | default 80 }}"
+              value: "http://{{ include "keryx.fullname" $ }}-wan2gp:{{ (index $.Values.services "wan2gp").servicePort | default 80 }}"
             - name: VOICE_CLONER_URL
               value: "http://{{ include "keryx.fullname" $ }}-voice-cloner:{{ (index $.Values.services "voice-cloner").servicePort | default 80 }}"
             {{- end }}
@@ -81,6 +85,10 @@ spec:
               value: {{ $value | quote }}
             {{- end }}
             {{- end }}
+          securityContext:
+            runAsNonRoot: {{ if $service.securityContext }}{{ default true $service.securityContext.runAsNonRoot }}{{ else }}true{{ end }}
+            runAsUser: {{ if $service.securityContext }}{{ default 1000 $service.securityContext.runAsUser }}{{ else }}1000{{ end }}
+            allowPrivilegeEscalation: false
           resources:
             {{- if $service.resources }}
             {{- toYaml $service.resources | nindent 12 }}
