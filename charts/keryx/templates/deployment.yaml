@@ -8,7 +8,7 @@ metadata:
     {{- include "keryx.labels" $ | nindent 4 }}
     app.kubernetes.io/component: {{ $serviceName }}
 spec:
-  replicas: {{ default 1 $service.replicaCount }}
+  replicas: {{ if or (eq $service.replicaCount 0) $service.replicaCount }}{{ $service.replicaCount }}{{ else }}1{{ end }}
   selector:
     matchLabels:
       {{- include "keryx.selectorLabels" $ | nindent 6 }}
