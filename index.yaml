@@ -2236,6 +2236,21 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/keda-waiting-page-0.1.0.tgz
     version: 0.1.0
+  keryx:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-04-12T11:08:21.882573056Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: 0.5.2-rc
+    description: A unified Helm chart for Keryx Distributed Video Orchestration
+    digest: 1a676c9073f58ef9ae1a0ca38feaa970392f9b09f7e3b2ac59e69a6a53a974d4
+    name: keryx
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/keryx-0.1.0/keryx-0.1.0.tgz
+    version: 0.1.0
   kusanagi:
   - apiVersion: v2
     appVersion: 0.3.11
@@ -3621,4 +3636,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-04-12T07:43:22.757964554Z"
+generated: "2026-04-12T11:08:21.882867793Z"
