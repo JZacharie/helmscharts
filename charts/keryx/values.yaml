@@ -105,7 +105,7 @@ services:
   extractor:
     name: extractor
     image: ghcr.io/jzacharie/keryx-extractor
-    containerPort: 8010
+    containerPort: 8000
     servicePort: 8000
     resources:
       limits:
