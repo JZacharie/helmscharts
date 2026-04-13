@@ -105,6 +105,7 @@ spec:
                 secretKeyRef:
                   name: {{ $.Values.global.otel.existingSecret }}
                   key: {{ $.Values.global.otel.authTokenKey }}
+                  optional: true
             {{- end }}
           securityContext:
             runAsNonRoot: {{ if $service.securityContext }}{{ default true $service.securityContext.runAsNonRoot }}{{ else }}true{{ end }}
