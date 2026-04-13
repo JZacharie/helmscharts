@@ -19,7 +19,7 @@ spec:
         {{- include "keryx.selectorLabels" $ | nindent 8 }}
         app.kubernetes.io/component: {{ $serviceName }}
     spec:
-      {{- if eq $serviceName "ingestor" }}
+      {{- if eq $serviceName "orchestrator" }}
       serviceAccountName: {{ include "keryx.fullname" $ }}-orchestrator-sa
       {{- end }}
       {{- with $.Values.global.imagePullSecrets }}
@@ -71,7 +71,7 @@ spec:
             {{- else }}
               value: {{ $.Values.global.s3.secretKey | quote }}
             {{- end }}
-            {{- if eq $serviceName "ingestor" }}
+            {{- if eq $serviceName "orchestrator" }}
             - name: EXTRACTOR_URL
               value: "http://{{ include "keryx.fullname" $ }}-extractor:{{ $.Values.services.extractor.servicePort | default 8000 }}"
             - name: DEWATERMARK_URL
