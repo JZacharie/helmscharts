@@ -30,7 +30,7 @@ services:
     name: ingestor
     image: ghcr.io/jzacharie/keryx-ingestor
     containerPort: 3000
-    servicePort: 80
+    servicePort: 8000
     env:
       RUST_LOG: "info"
     resources:
@@ -64,7 +64,7 @@ services:
     name: frontend
     image: ghcr.io/jzacharie/keryx-frontend
     containerPort: 3000
-    servicePort: 80
+    servicePort: 8000
     env:
       NEXT_PUBLIC_API_URL: "https://ingestor.p.zacharie.org"
     ingress:
@@ -97,7 +97,7 @@ services:
     name: extractor
     image: ghcr.io/jzacharie/keryx-extractor
     containerPort: 8010
-    servicePort: 8010
+    servicePort: 8000
     resources:
       limits:
         cpu: 1000m
@@ -110,7 +110,7 @@ services:
     name: dewatermark
     image: ghcr.io/jzacharie/keryx-dewatermark
     containerPort: 8011
-    servicePort: 8011
+    servicePort: 8000
     gpu: true
     resources:
       limits:
@@ -125,7 +125,7 @@ services:
     name: voice-extractor
     image: ghcr.io/jzacharie/keryx-voice-extractor
     containerPort: 8012
-    servicePort: 8012
+    servicePort: 8000
     env:
       OLLAMA_URL: "http://ollama.ai.svc.cluster.local:11434"
     resources:
@@ -140,7 +140,7 @@ services:
     name: video-composer
     image: ghcr.io/jzacharie/keryx-video-composer
     containerPort: 8013
-    servicePort: 8013
+    servicePort: 8000
     resources:
       limits:
         cpu: 1000m
@@ -153,7 +153,7 @@ services:
     name: wan2gp
     image: ghcr.io/jzacharie/keryx-wan2gp
     containerPort: 8014
-    servicePort: 8014
+    servicePort: 8000
     gpu: true
     resources:
       limits:
@@ -168,7 +168,7 @@ services:
     name: voice-cloner
     image: ghcr.io/jzacharie/keryx-voice-cloner
     containerPort: 9880
-    servicePort: 9880
+    servicePort: 8000
     gpu: true
     resources:
       limits:
@@ -187,7 +187,7 @@ services:
     name: pptx-builder
     image: ghcr.io/jzacharie/keryx-pptx-builder
     containerPort: 8002
-    servicePort: 8002
+    servicePort: 8000
     resources:
       limits:
         cpu: 1000m
