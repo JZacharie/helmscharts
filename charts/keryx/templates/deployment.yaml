@@ -122,6 +122,20 @@ spec:
               cpu: 100m
               memory: 256Mi
             {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: {{ default 5 $service.readinessInitialDelay }}
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: {{ default 15 $service.livenessInitialDelay }}
+            periodSeconds: 20
+            failureThreshold: 5
           {{- if $service.persistence }}
           volumeMounts:
             - name: data
