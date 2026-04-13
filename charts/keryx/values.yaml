@@ -118,7 +118,7 @@ services:
   dewatermark:
     name: dewatermark
     image: ghcr.io/jzacharie/keryx-dewatermark
-    containerPort: 8011
+    containerPort: 8000
     servicePort: 8000
     gpu: true
     resources:
@@ -133,7 +133,7 @@ services:
   voice-extractor:
     name: voice-extractor
     image: ghcr.io/jzacharie/keryx-voice-extractor
-    containerPort: 8012
+    containerPort: 8000
     servicePort: 8000
     env:
       OLLAMA_URL: "http://ollama.ai.svc.cluster.local:11434"
@@ -148,7 +148,7 @@ services:
   video-composer:
     name: video-composer
     image: ghcr.io/jzacharie/keryx-video-composer
-    containerPort: 8013
+    containerPort: 8000
     servicePort: 8000
     resources:
       limits:
@@ -161,7 +161,7 @@ services:
   wan2gp:
     name: wan2gp
     image: ghcr.io/jzacharie/keryx-wan2gp
-    containerPort: 8014
+    containerPort: 8000
     servicePort: 8000
     gpu: true
     resources:
@@ -176,7 +176,7 @@ services:
   voice-cloner:
     name: voice-cloner
     image: ghcr.io/jzacharie/keryx-voice-cloner
-    containerPort: 9880
+    containerPort: 8000
     servicePort: 8000
     gpu: true
     resources:
@@ -195,7 +195,7 @@ services:
   pptx-builder:
     name: pptx-builder
     image: ghcr.io/jzacharie/keryx-pptx-builder
-    containerPort: 8002
+    containerPort: 8000
     servicePort: 8000
     resources:
       limits:
