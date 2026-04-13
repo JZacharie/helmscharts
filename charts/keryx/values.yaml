@@ -25,6 +25,15 @@ global:
       value: "gpu"
       effect: "NoSchedule"
 
+  # OpenTelemetry — APM + Service Map → OpenObserve
+  otel:
+    enabled: true
+    # Endpoint OTLP/gRPC d'OpenObserve (port 5081)
+    endpoint: "http://openobserve.monitoring.svc.cluster.local:5081"
+    # Secret Kubernetes contenant OTEL_AUTH_TOKEN (Basic base64)
+    existingSecret: "keryx-secrets"
+    authTokenKey: "OTEL_AUTH_TOKEN"
+
 services:
   orchestrator:
     name: orchestrator

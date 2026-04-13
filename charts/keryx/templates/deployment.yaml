@@ -95,6 +95,17 @@ spec:
               {{- end }}
             {{- end }}
             {{- end }}
+            {{- if $.Values.global.otel.enabled }}
+            - name: OTEL_ENDPOINT
+              value: {{ $.Values.global.otel.endpoint | quote }}
+            - name: OTEL_SERVICE_NAME
+              value: {{ printf "keryx-%s" $serviceName | quote }}
+            - name: OTEL_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.global.otel.existingSecret }}
+                  key: {{ $.Values.global.otel.authTokenKey }}
+            {{- end }}
           securityContext:
             runAsNonRoot: {{ if $service.securityContext }}{{ default true $service.securityContext.runAsNonRoot }}{{ else }}true{{ end }}
             runAsUser: {{ if $service.securityContext }}{{ default 1000 $service.securityContext.runAsUser }}{{ else }}1000{{ end }}
