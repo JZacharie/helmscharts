@@ -73,17 +73,17 @@ spec:
             {{- end }}
             {{- if eq $serviceName "ingestor" }}
             - name: EXTRACTOR_URL
-              value: "http://{{ include "keryx.fullname" $ }}-extractor:{{ $.Values.services.extractor.servicePort | default 80 }}"
+              value: "http://{{ include "keryx.fullname" $ }}-extractor:{{ $.Values.services.extractor.servicePort | default 8000 }}"
             - name: DEWATERMARK_URL
-              value: "http://{{ include "keryx.fullname" $ }}-dewatermark:{{ $.Values.services.dewatermark.servicePort | default 80 }}"
+              value: "http://{{ include "keryx.fullname" $ }}-dewatermark:{{ $.Values.services.dewatermark.servicePort | default 8000 }}"
             - name: VOICE_EXTRACTOR_URL
-              value: "http://{{ include "keryx.fullname" $ }}-voice-extractor:{{ (index $.Values.services "voice-extractor").servicePort | default 80 }}"
+              value: "http://{{ include "keryx.fullname" $ }}-voice-extractor:{{ (index $.Values.services "voice-extractor").servicePort | default 8000 }}"
             - name: VIDEO_COMPOSER_URL
-              value: "http://{{ include "keryx.fullname" $ }}-video-composer:{{ (index $.Values.services "video-composer").servicePort | default 80 }}"
+              value: "http://{{ include "keryx.fullname" $ }}-video-composer:{{ (index $.Values.services "video-composer").servicePort | default 8000 }}"
             - name: VIDEO_GENERATOR_URL
-              value: "http://{{ include "keryx.fullname" $ }}-wan2gp:{{ (index $.Values.services "wan2gp").servicePort | default 80 }}"
+              value: "http://{{ include "keryx.fullname" $ }}-wan2gp:{{ (index $.Values.services "wan2gp").servicePort | default 8000 }}"
             - name: VOICE_CLONER_URL
-              value: "http://{{ include "keryx.fullname" $ }}-voice-cloner:{{ (index $.Values.services "voice-cloner").servicePort | default 80 }}"
+              value: "http://{{ include "keryx.fullname" $ }}-voice-cloner:{{ (index $.Values.services "voice-cloner").servicePort | default 8000 }}"
             {{- end }}
             {{- with $service.env }}
             {{- range $name, $value := . }}
