@@ -98,6 +98,13 @@ services:
     image: ghcr.io/jzacharie/keryx-extractor
     containerPort: 8010
     servicePort: 8010
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 4Gi
+      requests:
+        cpu: 500m
+        memory: 2Gi
 
   dewatermark:
     name: dewatermark
@@ -108,6 +115,11 @@ services:
     resources:
       limits:
         nvidia.com/gpu: 1
+        cpu: 2000m
+        memory: 8Gi
+      requests:
+        cpu: 1000m
+        memory: 4Gi
 
   voice-extractor:
     name: voice-extractor
@@ -116,12 +128,26 @@ services:
     servicePort: 8012
     env:
       OLLAMA_URL: "http://ollama.ai.svc.cluster.local:11434"
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 4Gi
+      requests:
+        cpu: 500m
+        memory: 2Gi
 
   video-composer:
     name: video-composer
     image: ghcr.io/jzacharie/keryx-video-composer
     containerPort: 8013
     servicePort: 8013
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 4Gi
+      requests:
+        cpu: 500m
+        memory: 2Gi
 
   wan2gp:
     name: wan2gp
@@ -132,6 +158,11 @@ services:
     resources:
       limits:
         nvidia.com/gpu: 1
+        cpu: 2000m
+        memory: 16Gi
+      requests:
+        cpu: 1000m
+        memory: 8Gi
 
   voice-cloner:
     name: voice-cloner
@@ -142,6 +173,11 @@ services:
     resources:
       limits:
         nvidia.com/gpu: 1
+        cpu: 2000m
+        memory: 16Gi
+      requests:
+        cpu: 1000m
+        memory: 8Gi
     persistence:
       enabled: true
       size: 10Gi
@@ -152,3 +188,10 @@ services:
     image: ghcr.io/jzacharie/keryx-pptx-builder
     containerPort: 8002
     servicePort: 8002
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
