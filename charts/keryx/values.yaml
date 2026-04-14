@@ -8,7 +8,7 @@ global:
     region: "us-east-1"
     accessKey: "keryx"
     secretKey: "REDACTED"
-    existingSecret: ""
+    existingSecret: "keryx-secrets"
     existingSecretKey: "AWS_SECRET_ACCESS_KEY"
   redis:
     url: "redis://localhost:6379"
