@@ -6,7 +6,7 @@ global:
     endpoint: "https://minio-170-api.zacharie.org"
     bucket: "keryx"
     region: "us-east-1"
-    accessKey: "keryx"
+    accessKey: "keryx2"
     secretKey: "REDACTED"
     existingSecret: "keryx-secrets"
     existingSecretKey: "AWS_SECRET_ACCESS_KEY"
