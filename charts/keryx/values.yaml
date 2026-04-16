@@ -132,6 +132,7 @@ services:
     image: ghcr.io/jzacharie/keryx-voice-extractor
     containerPort: 8000
     servicePort: 8000
+    gpu: true
     env:
       OLLAMA_URL: "http://ollama.ai.svc.cluster.local:11434"
       WHISPER_CACHE_DIR: "/app/.cache/whisper"
