@@ -2239,6 +2239,20 @@ entries:
   keryx:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2026-04-16T04:36:46.433395189Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: 0.5.2-rc
+    description: A unified Helm chart for Keryx Distributed Video Orchestration
+    digest: 58a5cd5ede3a4261c19d741cdeb778b4d6d3f72064511cde9d0baaeb34e949b0
+    name: keryx
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/keryx-0.1.1/keryx-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2026-04-12T11:08:21.882573056Z"
     dependencies:
     - name: common
@@ -3636,4 +3650,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-04-12T11:08:21.882867793Z"
+generated: "2026-04-16T04:36:46.433704398Z"
