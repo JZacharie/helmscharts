@@ -134,6 +134,11 @@ services:
     servicePort: 8000
     env:
       OLLAMA_URL: "http://ollama.ai.svc.cluster.local:11434"
+      WHISPER_CACHE_DIR: "/app/.cache/whisper"
+    persistence:
+      enabled: true
+      size: 10Gi
+      mountPath: /app/.cache/whisper
     resources:
       limits:
         cpu: 1000m
