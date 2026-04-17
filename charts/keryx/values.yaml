@@ -154,7 +154,7 @@ services:
   video-composer:
     name: video-composer
     image: ghcr.io/jzacharie/keryx-video-composer
-    containerPort: 8013
+    containerPort: 8000
     servicePort: 8000
     resources:
       limits:
