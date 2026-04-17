@@ -117,10 +117,9 @@ services:
     image: ghcr.io/jzacharie/keryx-dewatermark
     containerPort: 8000
     servicePort: 8000
-    gpu: true
+    gpu: false
     resources:
       limits:
-        nvidia.com/gpu: 1
         cpu: 2000m
         memory: 8Gi
       requests:
@@ -181,10 +180,9 @@ services:
     image: ghcr.io/jzacharie/keryx-voice-cloner
     containerPort: 8000
     servicePort: 8000
-    gpu: true
+    gpu: false
     resources:
       limits:
-        nvidia.com/gpu: 1
         cpu: 2000m
         memory: 16Gi
       requests:
