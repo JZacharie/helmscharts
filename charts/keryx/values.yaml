@@ -6,13 +6,10 @@ global:
     endpoint: "https://minio-170-api.zacharie.org"
     bucket: "keryx"
     region: "us-east-1"
-    accessKey: "keryx"
-    secretKey: "REDACTED"
-    existingSecret: ""
-    existingSecretKey: "AWS_SECRET_ACCESS_KEY"
+    existingSecret: "keryx-secrets"
   redis:
     url: "redis://localhost:6379"
-    existingSecret: ""
+    existingSecret: "keryx-secrets"
     existingSecretKey: "REDIS_URL"
   image:
     pullPolicy: Always
@@ -121,9 +118,11 @@ services:
     containerPort: 8000
     servicePort: 8000
     gpu: true
+    env:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility,video
     resources:
       limits:
-        nvidia.com/gpu: 1
         cpu: 2000m
         memory: 8Gi
       requests:
@@ -135,15 +134,22 @@ services:
     image: ghcr.io/jzacharie/keryx-voice-extractor
     containerPort: 8000
     servicePort: 8000
+    gpu: true
     env:
       OLLAMA_URL: "http://ollama.ai.svc.cluster.local:11434"
+      WHISPER_CACHE_DIR: "/app/.cache/whisper"
+      WHISPER_MODEL: "medium"
+    persistence:
+      enabled: true
+      size: 10Gi
+      mountPath: /app/.cache/whisper
     resources:
       limits:
+        cpu: 2000m
+        memory: 8Gi
+      requests:
         cpu: 1000m
         memory: 4Gi
-      requests:
-        cpu: 500m
-        memory: 2Gi
 
   video-composer:
     name: video-composer
@@ -179,9 +185,11 @@ services:
     containerPort: 8000
     servicePort: 8000
     gpu: true
+    env:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility,video
     resources:
       limits:
-        nvidia.com/gpu: 1
         cpu: 2000m
         memory: 16Gi
       requests:
