@@ -40,8 +40,7 @@ spec:
             - secretRef:
                 name: keryx-secrets
           ports:
-            - name: http
-              containerPort: {{ $service.containerPort }}
+            - containerPort: {{ $service.containerPort }}
               protocol: TCP
           env:
 
@@ -100,14 +99,14 @@ spec:
           readinessProbe:
             httpGet:
               path: /health
-              port: http
+              port: {{ $service.containerPort }}
             initialDelaySeconds: {{ default 5 $service.readinessInitialDelay }}
             periodSeconds: 10
             failureThreshold: 3
           livenessProbe:
             httpGet:
               path: /health
-              port: http
+              port: {{ $service.containerPort }}
             initialDelaySeconds: {{ default 15 $service.livenessInitialDelay }}
             periodSeconds: 20
             failureThreshold: 5
