@@ -11,7 +11,7 @@ spec:
   type: ClusterIP
   ports:
     - port: {{ $service.servicePort }}
-      targetPort: http
+      targetPort: {{ $service.containerPort }}
       protocol: TCP
       name: http
   selector:
