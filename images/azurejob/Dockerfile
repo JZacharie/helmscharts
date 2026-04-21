@@ -28,6 +28,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get install -y --no-install-recommends \
         azure-cli=2.74.0-1~bookworm \
         bash \
+        btop \
         coreutils \
         findutils \
         gawk \
@@ -40,7 +41,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         sed \
         tar \
         tzdata \
-        util-linux; \
+        util-linux \
+        zip \
+        unzip; \
     apt-mark hold azure-cli
 
 # Install azcopy
@@ -59,7 +62,7 @@ RUN set -eux; \
     chown -R appuser:appuser /work /home/appuser
 
 # Quick sanity check of mandatory commands.
-RUN bash -lc 'for cmd in bash az azcopy awk find du grep sed sort tail head wc tr python3 pip3; do command -v "$cmd" >/dev/null || exit 1; done'
+RUN bash -lc 'for cmd in bash az azcopy awk find du grep sed sort tail head wc tr python3 pip3 btop zip unzip; do command -v "$cmd" >/dev/null || exit 1; done'
 
 ENV HOME=/home/appuser
 WORKDIR /work
