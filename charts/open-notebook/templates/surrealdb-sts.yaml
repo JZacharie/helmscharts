@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "open-notebook.fullname" . }}-surrealdb
+  labels:
+    app.kubernetes.io/component: surrealdb
+    {{- include "open-notebook.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "open-notebook.fullname" . }}-surrealdb
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: surrealdb
+      {{- include "open-notebook.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: surrealdb
+        {{- include "open-notebook.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: surrealdb
+          image: "{{ .Values.surrealdb.image.repository }}:{{ .Values.surrealdb.image.tag }}"
+          imagePullPolicy: {{ .Values.surrealdb.image.pullPolicy }}
+          command:
+            - /surreal
+            - start
+            - --log
+            - info
+            - --user
+            - {{ .Values.surrealdb.auth.user | quote }}
+            - --pass
+            - {{ .Values.surrealdb.auth.pass | quote }}
+            - rocksdb:/mydata/mydatabase.db
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /mydata
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        {{- if .Values.surrealdb.persistence.storageClass }}
+        storageClassName: {{ .Values.surrealdb.persistence.storageClass | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.surrealdb.persistence.size }}

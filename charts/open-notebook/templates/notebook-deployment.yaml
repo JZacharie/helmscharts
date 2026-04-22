@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "open-notebook.fullname" . }}
+  labels:
+    app.kubernetes.io/component: notebook
+    {{- include "open-notebook.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: notebook
+      {{- include "open-notebook.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: notebook
+        {{- include "open-notebook.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: notebook
+          image: "{{ .Values.openNotebook.image.repository }}:{{ .Values.openNotebook.image.tag }}"
+          imagePullPolicy: {{ .Values.openNotebook.image.pullPolicy }}
+          {{- if .Values.openNotebook.existingSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.openNotebook.existingSecret }}
+          {{- end }}
+          env:
+            {{- if not .Values.openNotebook.existingSecret }}
+            - name: OPEN_NOTEBOOK_ENCRYPTION_KEY
+              value: {{ .Values.openNotebook.encryptionKey | quote }}
+            {{- end }}
+            - name: SURREAL_URL
+              value: "ws://{{ include "open-notebook.fullname" . }}-surrealdb:{{ .Values.surrealdb.service.port }}/rpc"
+            - name: SURREAL_USER
+              value: {{ .Values.surrealdb.auth.user | quote }}
+            - name: SURREAL_PASSWORD
+              value: {{ .Values.surrealdb.auth.pass | quote }}
+            - name: SURREAL_NAMESPACE
+              value: "open_notebook"
+            - name: SURREAL_DATABASE
+              value: "open_notebook"
+          ports:
+            - name: http
+              containerPort: {{ .Values.openNotebook.service.ports.http }}
+              protocol: TCP
+            - name: api
+              containerPort: {{ .Values.openNotebook.service.ports.api }}
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+      volumes:
+        - name: data
+          {{- if .Values.openNotebook.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "open-notebook.fullname" . }}-notebook-data
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
