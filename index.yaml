@@ -2640,6 +2640,17 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/maker-management-platform-0.1.0.tgz
     version: 0.1.0
+  open-notebook:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-04-22T15:16:47.660767846Z"
+    description: A Helm chart for Open Notebook with SurrealDB
+    digest: c85945cf550a7c68b693710e564074de201cd3cd6f3483f9f7806cc24e41a8f5
+    name: open-notebook
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/open-notebook-0.1.0/open-notebook-0.1.0.tgz
+    version: 0.1.0
   openai-whisper-asr-webservice:
   - apiVersion: v2
     appVersion: 1.7.0
@@ -3741,4 +3752,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-04-22T12:46:34.731684704Z"
+generated: "2026-04-22T15:16:47.661060903Z"
