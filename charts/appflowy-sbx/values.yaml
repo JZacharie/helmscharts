@@ -19,7 +19,7 @@ database:
 
 # Redis configuration (external Redis)
 redis:
-  uri: "redis://:f35be7e8d52bf5d7dedd9929673467e8a8454e7221335262d20ad81430c7a2da@redis.redis.svc:6379"
+  uri: "redis://:f35be7e8d52bf5d7dedd9929673467e8a8454e7221335262d20ad81430c7a2da@dragonfly.dragonfly.svc.cluster.local:6379"
 
 # S3/MinIO configuration (external MinIO at 192.168.0.170:9010)
 s3:
