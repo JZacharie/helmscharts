@@ -137,6 +137,12 @@ spec:
         - name: nginx-config
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
+        - name: cache
+          mountPath: /var/cache/nginx
+        - name: run
+          mountPath: /var/run
+        - name: tmp
+          mountPath: /tmp
         {{- with .Values.proxy.resources }}
         resources:
           {{- toYaml . | nindent 10 }}
@@ -145,6 +151,12 @@ spec:
       - name: nginx-config
         configMap:
           name: {{ include "appflowy-sbx.fullname" . }}-nginx-config
+      - name: cache
+        emptyDir: {}
+      - name: run
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
 {{- end }}
 ---
 {{- if .Values.proxy.enabled }}
