@@ -22,8 +22,16 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - name: gotrue
+        {{- with .Values.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         image: "{{ .Values.gotrue.image.repository }}:{{ .Values.gotrue.image.tag }}"
         imagePullPolicy: {{ .Values.gotrue.image.pullPolicy }}
         ports:

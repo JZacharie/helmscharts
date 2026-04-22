@@ -170,6 +170,23 @@ setupJob:
   backoffLimit: 5
   resources: {}
 
+# Pod security context
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+
+# Container security context
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  runAsUser: 1000
+
 # Node selector for all pods
 nodeSelector:
   proxmox: aquabot
