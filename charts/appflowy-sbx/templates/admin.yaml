@@ -30,7 +30,7 @@ spec:
       - name: copy-app-files
         image: "{{ .Values.admin.image.repository }}:{{ .Values.admin.image.tag }}"
         imagePullPolicy: {{ .Values.admin.image.pullPolicy }}
-        command: ['sh', '-c', 'cp -a /app/apps/super/* /app-writable/']
+        command: ['sh', '-c', 'cp -a /app/. /app-writable/']
         securityContext:
           {{- toYaml .Values.securityContext | nindent 10 }}
         volumeMounts:
@@ -55,7 +55,7 @@ spec:
             value: {{ .Values.baseUrl | quote }}
         volumeMounts:
         - name: app-writable
-          mountPath: /app/apps/super
+          mountPath: /app
         {{- with .Values.admin.resources }}
         resources:
           {{- toYaml . | nindent 10 }}
