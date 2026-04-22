@@ -2239,6 +2239,20 @@ entries:
   keryx:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2026-04-22T12:23:44.133080201Z"
+    dependencies:
+    - name: common
+      repository: file://../common
+      version: 0.5.2-rc
+    description: A unified Helm chart for Keryx Distributed Video Orchestration
+    digest: 2b48bae36021ae595fb9b35c0d1bd11a23a559d5d89e924d91f541d7d424b8cb
+    name: keryx
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/keryx-0.1.2/keryx-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2026-04-16T04:36:46.433395189Z"
     dependencies:
     - name: common
@@ -3161,6 +3175,21 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/openobserve-collector-0.4.1-custom/openobserve-collector-0.4.1-custom.tgz
     version: 0.4.1-custom
+  - apiVersion: v2
+    appVersion: 0.136.0
+    created: "2026-04-22T12:23:44.26684681Z"
+    description: An opinionated installation of OTEL Collector for OpenObserve (forked
+      with custom env support)
+    digest: 091901c338f5610915a17d8bba21dc522415291e3cb008b462cb50725bbad2f4
+    maintainers:
+    - email: hello@openobserve.ai
+      name: OpenObserve
+      url: https://openobserve.ai
+    name: openobserve-collector
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/openobserve-collector-0.4.1-custom/openobserve-collector-0.4.1-custom.tgz
+    version: 0.4.1-custom
   opentext-loadrunner:
   - apiVersion: v2
     appVersion: "2024.1"
@@ -3695,4 +3724,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-04-22T04:44:37.438015212Z"
+generated: "2026-04-22T12:23:44.408327867Z"
