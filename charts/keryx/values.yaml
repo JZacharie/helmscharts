@@ -24,9 +24,9 @@ global:
 
   # OpenTelemetry — APM + Service Map → OpenObserve
   otel:
-    enabled: false
+    enabled: true
     # Endpoint OTLP/gRPC d'OpenObserve (port 5081)
-    endpoint: "http://openobserve.monitoring.svc.cluster.local:5081"
+    endpoint: "http://o2-openobserve-router.openobserve.svc:5080"
     # Secret Kubernetes contenant OTEL_AUTH_TOKEN (Basic base64)
     existingSecret: "keryx-secrets"
     authTokenKey: "OTEL_AUTH_TOKEN"
