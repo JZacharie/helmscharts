@@ -17,6 +17,7 @@ spec:
       labels:
         {{- include "appflowy-sbx.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: cloud
+    spec:
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
