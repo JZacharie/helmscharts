@@ -21,6 +21,7 @@ openNotebook:
   encryptionKey: "change-me-to-a-secret-string"
   existingSecret: ""
   apiUrl: ""
+  ollamaApiBase: ""
   persistence:
     enabled: true
     size: 2Gi
