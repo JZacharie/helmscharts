@@ -17,7 +17,6 @@ spec:
       labels:
         {{- include "appflowy-sbx.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: cloud
-    spec:
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -55,7 +54,7 @@ spec:
           
           # Redis
           - name: APPFLOWY_REDIS_URI
-            value: {{ include "appflowy-sbx.redisUrl" . | quote }}
+            value: {{ .Values.redis.uri | quote }}
           
           # GoTrue/JWT
           - name: APPFLOWY_GOTRUE_JWT_SECRET

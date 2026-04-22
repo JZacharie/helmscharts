@@ -83,7 +83,7 @@ spec:
           
           # Redis
           - name: AI_REDIS_URL
-            value: {{ include "appflowy-sbx.redisUrl" . | quote }}
+            value: {{ .Values.redis.uri | quote }}
           
           # MinIO
           - name: AI_USE_MINIO
