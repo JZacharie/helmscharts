@@ -26,6 +26,16 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      initContainers:
+      - name: copy-app-files
+        image: "{{ .Values.admin.image.repository }}:{{ .Values.admin.image.tag }}"
+        imagePullPolicy: {{ .Values.admin.image.pullPolicy }}
+        command: ['sh', '-c', 'cp -a /app/apps/super/* /app-writable/']
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        volumeMounts:
+        - name: app-writable
+          mountPath: /app-writable
       containers:
       - name: admin
         {{- with .Values.securityContext }}
@@ -43,10 +53,16 @@ spec:
             value: "{{ .Values.baseUrl }}/gotrue"
           - name: APPFLOWY_BASE_URL
             value: {{ .Values.baseUrl | quote }}
+        volumeMounts:
+        - name: app-writable
+          mountPath: /app/apps/super
         {{- with .Values.admin.resources }}
         resources:
           {{- toYaml . | nindent 10 }}
         {{- end }}
+      volumes:
+      - name: app-writable
+        emptyDir: {}
 {{- end }}
 ---
 {{- if .Values.admin.enabled }}
