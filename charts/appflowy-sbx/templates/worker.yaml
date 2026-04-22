@@ -42,7 +42,7 @@ spec:
           
           # Redis
           - name: APPFLOWY_WORKER_REDIS_URL
-            value: {{ .Values.redis.uri | quote }}
+            value: {{ include "appflowy-sbx.redisUrl" . | quote }}
           - name: APPFLOWY_WORKER_ENVIRONMENT
             value: "production"
           

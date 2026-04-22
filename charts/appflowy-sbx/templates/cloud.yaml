@@ -55,7 +55,7 @@ spec:
           
           # Redis
           - name: APPFLOWY_REDIS_URI
-            value: {{ .Values.redis.uri | quote }}
+            value: {{ include "appflowy-sbx.redisUrl" . | quote }}
           
           # GoTrue/JWT
           - name: APPFLOWY_GOTRUE_JWT_SECRET
