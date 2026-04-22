@@ -27,8 +27,8 @@ Create the name of the secret to use
 {{- define "appflowy-sbx.secretName" -}}
 {{- if .Values.secret -}}
 {{- default (include "appflowy-sbx.fullname" .) .Values.secret.name }}
-{{- else if (index .Values "global" "secret") -}}
-{{- default (include "appflowy-sbx.fullname" .) (index .Values "global" "secret" "name") }}
+{{- else if and .Values.global (index .Values.global "secret") -}}
+{{- default (include "appflowy-sbx.fullname" .) (index .Values.global "secret" "name") }}
 {{- else -}}
 {{- printf "%s-secret" (include "appflowy-sbx.fullname" .) }}
 {{- end -}}
