@@ -31,6 +31,10 @@ spec:
             - name: OPEN_NOTEBOOK_ENCRYPTION_KEY
               value: {{ .Values.openNotebook.encryptionKey | quote }}
             {{- end }}
+            {{- if .Values.openNotebook.apiUrl }}
+            - name: API_URL
+              value: {{ .Values.openNotebook.apiUrl | quote }}
+            {{- end }}
             - name: SURREAL_URL
               value: "ws://{{ include "open-notebook.fullname" . }}-surrealdb:{{ .Values.surrealdb.service.port }}/rpc"
             - name: SURREAL_USER

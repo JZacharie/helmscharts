@@ -20,6 +20,7 @@ openNotebook:
     pullPolicy: IfNotPresent
   encryptionKey: "change-me-to-a-secret-string"
   existingSecret: ""
+  apiUrl: ""
   persistence:
     enabled: true
     size: 2Gi
