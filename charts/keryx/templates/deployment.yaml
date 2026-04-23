@@ -120,10 +120,12 @@ spec:
             - name: data
               mountPath: {{ $service.persistence.mountPath }}
           {{- end }}
-      {{- with $.Values.global.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- if $service.nodeSelector }}
+        {{- toYaml $service.nodeSelector | nindent 8 }}
+        {{- else if $.Values.global.nodeSelector }}
+        {{- toYaml $.Values.global.nodeSelector | nindent 8 }}
+        {{- end }}
       {{- with $.Values.global.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
