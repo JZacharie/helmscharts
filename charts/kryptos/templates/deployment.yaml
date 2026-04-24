@@ -44,6 +44,10 @@ spec:
             - name: certs
               mountPath: /app/certs
               readOnly: true
+            {{- if .Values.persistence.enabled }}
+            - name: db
+              mountPath: {{ .Values.persistence.mountPath | default "/database" }}
+            {{- end }}
           # livenessProbe:
           #   httpGet:
           #     path: /
@@ -73,6 +77,11 @@ spec:
             items:
               - key: {{ .Values.config.sealedSecrets.existingConfigMapKey | default "sealed-secrets.crt" }}
                 path: sealed-secrets.crt
+        {{- if .Values.persistence.enabled }}
+        - name: db
+          persistentVolumeClaim:
+            claimName: {{ include "kryptos.fullname" . }}-db
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
