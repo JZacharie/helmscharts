@@ -55,7 +55,7 @@ Create the name of the service account to use
 */}}
 {{- define "kryptos.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "kryptos.fullname" .) .Values.serviceAccount.name }}
+{{- default (printf "%s-sa" (include "kryptos.fullname" .)) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
