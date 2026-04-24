@@ -137,9 +137,11 @@ services:
     servicePort: 8000
     gpu: true
     env:
-      OLLAMA_URL: "http://ollama.ai.svc.cluster.local:11434"
+      OLLAMA_URL: "http://192.168.0.58:11434"
       WHISPER_CACHE_DIR: "/app/.cache/whisper"
       WHISPER_MODEL: "medium"
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility,video
     persistence:
       enabled: true
       size: 10Gi
@@ -157,6 +159,10 @@ services:
     image: ghcr.io/jzacharie/keryx-video-composer
     containerPort: 8000
     servicePort: 8000
+    gpu: true
+    env:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility,video
     resources:
       limits:
         cpu: 1000m
