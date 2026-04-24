@@ -66,6 +66,10 @@ spec:
               value: "http://{{ include "keryx.fullname" $ }}-video-generator:{{ (index $.Values.services "video-generator").servicePort | default 8000 }}"
             - name: VOICE_CLONER_URL
               value: "http://{{ include "keryx.fullname" $ }}-voice-cloner:{{ (index $.Values.services "voice-cloner").servicePort | default 8000 }}"
+            - name: DIFFUSION_URL
+              value: "http://{{ include "keryx.fullname" $ }}-diffusion-engine:{{ (index $.Values.services "diffusion-engine").servicePort | default 8000 }}"
+            - name: PPTX_URL
+              value: "http://{{ include "keryx.fullname" $ }}-pptx-builder:{{ (index $.Values.services "pptx-builder").servicePort | default 8000 }}"
             {{- end }}
             {{- with $service.env }}
             {{- range $name, $value := . }}
