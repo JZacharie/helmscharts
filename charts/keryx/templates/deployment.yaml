@@ -61,7 +61,7 @@ spec:
             - name: VIDEO_COMPOSER_URL
               value: "http://{{ include "keryx.fullname" $ }}-video-composer:{{ (index $.Values.services "video-composer").servicePort | default 8000 }}"
             - name: VIDEO_GENERATOR_URL
-              value: "http://{{ include "keryx.fullname" $ }}-video-generator:{{ (index $.Values.services "video-generator").servicePort | default 8000 }}"
+              value: "http://{{ include "keryx.fullname" $ }}-wan2gp:{{ (index $.Values.services "wan2gp").servicePort | default 8000 }}"
             - name: VOICE_CLONER_URL
               value: "http://{{ include "keryx.fullname" $ }}-voice-cloner:{{ (index $.Values.services "voice-cloner").servicePort | default 8000 }}"
             {{- end }}

@@ -164,8 +164,8 @@ services:
         cpu: 500m
         memory: 2Gi
 
-  video-generator:
-    name: video-generator
+  wan2gp:
+    name: wan2gp
     image: ghcr.io/jzacharie/keryx-wan2gp
     containerPort: 8000
     servicePort: 8000
