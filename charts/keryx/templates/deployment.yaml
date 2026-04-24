@@ -33,6 +33,7 @@ spec:
         runAsNonRoot: {{ if $service.securityContext }}{{ default true $service.securityContext.runAsNonRoot }}{{ else }}true{{ end }}
         runAsUser: {{ if $service.securityContext }}{{ default 1000 $service.securityContext.runAsUser }}{{ else }}1000{{ end }}
         runAsGroup: {{ if $service.securityContext }}{{ default 1000 $service.securityContext.runAsGroup }}{{ else }}1000{{ end }}
+        fsGroup: {{ if $service.securityContext }}{{ default 1000 $service.securityContext.fsGroup }}{{ else }}1000{{ end }}
       containers:
         - name: {{ $serviceName }}
           image: "{{ $service.image }}:{{ default $.Values.global.image.tag $service.imageTag }}"

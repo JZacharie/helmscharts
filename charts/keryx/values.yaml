@@ -97,6 +97,8 @@ services:
         memory: 16Gi
     env:
       MODEL_ID: "stabilityai/sdxl-turbo"
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility,video
 
   extractor:
     name: extractor
@@ -169,6 +171,9 @@ services:
     containerPort: 8000
     servicePort: 8000
     gpu: true
+    env:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility,video
     resources:
       limits:
         cpu: 2000m
