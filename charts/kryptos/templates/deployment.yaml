@@ -37,6 +37,13 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
+            - name: backend
+              containerPort: 5000
+              protocol: TCP
+          volumeMounts:
+            - name: certs
+              mountPath: /app/certs
+              readOnly: true
           # livenessProbe:
           #   httpGet:
           #     path: /
@@ -47,6 +54,11 @@ spec:
           #     port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.sealedSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.sealedSecret.name | default (include "kryptos.fullname" .) }}
+          {{- end }}
           env:
             - name: GIT_REPO
               value: {{ .Values.config.git.repo | quote }}
@@ -54,6 +66,13 @@ spec:
               value: {{ .Values.config.git.branch | quote }}
             - name: VAULT_ADDR
               value: {{ .Values.config.vault.address | quote }}
+      volumes:
+        - name: certs
+          configMap:
+            name: {{ .Values.config.sealedSecrets.existingConfigMap | default (printf "%s-certs" (include "kryptos.fullname" .)) }}
+            items:
+              - key: {{ .Values.config.sealedSecrets.existingConfigMapKey | default "sealed-secrets.crt" }}
+                path: sealed-secrets.crt
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

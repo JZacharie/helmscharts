@@ -1,0 +1,10 @@
+{{- if .Values.config.sealedSecrets.certificate -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-certs" (include "kryptos.fullname" .) }}
+  labels:
+    {{- include "kryptos.labels" . | nindent 4 }}
+data:
+  {{ .Values.config.sealedSecrets.existingConfigMapKey | default "sealed-secrets.crt" }}: {{ .Values.config.sealedSecrets.certificate | quote }}
+{{- end }}
