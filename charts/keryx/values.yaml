@@ -94,7 +94,6 @@ services:
     gpu: true
     resources:
       limits:
-        nvidia.com/gpu: 1
         memory: 16Gi
     env:
       MODEL_ID: "stabilityai/sdxl-turbo"
@@ -172,7 +171,6 @@ services:
     gpu: true
     resources:
       limits:
-        nvidia.com/gpu: 1
         cpu: 2000m
         memory: 16Gi
       requests:
