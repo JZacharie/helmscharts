@@ -2296,6 +2296,24 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/keryx-0.1.0/keryx-0.1.0.tgz
     version: 0.1.0
+  kryptos:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2026-04-24T08:38:45.57008577Z"
+    description: Cyber Premium Secrets Manager & GitOps Hub
+    digest: ff98ac4b0f6f8daecce0e0f3f116e31014baa1307a4136157c85769d23b16e7b
+    keywords:
+    - kryptos
+    - security
+    - secrets
+    - gitops
+    maintainers:
+    - name: Joseph
+    name: kryptos
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/kryptos-0.1.0/kryptos-0.1.0.tgz
+    version: 0.1.0
   kusanagi:
   - apiVersion: v2
     appVersion: 0.3.11
@@ -3752,4 +3770,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-04-22T15:16:47.661060903Z"
+generated: "2026-04-24T08:38:45.67403895Z"
