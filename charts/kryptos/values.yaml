@@ -88,3 +88,7 @@ config:
   vault:
     address: ""
     mountPath: "secret"
+  sealedSecrets:
+    certificate: "" # Base64 encoded certificate
+    existingConfigMap: ""
+    existingConfigMapKey: "sealed-secrets.crt"
