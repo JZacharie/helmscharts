@@ -77,13 +77,13 @@ services:
       enabled: true
       className: "traefik"
       hosts:
-        - host: keryx-app.p.zacharie.org
+        - host: keryx.p.zacharie.org
           paths:
             - path: /
               pathType: Prefix
       tls:
         - hosts:
-            - keryx-app.p.zacharie.org
+            - keryx.p.zacharie.org
           secretName: tls-zacharie-org
 
   diffusion-engine:

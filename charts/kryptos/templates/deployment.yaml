@@ -40,10 +40,11 @@ spec:
             - name: backend
               containerPort: 5000
               protocol: TCP
-          volumeMounts:
+            {{- if or .Values.config.sealedSecrets.certificate .Values.config.sealedSecrets.existingConfigMap }}
             - name: certs
               mountPath: /app/certs
               readOnly: true
+            {{- end }}
             {{- if .Values.persistence.enabled }}
             - name: db
               mountPath: {{ .Values.persistence.mountPath | default "/database" }}
@@ -71,12 +72,14 @@ spec:
             - name: VAULT_ADDR
               value: {{ .Values.config.vault.address | quote }}
       volumes:
+        {{- if or .Values.config.sealedSecrets.certificate .Values.config.sealedSecrets.existingConfigMap }}
         - name: certs
           configMap:
             name: {{ .Values.config.sealedSecrets.existingConfigMap | default (printf "%s-certs" (include "kryptos.fullname" .)) }}
             items:
               - key: {{ .Values.config.sealedSecrets.existingConfigMapKey | default "sealed-secrets.crt" }}
                 path: sealed-secrets.crt
+        {{- end }}
         {{- if .Values.persistence.enabled }}
         - name: db
           persistentVolumeClaim:
