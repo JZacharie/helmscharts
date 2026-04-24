@@ -173,7 +173,7 @@ services:
 
   video-generator:
     name: video-generator
-    image: ghcr.io/jzacharie/keryx-wan2gp
+    image: ghcr.io/jzacharie/keryx-video-generator
     containerPort: 8000
     servicePort: 8000
     gpu: true
