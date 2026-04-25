@@ -99,6 +99,9 @@ services:
       MODEL_ID: "stabilityai/sdxl-turbo"
       NVIDIA_VISIBLE_DEVICES: all
       NVIDIA_DRIVER_CAPABILITIES: compute,utility,video
+    readinessInitialDelay: 60
+    readinessFailureThreshold: 10
+    livenessInitialDelay: 120
 
   extractor:
     name: extractor
@@ -180,6 +183,9 @@ services:
     env:
       NVIDIA_VISIBLE_DEVICES: all
       NVIDIA_DRIVER_CAPABILITIES: compute,utility,video
+    readinessInitialDelay: 60
+    readinessFailureThreshold: 10
+    livenessInitialDelay: 120
     resources:
       limits:
         cpu: 2000m
