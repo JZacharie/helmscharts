@@ -40,15 +40,6 @@ spec:
             - name: backend
               containerPort: 5000
               protocol: TCP
-            {{- if or .Values.config.sealedSecrets.certificate .Values.config.sealedSecrets.existingConfigMap }}
-            - name: certs
-              mountPath: /app/certs
-              readOnly: true
-            {{- end }}
-            {{- if .Values.persistence.enabled }}
-            - name: db
-              mountPath: {{ .Values.persistence.mountPath | default "/database" }}
-            {{- end }}
           # livenessProbe:
           #   httpGet:
           #     path: /
@@ -71,6 +62,16 @@ spec:
               value: {{ .Values.config.git.branch | quote }}
             - name: VAULT_ADDR
               value: {{ .Values.config.vault.address | quote }}
+          volumeMounts:
+            {{- if or .Values.config.sealedSecrets.certificate .Values.config.sealedSecrets.existingConfigMap }}
+            - name: certs
+              mountPath: /app/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.persistence.enabled }}
+            - name: db
+              mountPath: {{ .Values.persistence.mountPath | default "/database" }}
+            {{- end }}
       volumes:
         {{- if or .Values.config.sealedSecrets.certificate .Values.config.sealedSecrets.existingConfigMap }}
         - name: certs
