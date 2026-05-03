@@ -194,6 +194,24 @@ spec:
             {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+            {{- if .Values.bedrock.enabled }}
+            - name: BEDROCK_AWS_REGION
+              value: {{ .Values.bedrock.region | quote }}
+            - name: BEDROCK_ACCOUNT_LABEL
+              value: {{ .Values.bedrock.accountLabel | quote }}
+            - name: BEDROCK_BUDGET_LIMIT
+              value: {{ .Values.bedrock.budgetLimit | quote }}
+            - name: BEDROCK_AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: kusanagi-bedrock-credentials
+                  key: BEDROCK_AWS_ACCESS_KEY_ID
+            - name: BEDROCK_AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kusanagi-bedrock-credentials
+                  key: BEDROCK_AWS_SECRET_ACCESS_KEY
+            {{- end }}
           envFrom:
             {{- with .Values.envFrom }}
             {{- toYaml . | nindent 12 }}

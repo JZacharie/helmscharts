@@ -22,3 +22,30 @@ spec:
       key: {{ .Values.vault.secrets.slack.path }}
       property: {{ .Values.vault.secrets.slack.channelIdKey }}
 {{- end }}
+{{- if .Values.bedrock.enabled }}
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: {{ include "kusanagi.fullname" . }}-bedrock-credentials
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kusanagi.labels" . | nindent 4 }}
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    name: {{ .Values.vault.clusterSecretStore | default "vault-backend" }}
+    kind: ClusterSecretStore
+  target:
+    name: kusanagi-bedrock-credentials
+    creationPolicy: Owner
+  data:
+  - secretKey: BEDROCK_AWS_ACCESS_KEY_ID
+    remoteRef:
+      key: {{ .Values.bedrock.vault.path }}
+      property: BEDROCK_AWS_ACCESS_KEY_ID
+  - secretKey: BEDROCK_AWS_SECRET_ACCESS_KEY
+    remoteRef:
+      key: {{ .Values.bedrock.vault.path }}
+      property: BEDROCK_AWS_SECRET_ACCESS_KEY
+{{- end }}
