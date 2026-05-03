@@ -145,6 +145,7 @@ vault:
   enabled: true
   address: "https://vault.p.zacharie.org"
   mountPath: "secret"
+  clusterSecretStore: "vault-backend"
   auth:
     secretName: "vault-token"
     secretKey: "token"
@@ -153,6 +154,15 @@ vault:
       path: "kusanagi/slack"
       botTokenKey: "bot_token"
       channelIdKey: "channel_id"
+
+# AWS Bedrock cost & usage monitoring
+bedrock:
+  enabled: false
+  region: "us-east-1"
+  accountLabel: "default"
+  budgetLimit: "50"
+  vault:
+    path: "kusanagi"
 
 
 
