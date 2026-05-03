@@ -1,0 +1,6 @@
+apiVersion: v2
+name: common
+description: Common library chart for JZacharie Helm charts
+type: library
+version: 0.5.2-rc
+appVersion: "1.0.0"
