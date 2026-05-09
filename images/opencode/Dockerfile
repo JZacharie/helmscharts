@@ -4,7 +4,7 @@ FROM ubuntu:24.04
 
 # --- Build Arguments for Cache Invalidation & Versioning ---
 ARG GO_VERSION=1.23.0
-ARG OPENCODE_VERSION=v1.2.10
+ARG OPENCODE_VERSION=v1.14.41
 ARG EZA_VERSION=v0.20.18
 ARG BAT_VERSION=v0.24.0
 ARG FZF_VERSION=0.55.0
@@ -59,7 +59,7 @@ RUN curl -fsSL -o /tmp/opencode.tar.gz "https://github.com/anomalyco/opencode/re
     rm /tmp/opencode.tar.gz
 
 # VS Code (code-server)
-RUN curl -fsSL https://code-server.dev/install.sh | sh
+RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version 4.118.0
 
 # --- 5. Switch to Developer User for Toolchains ---
 USER developer
