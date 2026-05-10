@@ -1,0 +1,44 @@
+image:
+  repository: registry.p.zacharie.org/rag-gateway
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  host: rag.p.zacharie.org
+  tlsSecret: tls-zacharie-org
+
+nfs:
+  server: 192.168.0.60
+  path: /volume1/share/paperless
+  capacity: 100Gi
+
+config:
+  collectionName: "nfs_documents"
+  embeddingModel: "text-embedding-ada-002"
+  litellmUrl: "http://litellm.litellm.svc.cluster.local:4000"
+  baseUrl: "https://rag.p.zacharie.org"
+
+cronjob:
+  enabled: true
+  schedule: "0 2 * * *" # Daily at 2 AM
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+
+env:
+  databaseUrlSecretName: litellm-api-keys
+  databaseUrlSecretKey: DATABASE_URL
+  litellmApiKeySecretName: litellm-api-keys
+  litellmApiKeySecretKey: LITELLM_OPENCODE_KEY
+
+resources: {}
+  # limits:
+  #   cpu: 500m
+  #   memory: 1Gi
+  # requests:
+  #   cpu: 100m
+  #   memory: 256Mi

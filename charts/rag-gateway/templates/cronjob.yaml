@@ -1,0 +1,52 @@
+{{- if .Values.cronjob.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-indexer
+spec:
+  schedule: {{ .Values.cronjob.schedule | quote }}
+  successfulJobsHistoryLimit: {{ .Values.cronjob.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.cronjob.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: indexer
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 1000
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: ["ALL"]
+            command: ["python", "/app/scripts/indexer.py"]
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.databaseUrlSecretName }}
+                  key: {{ .Values.env.databaseUrlSecretKey }}
+            - name: LITELLM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.litellmApiKeySecretName }}
+                  key: {{ .Values.env.litellmApiKeySecretKey }}
+            - name: NFS_PATH
+              value: "/data/nfs"
+            - name: LITELLM_URL
+              value: {{ .Values.config.litellmUrl | quote }}
+            - name: COLLECTION_NAME
+              value: {{ .Values.config.collectionName | quote }}
+            - name: EMBEDDING_MODEL
+              value: {{ .Values.config.embeddingModel | quote }}
+            volumeMounts:
+            - name: nfs-data
+              mountPath: /data/nfs
+          volumes:
+          - name: nfs-data
+            persistentVolumeClaim:
+              claimName: {{ .Release.Name }}-nfs-pvc
+{{- end }}
