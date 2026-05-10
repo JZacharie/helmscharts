@@ -19,7 +19,7 @@ nfs:
 
 config:
   collectionName: "nfs_documents"
-  embeddingModel: "text-embedding-ada-002"
+  embeddingModel: "zembed-132k"
   litellmUrl: "http://litellm.litellm.svc.cluster.local:4000"
   baseUrl: "https://rag.p.zacharie.org"
 
