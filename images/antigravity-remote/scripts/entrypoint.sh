@@ -69,7 +69,7 @@ fi
 # Set default icon theme if not set
 if ! xfconf-query -c xsettings -p /Net/IconThemeName >/dev/null 2>&1; then
     echo "Setting default icon theme to Papirus-Dark..."
-    xfconf-query -c xsettings -p /Net/IconThemeName -s "Papirus-Dark" --create -t string
+    xfconf-query -c xsettings -p /Net/IconThemeName -s "Papirus-Dark" --create -t string || true
 fi
 
 # =============================================================================
