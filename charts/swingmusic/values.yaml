@@ -2,7 +2,7 @@ image:
   # -- image repository
   repository: ghcr.io/swingmx/swingmusic
   # -- image tag
-  tag: "v2.1.4"
+  tag: "v2.1.10"
   # -- image pull policy
   pullPolicy: IfNotPresent
 
