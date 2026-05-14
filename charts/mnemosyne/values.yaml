@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 
 image:
-  repository: ghcr.io/jzcharie/mnemosyne
+  repository: ghcr.io/jzacharie/mnemosyne
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
