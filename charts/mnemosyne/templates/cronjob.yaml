@@ -53,6 +53,8 @@ spec:
                   value: {{ .Values.config.litellmUrl | quote }}
                 - name: NFS_PATH
                   value: {{ .Values.config.nfsPath | quote }}
+                - name: ONESHOT
+                  value: "true"
               volumeMounts:
                 {{- range .Values.persistence.pvcs }}
                 - name: {{ .name }}
