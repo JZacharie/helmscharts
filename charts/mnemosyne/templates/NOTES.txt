@@ -1,0 +1,8 @@
+Mnemosyne has been installed.
+
+The indexer will run as a CronJob according to the schedule: {{ .Values.cronjob.schedule }}
+
+To trigger the job manually, you can run:
+kubectl create job --from=cronjob/{{ include "mnemosyne.fullname" . }} manual-indexing-{{ now | date "20060102150405" }}
+
+For more information, please check the README in the Mnemosyne repository.

@@ -1,0 +1,76 @@
+# Default values for mnemosyne.
+# This is a YAML-formatted file.
+
+image:
+  repository: ghcr.io/jzcharie/mnemosyne
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+
+service:
+  type: ClusterIP
+  port: 8080
+
+deployment:
+  enabled: true
+  replicaCount: 1
+
+cronjob:
+  enabled: false # Disabled by default if running as deployment
+  schedule: "0 2 * * *"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 1
+
+config:
+  collectionName: "mnemosyne_docs"
+  embeddingModel: "zembed-132k"
+  litellmUrl: "http://litellm.litellm.svc.cluster.local:4000"
+  nfsPath: "/data/nfs"
+
+externalSecrets:
+  enabled: true
+  refreshInterval: "1h"
+  secretStoreName: "vault-backend"
+  secretStoreKind: "ClusterSecretStore"
+  vaultPath: "ai/mnemosyne"
+
+persistence:
+  pvcs:
+    - name: nfs-data
+      claimName: mnemosyne-pvc
+      mountPath: /data/nfs
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
