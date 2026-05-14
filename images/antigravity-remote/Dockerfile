@@ -149,6 +149,7 @@ WORKDIR /home/${USER}
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable \
     && curl -LsSf https://astral.sh/uv/install.sh | sh \
     && curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh \
+    && mkdir -p /home/${USER}/.claude \
     && /home/${USER}/.local/bin/rtk init -g --auto-patch
 
 USER root
