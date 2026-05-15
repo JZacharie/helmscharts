@@ -1980,6 +1980,16 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
     version: 0.5.2-rc
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-05-15T18:08:01.010081181Z"
+    description: Common library chart for JZacharie Helm charts
+    digest: eb4ea1e0d31c915ceb25d3bd174231cc01f0b7a6ffb76997dcca45a489c413da
+    name: common
+    type: library
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
+    version: 0.5.2-rc
   cursor:
   - annotations:
       artifacthub.io/changes: |-
@@ -2674,6 +2684,17 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/maker-management-platform-0.1.0.tgz
     version: 0.1.0
+  mnemosyne:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2026-05-15T18:08:02.166782019Z"
+    description: A modern Rust-based RAG indexer for PVCs
+    digest: 068e5f2f1a29a9df5758ecba9e9a4363b8a80a4779d7542f719366389a9317c5
+    name: mnemosyne
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/mnemosyne-0.1.0/mnemosyne-0.1.0.tgz
+    version: 0.1.0
   open-notebook:
   - apiVersion: v2
     appVersion: 1.0.0
@@ -2701,6 +2722,16 @@ entries:
     - https://jzacharie.github.io/helmscharts/openai-whisper-asr-webservice-0.1.2.tgz
     version: 0.1.2
   opencode:
+  - apiVersion: v2
+    appVersion: 1.14.41
+    created: "2026-05-15T18:08:02.364756226Z"
+    description: A Helm chart for OpenCode AI Coding Agent
+    digest: 7a3ba845de42a277cdda83864d19c949cb52118eb7baa1b6a793fd3edc757667
+    name: opencode
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/opencode-0.1.1/opencode-0.1.1.tgz
+    version: 0.1.1
   - apiVersion: v2
     appVersion: 1.0.0
     created: "2026-03-04T04:04:35.356284708Z"
@@ -3786,4 +3817,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-05-03T08:41:55.205924644Z"
+generated: "2026-05-15T18:08:02.798288059Z"
