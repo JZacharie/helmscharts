@@ -117,10 +117,11 @@ jobs:
 
       - name: Push version tag
         run: |
-          VERSION=$(grep -oP '^ARG [A-Z_]+_VERSION=\K.*' Dockerfile 2>/dev/null || true)
+          VERSION=$(sed -n 's/^ARG [A-Z_]*_VERSION=//p' Dockerfile | head -1)
           if [ -n "$VERSION" ]; then
-            docker pull ${{ env.REGISTRY }}/${{ steps.prepare.outputs.image_name }}:latest
-            docker tag ${{ env.REGISTRY }}/${{ steps.prepare.outputs.image_name }}:latest ${{ env.REGISTRY }}/${{ steps.prepare.outputs.image_name }}:$VERSION
-            docker push ${{ env.REGISTRY }}/${{ steps.prepare.outputs.image_name }}:$VERSION
+            echo "Pushing version tag: $VERSION"
+            docker buildx imagetools create \
+              -t "${{ env.REGISTRY }}/${{ steps.prepare.outputs.image_name }}:$VERSION" \
+              "${{ env.REGISTRY }}/${{ steps.prepare.outputs.image_name }}:latest"
           fi
         working-directory: ${{ matrix.image_path }}
