@@ -56,11 +56,18 @@ chmod +x /home/${USER}/.vnc/xstartup
 echo "Initializing configuration..."
 mkdir -p /home/${USER}/.config/xfce4/xfconf/xfce-perchannel-xml
 
+# Ensure machine-id exists (required for D-Bus)
+dbus-uuidgen --ensure
+
 # Start a temporary D-Bus session for configuration (required for xfconf-query)
-if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
-    echo "Starting temporary D-Bus session..."
-    eval $(dbus-launch --sh-syntax)
-fi
+# We force a new one and unset DISPLAY to avoid any X11 or inherited environment conflicts
+echo "Starting temporary D-Bus session..."
+OLD_DISPLAY=$DISPLAY
+unset DISPLAY
+unset DBUS_SESSION_BUS_ADDRESS
+eval $(dbus-launch --sh-syntax)
+export DBUS_SESSION_BUS_ADDRESS
+export DBUS_SESSION_BUS_PID
 
 # Apply default panel configuration if not present
 if [ ! -f /home/${USER}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml ]; then
@@ -84,6 +91,7 @@ if [ -n "$DBUS_SESSION_BUS_PID" ]; then
     unset DBUS_SESSION_BUS_ADDRESS
     unset DBUS_SESSION_BUS_PID
 fi
+DISPLAY=$OLD_DISPLAY
 
 # =============================================================================
 # Create directories
