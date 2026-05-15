@@ -89,25 +89,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && locale-gen en_US.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Google Chrome
+# Install Google Chrome, Hashicorp Tools, and Antigravity
 RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
     && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Antigravity Repository and Package
-RUN mkdir -p /etc/apt/keyrings \
-    && curl -fsSL https://us-central1-apt.pkg.dev/doc/repo-signing-key.gpg | gpg --dearmor --yes -o /etc/apt/keyrings/antigravity-repo-key.gpg \
-    && echo "deb [signed-by=/etc/apt/keyrings/antigravity-repo-key.gpg] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/ antigravity-debian main" | tee /etc/apt/sources.list.d/antigravity.list > /dev/null \
-    && apt-get update \
-    && apt-get install -y antigravity \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Hashicorp Tools and Docker CLI
-RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg \
+    && curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg \
     && echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list \
-    && apt-get update && apt-get install -y terraform docker.io \
+    && mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://us-central1-apt.pkg.dev/doc/repo-signing-key.gpg | gpg --dearmor --yes -o /etc/apt/keyrings/antigravity-repo-key.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/antigravity-repo-key.gpg] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/ antigravity-debian main" | tee /etc/apt/sources.list.d/antigravity.list \
+    && apt-get update && apt-get install -y --no-install-recommends \
+    google-chrome-stable \
+    terraform \
+    docker.io \
+    antigravity \
     && rm -rf /var/lib/apt/lists/*
 
 # Install kubectl
@@ -131,10 +125,10 @@ RUN tar -xz -C /usr/local -f /tmp/go.tar.gz \
     && chmod +x /usr/local/bin/mc /usr/local/bin/helm \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
-# Create Non-Root User
-RUN touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu \
+# Create Non-Root User (Handling potential existing 'ubuntu' user)
+RUN id -u ubuntu >/dev/null 2>&1 && (userdel -r ubuntu || userdel -f ubuntu) || true \
     && echo 'root:root' | chpasswd \
-    && groupadd -g ${GID} ${USER} \
+    && groupadd -g ${GID} ${USER} || true \
     && useradd -m -u ${UID} -g ${GID} -s /bin/bash ${USER} \
     && groupadd -f docker \
     && usermod -aG docker ${USER} \
@@ -154,8 +148,8 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --de
 
 USER root
 
-# Add RTK aliases globally
-RUN for tool in git kubectl helm terraform rustc cargo go python python3 pip uv ls grep rg cat mc psql docker; do \
+# Add RTK aliases globally (only for main tools, avoiding common utilities like ls, grep, cat)
+RUN for tool in git kubectl helm terraform rustc cargo go python python3 pip uv mc psql docker; do \
     echo "alias $tool='rtk $tool'" >> /etc/bash.bashrc; \
     done
 

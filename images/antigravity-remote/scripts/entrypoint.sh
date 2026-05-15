@@ -56,6 +56,12 @@ chmod +x /home/${USER}/.vnc/xstartup
 echo "Initializing configuration..."
 mkdir -p /home/${USER}/.config/xfce4/xfconf/xfce-perchannel-xml
 
+# Start a temporary D-Bus session for configuration (required for xfconf-query)
+if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+    echo "Starting temporary D-Bus session..."
+    eval $(dbus-launch --sh-syntax)
+fi
+
 # Apply default panel configuration if not present
 if [ ! -f /home/${USER}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml ]; then
     echo "Applying custom panel configuration..."
@@ -70,6 +76,13 @@ fi
 if ! xfconf-query -c xsettings -p /Net/IconThemeName >/dev/null 2>&1; then
     echo "Setting default icon theme to Papirus-Dark..."
     xfconf-query -c xsettings -p /Net/IconThemeName -s "Papirus-Dark" --create -t string || true
+fi
+
+# Kill temporary D-Bus session to avoid conflicts with the desktop session later
+if [ -n "$DBUS_SESSION_BUS_PID" ]; then
+    kill "$DBUS_SESSION_BUS_PID" >/dev/null 2>&1 || true
+    unset DBUS_SESSION_BUS_ADDRESS
+    unset DBUS_SESSION_BUS_PID
 fi
 
 # =============================================================================
