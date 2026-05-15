@@ -1,0 +1,6 @@
+apiVersion: v2
+name: appflowy-ai
+description: A Helm chart for AppFlowy AI Service
+type: application
+version: 0.1.3
+appVersion: "0.6.16"

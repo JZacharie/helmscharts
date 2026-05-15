@@ -1,0 +1,21 @@
+dependencies:
+- name: appflowy-cloud
+  repository: ""
+  version: 0.1.5
+- name: appflowy-gotrue
+  repository: ""
+  version: 0.1.5
+- name: appflowy-admin
+  repository: ""
+  version: 0.1.4
+- name: appflowy-worker
+  repository: ""
+  version: 0.1.3
+- name: appflowy-web
+  repository: ""
+  version: 0.1.10
+- name: appflowy-ai
+  repository: ""
+  version: 0.1.3
+digest: sha256:67ae8a100772dc22fd90e4c81f44d3770e37e4a36d48a4195514ccf48dd9712f
+generated: "2026-05-15T20:06:15.434740797+02:00"
