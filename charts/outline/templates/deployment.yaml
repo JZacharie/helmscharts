@@ -9,7 +9,6 @@ spec:
   selector:
     matchLabels:
       {{- include "outline.selectorLabels" . | nindent 6 }}
-  revisionHistoryLimit: 3
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -23,6 +22,12 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.initContainers }}
+      initContainers:
+        {{- toYaml .Values.initContainers | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "outline.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automount }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -31,7 +36,16 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.command }}
+          command:
+            {{- toYaml .Values.command | nindent 12 }}
+          {{- else }}
           command: ["node", "./build/server/index.js"]
+          {{- end }}
+          {{- if .Values.args }}
+          args:
+            {{- toYaml .Values.args | nindent 12 }}
+          {{- end }}
           env:
             - name: URL
               value: {{ .Values.url | quote }}
@@ -39,9 +53,21 @@ spec:
               value: {{ .Values.service.port | quote }}
             - name: NODE_ENV
               value: "production"
+            - name: postgres-password
+              valueFrom:
+                secretKeyRef:
+                  name: {{ index .Values.extraSecretNamesForEnvFrom 0 }}
+                  key: postgres-password
+            - name: redis-password
+              valueFrom:
+                secretKeyRef:
+                  name: {{ index .Values.extraSecretNamesForEnvFrom 0 }}
+                  key: redis-password
             - name: DATABASE_URL
-              value: "postgres://{{ .Values.externalPostgresql.username }}:$(postgres-password)@{{ .Values.externalPostgresql.host }}:{{ .Values.externalPostgresql.port }}/{{ .Values.externalPostgresql.database }}"
+              value: "postgres://{{ .Values.externalPostgresql.username }}:$(postgres-password)@{{ .Values.externalPostgresql.host }}:{{ .Values.externalPostgresql.port }}/{{ .Values.externalPostgresql.database }}{{- if .Values.database.sslMode }}?sslmode={{ .Values.database.sslMode }}{{- end }}"
             - name: REDIS_URL
+              value: "redis://:$(redis-password)@{{ .Values.externalRedis.host }}:{{ .Values.externalRedis.port }}/0"
+            - name: REDIS_COLLABORATION_URL
               value: "redis://:$(redis-password)@{{ .Values.externalRedis.host }}:{{ .Values.externalRedis.port }}/0"
             {{- if .Values.secretKey }}
             - name: SECRET_KEY
@@ -55,11 +81,17 @@ spec:
               value: {{ .Values.defaultLanguage | quote }}
             - name: FORCE_HTTPS
               value: {{ .Values.web.forceHttps | quote }}
+            {{- if .Values.web.concurrency }}
+            - name: WEB_CONCURRENCY
+              value: {{ .Values.web.concurrency | quote }}
+            {{- end }}
             - name: LOG_LEVEL
               value: {{ .Values.logging.level | quote }}
             # Storage (S3)
-            - name: STORAGE_CONNECTION_LIMIT
+            - name: FILE_STORAGE_UPLOAD_MAX_SIZE
               value: {{ .Values.fileStorage.uploadMaxSize | quote }}
+            - name: FILE_STORAGE_IMPORT_MAX_SIZE
+              value: {{ .Values.fileStorage.importMaxSize | quote }}
             {{- if .Values.fileStorage.s3.accessKeyId }}
             - name: AWS_ACCESS_KEY_ID
               value: {{ .Values.fileStorage.s3.accessKeyId | quote }}
@@ -98,6 +130,28 @@ spec:
             - name: GITHUB_CLIENT_SECRET
               value: {{ .Values.auth.github.clientSecret | quote }}
             {{- end }}
+            {{- if .Values.auth.github.appName }}
+            - name: GITHUB_APP_NAME
+              value: {{ .Values.auth.github.appName | quote }}
+            {{- end }}
+            {{- if .Values.auth.github.appId }}
+            - name: GITHUB_APP_ID
+              value: {{ .Values.auth.github.appId | quote }}
+            {{- end }}
+            {{- if .Values.auth.github.appPrivateKey }}
+            - name: GITHUB_APP_PRIVATE_KEY
+              value: {{ .Values.auth.github.appPrivateKey | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.auth.slack.enabled }}
+            {{- if .Values.auth.slack.clientId }}
+            - name: SLACK_CLIENT_ID
+              value: {{ .Values.auth.slack.clientId | quote }}
+            {{- end }}
+            {{- if .Values.auth.slack.clientSecret }}
+            - name: SLACK_CLIENT_SECRET
+              value: {{ .Values.auth.slack.clientSecret | quote }}
+            {{- end }}
             {{- end }}
             # SMTP
             - name: SMTP_HOST
@@ -106,10 +160,6 @@ spec:
               value: {{ .Values.smtp.port | quote }}
             - name: SMTP_USERNAME
               value: {{ .Values.smtp.username | quote }}
-            {{- if .Values.smtp.password }}
-            - name: SMTP_PASSWORD
-              value: {{ .Values.smtp.password | quote }}
-            {{- end }}
             - name: SMTP_FROM_EMAIL
               value: {{ .Values.smtp.fromEmail | quote }}
             - name: SMTP_REPLY_EMAIL
@@ -118,6 +168,17 @@ spec:
               value: {{ .Values.smtp.tlsCiphers | quote }}
             - name: SMTP_SECURE
               value: {{ .Values.smtp.secure | quote }}
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ index .Values.extraSecretNamesForEnvFrom 0 }}
+                  key: SMTP_PASSWORD
+            {{- if .Values.extraEnvVars }}
+            {{- range $key, $val := .Values.extraEnvVars }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
+            {{- end }}
+            {{- end }}
             # Extra Env from existing Secret (Postgres/Redis passwords)
           {{- if .Values.extraSecretNamesForEnvFrom }}
           envFrom:
@@ -136,6 +197,17 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml .Values.volumeMounts | nindent 12 }}
+          {{- end }}
+        {{- if .Values.extraContainers }}
+        {{- toYaml .Values.extraContainers | nindent 8 }}
+        {{- end }}
+      {{- if .Values.volumes }}
+      volumes:
+        {{- toYaml .Values.volumes | nindent 8 }}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -144,7 +216,7 @@ spec:
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .tolerations }}
+      {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

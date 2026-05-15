@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: outlinewiki/outline
   pullPolicy: IfNotPresent
-  tag: "1.6.1"
+  tag: "1.7.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -31,7 +31,8 @@ service:
 ingress:
   enabled: true
   className: "traefik"
-  annotations: {}
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "500m"
   hosts:
     - host: outline.p.zacharie.org
       paths:
@@ -81,6 +82,7 @@ logging:
   level: info
 
 fileStorage:
+  uploadMaxSize: "524288000"
   s3:
     bucket: outline
     accessKeyId: ""
@@ -123,3 +125,4 @@ externalPostgresql:
   port: 5432
   username: "app"
   database: "outline"
+extraEnvVars: {}
