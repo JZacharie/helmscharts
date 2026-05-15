@@ -107,7 +107,7 @@ jobs:
       - name: Generate tags with version
         id: gen-tags
         run: |
-          VERSION=$(sed -n 's/^ARG [A-Z_]*_VERSION=//p' Dockerfile | head -1)
+          VERSION=$(sed -n 's/^ARG OPENCODE_VERSION=//p; s/^ARG APP_VERSION=//p; s/^ARG VERSION=//p' Dockerfile | head -1)
           {
             echo '${{ steps.meta.outputs.tags }}'
             if [ -n "$VERSION" ]; then
