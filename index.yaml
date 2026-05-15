@@ -2723,6 +2723,16 @@ entries:
     version: 0.1.2
   opencode:
   - apiVersion: v2
+    appVersion: 1.15.0
+    created: "2026-05-15T18:17:23.247816312Z"
+    description: A Helm chart for OpenCode AI Coding Agent
+    digest: 962c06ed55b0552185aab8f39cc8837f884dcd96562f6084503fdcb75b9e7605
+    name: opencode
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/opencode-0.1.2/opencode-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     appVersion: 1.14.41
     created: "2026-05-15T18:08:02.364756226Z"
     description: A Helm chart for OpenCode AI Coding Agent
@@ -3817,4 +3827,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-05-15T18:08:02.798288059Z"
+generated: "2026-05-15T18:17:23.248167228Z"
