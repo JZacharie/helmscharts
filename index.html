@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J. Zacharie Helm Charts</title>
+    <meta name="description"
+        content="A collection of high-quality Helm charts for various applications, maintained by J. Zacharie.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- JS-YAML for parsing index.yaml -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.4);
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #10b981;
+            --font-main: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            margin-bottom: 4rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(to right, #818cf8, #34d399);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gh-link {
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--card-bg);
+            border-radius: 99px;
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+
+        .gh-link:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 6rem;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .repo-bar {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            position: relative;
+            box-shadow: 0 0 30px var(--primary-glow);
+        }
+
+        .copy-btn {
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .copy-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Search Section */
+        .search-area {
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 1rem 1.5rem 1rem 3rem;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        /* Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .chart-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .chart-card:hover::before {
+            opacity: 1;
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .chart-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .version-tag {
+            background: rgba(99, 102, 241, 0.1);
+            color: #a5b4fc;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            font-weight: 500;
+        }
+
+        .chart-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .chart-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex-grow: 1;
+        }
+
+        .chart-footer {
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .keyword {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            color: var(--text-muted);
+        }
+
+        .chart-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-install {
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            flex-grow: 1;
+            text-align: center;
+            transition: background 0.2s;
+        }
+
+        .btn-install:hover {
+            background: #4f46e5;
+        }
+
+        .btn-source {
+            color: var(--text-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-source:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        /* Loading & Errors */
+        .loading {
+            text-align: center;
+            padding: 10rem 0;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        footer {
+            margin-top: 8rem;
+            padding-bottom: 4rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--card-border);
+            padding-top: 4rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chart-card {
+            animation: fadeIn 0.5s ease backwards;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Tooltip */
+        .copied-tooltip {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .copied-tooltip.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container text-center">
+        <header>
+            <div class="logo">
+                <i data-lucide="ship"></i>
+                <span>JZacharie Charts</span>
+            </div>
+            <a href="https://github.com/JZacharie/helmscharts" class="gh-link">
+                <i data-lucide="github"></i>
+                <span>View on GitHub</span>
+            </a>
+        </header>
+
+        <section class="hero">
+            <h1>Helm Charts Repository</h1>
+            <p>A curated collection of Kubernetes-ready Helm charts. Simple deployment, robust configurations, always
+                up-to-date.</p>
+
+            <div class="repo-bar">
+                <span>helm repo add jzacharie https://jzacharie.github.io/helmscharts/</span>
+                <button class="copy-btn" id="copyBtn" onclick="copyRepo()">
+                    <i data-lucide="copy"></i>
+                </button>
+                <div class="copied-tooltip" id="tooltip">Copied!</div>
+            </div>
+        </section>
+
+        <div class="search-area">
+            <div class="search-wrapper">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" id="searchInput" class="search-input"
+                    placeholder="Search charts (e.g. wh2pg, appflowy)..." oninput="filterCharts()">
+            </div>
+        </div>
+
+        <div id="loading" class="loading">
+            <i data-lucide="loader" class="animate-spin"></i>
+            <p>Fetching chart data...</p>
+        </div>
+
+        <div id="charts" class="charts-grid">
+            <!-- Charts will be injected here -->
+        </div>
+
+        <footer>
+            <p>&copy; 2025 J. Zacharie. Built with &hearts; for the Kubernetes community.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        let allCharts = [];
+
+        async function fetchCharts() {
+            try {
+                const response = await fetch('index.yaml');
+                const text = await response.text();
+                const data = jsyaml.load(text);
+
+                // Group entries by name and get the latest version for each
+                const entries = data.entries;
+                allCharts = Object.keys(entries).map(name => {
+                    const latest = entries[name].sort((a, b) => new Date(b.created) - new Date(a.created))[0];
+                    return {
+                        name: latest.name,
+                        description: latest.description || 'No description provided.',
+                        version: latest.version,
+                        appVersion: latest.appVersion,
+                        icon: latest.icon,
+                        home: latest.home,
+                        sources: latest.sources,
+                        keywords: latest.keywords || []
+                    };
+                });
+
+                document.getElementById('loading').style.display = 'none';
+                renderCharts(allCharts);
+            } catch (error) {
+                console.error('Error fetching charts:', error);
+                document.getElementById('loading').innerHTML = '<p style="color: #ef4444">Failed to load index.yaml. Make sure this page is hosted alongside your Helm repository.</p>';
+            }
+        }
+
+        function renderCharts(charts) {
+            const container = document.getElementById('charts');
+            container.innerHTML = '';
+
+            charts.forEach((chart, index) => {
+                const card = document.createElement('div');
+                card.className = 'chart-card';
+                card.style.animationDelay = `${index * 50}ms`;
+
+                const iconHtml = chart.icon
+                    ? `<img src="${chart.icon}" alt="${chart.name}" class="chart-icon" style="padding: 4px; object-fit: contain;">`
+                    : `<div class="chart-icon"><i data-lucide="box"></i></div>`;
+
+                card.innerHTML = `
+                    <div class="chart-header">
+                        ${iconHtml}
+                        <div class="version-tag">v${chart.version}</div>
+                    </div>
+                    <div>
+                        <div class="chart-name">${chart.name}</div>
+                        <div class="chart-desc">${chart.description}</div>
+                    </div>
+                    <div class="chart-footer">
+                        ${chart.keywords.slice(0, 4).map(k => `<span class="keyword">${k}</span>`).join('')}
+                    </div>
+                    <div class="chart-actions">
+                        <a href="https://github.com/JZacharie/helmscharts/tree/main/charts/${chart.name}" class="btn-install">View Chart</a>
+                        <a href="${chart.home || '#'}" class="btn-source" target="_blank" title="Home Page">
+                            <i data-lucide="external-link" style="width: 18px"></i>
+                        </a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function filterCharts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allCharts.filter(c =>
+                c.name.toLowerCase().includes(query) ||
+                c.description.toLowerCase().includes(query) ||
+                c.keywords.some(k => k.toLowerCase().includes(query))
+            );
+            renderCharts(filtered);
+        }
+
+        function copyRepo() {
+            const cmd = 'helm repo add jzacharie https://jzacharie.github.io/helmscharts/';
+            navigator.clipboard.writeText(cmd);
+
+            const tooltip = document.getElementById('tooltip');
+            tooltip.classList.add('show');
+            setTimeout(() => tooltip.classList.remove('show'), 2000);
+        }
+
+        // Run fetch on load
+        fetchCharts();
+    </script>
+</body>
+
+</html>

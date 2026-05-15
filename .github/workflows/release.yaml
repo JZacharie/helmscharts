@@ -86,8 +86,10 @@ jobs:
 
       - name: Deploy Landing Page
         run: |
-          # The chart-releaser action handles the gh-pages branch
-          # We want to ensure our index.html is also there
+          if ! git show main:index.html > /dev/null 2>&1; then
+            echo "index.html not found on main branch, skipping landing page deploy"
+            exit 0
+          fi
           git fetch origin gh-pages
           git checkout gh-pages
           git checkout main -- index.html
