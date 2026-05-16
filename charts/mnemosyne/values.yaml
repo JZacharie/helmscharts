@@ -64,7 +64,7 @@ externalSecrets:
   dbVaultPath: "pg-sbx/grafana"
 
 qdrant:
-  url: "http://qdrant.qdrant.svc.cluster.local:6333"
+  url: "http://qdrant.qdrant.svc.cluster.local:6334"
 
 tei:
   embedder:
