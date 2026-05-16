@@ -7,6 +7,7 @@ metadata:
     {{- include "mnemosyne.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: {{ $.Release.Namespace }}-{{ include "mnemosyne.fullname" $ }}-cors@kubernetescrd
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:

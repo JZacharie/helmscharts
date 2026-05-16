@@ -1,0 +1,19 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ include "mnemosyne.fullname" . }}-cors
+  labels:
+    {{- include "mnemosyne.labels" . | nindent 4 }}
+spec:
+  headers:
+    accessControlAllowMethods:
+      - GET
+      - POST
+      - OPTIONS
+    accessControlAllowOriginList:
+      - "https://search.p.zacharie.org"
+      - "http://search.p.zacharie.org"
+    accessControlAllowHeaders:
+      - "*"
+    accessControlMaxAge: 100
+    addVaryHeader: true
