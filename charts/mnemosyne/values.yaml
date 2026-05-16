@@ -86,6 +86,13 @@ tei:
     enabled: true
     model: "BAAI/bge-m3"
     url: "http://mnemosyne-tei-embedder.mnemosyne.svc.cluster.local"
+    resources:
+      requests:
+        cpu: 2
+        memory: 8Gi
+      limits:
+        cpu: 4
+        memory: 12Gi
   reranker:
     enabled: true
     model: "BAAI/bge-reranker-large"

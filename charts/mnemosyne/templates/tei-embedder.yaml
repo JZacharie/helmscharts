@@ -43,12 +43,7 @@ spec:
               name: {{ include "mnemosyne.fullname" . }}-secrets
               key: HF_TOKEN
         resources:
-          requests:
-            cpu: 2
-            memory: 8Gi
-          limits:
-            cpu: 4
-            memory: 12Gi
+          {{- toYaml .Values.tei.embedder.resources | nindent 10 }}
         volumeMounts:
         - name: data
           mountPath: /data
