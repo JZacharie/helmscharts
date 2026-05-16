@@ -35,6 +35,21 @@ service:
   type: ClusterIP
   port: 8080
 
+ingress:
+  enabled: false
+  className: "traefik"
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: api-mnemosyne.p.zacharie.org
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: mnemosyne-api-tls
+      hosts:
+        - api-mnemosyne.p.zacharie.org
+
 deployment:
   enabled: true
   replicaCount: 1
