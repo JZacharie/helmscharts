@@ -44,5 +44,5 @@ affinity: {}
 
 config:
   mnemosyneUrl: "http://mnemosyne.mnemosyne.svc.cluster.local:8080"
-  ollamaUrl: "http://ollama.ollama.svc.cluster.local:11434"
+  ollamaUrl: "http://192.168.0.58:11434"
   ollamaModel: "llama3"
