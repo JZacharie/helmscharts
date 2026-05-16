@@ -1,0 +1,68 @@
+{{- if .Values.tei.reranker.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mnemosyne.fullname" . }}-tei-reranker
+  labels:
+    {{- include "mnemosyne.labels" . | nindent 4 }}
+    app: tei-reranker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "mnemosyne.selectorLabels" . | nindent 6 }}
+      app: tei-reranker
+  template:
+    metadata:
+      labels:
+        {{- include "mnemosyne.selectorLabels" . | nindent 8 }}
+        app: tei-reranker
+    spec:
+      runtimeClassName: nvidia
+      containers:
+      - name: tei
+        image: ghcr.io/huggingface/text-embeddings-inference:turing-latest
+        args:
+        - --model-id
+        - {{ .Values.tei.reranker.model }}
+        - --port
+        - "80"
+        - --dtype
+        - float16
+        ports:
+        - containerPort: 80
+        env:
+        - name: HUGGING_FACE_HUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "mnemosyne.fullname" . }}-secrets
+              key: HF_TOKEN
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+        volumeMounts:
+        - name: data
+          mountPath: /data
+      nodeSelector:
+        kubernetes.io/hostname: vm169
+      tolerations:
+      - key: special-node
+        operator: Equal
+        value: gpu
+        effect: NoSchedule
+      volumes:
+      - name: data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mnemosyne.fullname" . }}-tei-reranker
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    {{- include "mnemosyne.selectorLabels" . | nindent 4 }}
+    app: tei-reranker
+{{- end }}

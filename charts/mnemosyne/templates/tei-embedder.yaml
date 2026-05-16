@@ -1,0 +1,68 @@
+{{- if .Values.tei.embedder.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mnemosyne.fullname" . }}-tei-embedder
+  labels:
+    {{- include "mnemosyne.labels" . | nindent 4 }}
+    app: tei-embedder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "mnemosyne.selectorLabels" . | nindent 6 }}
+      app: tei-embedder
+  template:
+    metadata:
+      labels:
+        {{- include "mnemosyne.selectorLabels" . | nindent 8 }}
+        app: tei-embedder
+    spec:
+      runtimeClassName: nvidia
+      containers:
+      - name: tei
+        image: ghcr.io/huggingface/text-embeddings-inference:turing-latest
+        args:
+        - --model-id
+        - {{ .Values.tei.embedder.model }}
+        - --port
+        - "80"
+        - --dtype
+        - float16
+        ports:
+        - containerPort: 80
+        env:
+        - name: HUGGING_FACE_HUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "mnemosyne.fullname" . }}-secrets
+              key: HF_TOKEN
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+        volumeMounts:
+        - name: data
+          mountPath: /data
+      nodeSelector:
+        kubernetes.io/hostname: vm169 # Based on existing tei manifest
+      tolerations:
+      - key: special-node
+        operator: Equal
+        value: gpu
+        effect: NoSchedule
+      volumes:
+      - name: data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mnemosyne.fullname" . }}-tei-embedder
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    {{- include "mnemosyne.selectorLabels" . | nindent 4 }}
+    app: tei-embedder
+{{- end }}

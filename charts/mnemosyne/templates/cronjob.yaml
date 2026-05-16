@@ -52,40 +52,29 @@ spec:
                 - name: LITELLM_URL
                   value: {{ .Values.config.litellmUrl | quote }}
                 - name: NFS_PATH
-                  {{- if .Values.config.nfsPathFromSecret }}
                   valueFrom:
                     secretKeyRef:
                       name: {{ include "mnemosyne.fullname" . }}-secrets
                       key: NFS_PATH
-                  {{- else }}
-                  value: {{ .Values.config.nfsPath | quote }}
-                  {{- end }}
-                - name: ONESHOT
-                  value: "true"
+                - name: QDRANT_URL
+                  value: {{ .Values.qdrant.url | quote }}
+                - name: TEI_EMBEDDER_URL
+                  value: {{ .Values.tei.embedder.url | quote }}
+                - name: TEI_RERANKER_URL
+                  value: {{ .Values.tei.reranker.url | quote }}
               volumeMounts:
-                {{- range .Values.persistence.volumes }}
+                {{- range .Values.persistence.pvcs }}
                 - name: {{ .name }}
                   mountPath: {{ .mountPath }}
-                  {{- if .readOnly }}
-                  readOnly: {{ .readOnly }}
-                  {{- end }}
                 {{- end }}
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
           restartPolicy: OnFailure
           volumes:
-            {{- range .Values.persistence.volumes }}
+            {{- range .Values.persistence.pvcs }}
             - name: {{ .name }}
-              {{- if .nfs }}
-              nfs:
-                {{- toYaml .nfs | nindent 16 }}
-              {{- else if .claimName }}
               persistentVolumeClaim:
                 claimName: {{ .claimName }}
-              {{- else if .hostPath }}
-              hostPath:
-                {{- toYaml .hostPath | nindent 16 }}
-              {{- end }}
             {{- end }}
           {{- with .Values.nodeSelector }}
           nodeSelector:
