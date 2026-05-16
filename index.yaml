@@ -2695,6 +2695,17 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/mnemosyne-0.1.0/mnemosyne-0.1.0.tgz
     version: 0.1.0
+  mnemosyne-ui:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-05-16T07:56:59.538673577Z"
+    description: A premium search interface for the Mnemosyne RAG engine
+    digest: 5e2f8fc53b4fe401d9ea130aff91ba937956c214b3262c1719fbff87c3d608b5
+    name: mnemosyne-ui
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/mnemosyne-ui-0.1.0/mnemosyne-ui-0.1.0.tgz
+    version: 0.1.0
   open-notebook:
   - apiVersion: v2
     appVersion: 1.0.0
@@ -3827,4 +3838,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-05-15T18:17:23.248167228Z"
+generated: "2026-05-16T07:56:59.539103881Z"
