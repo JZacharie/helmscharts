@@ -81,8 +81,9 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .claimName }}
         {{- end }}
-        {{- with .Values.persistence.volumes }}
-        {{- toYaml . | nindent 8 }}
+        {{- range .Values.persistence.volumes }}
+        - name: {{ .name }}
+          {{- omit . "name" "mountPath" | toYaml | nindent 10 }}
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
