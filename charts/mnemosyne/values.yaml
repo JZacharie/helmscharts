@@ -86,12 +86,12 @@ persistence:
   volumes: []
 
 resources:
-  limits:
-    cpu: 500m
-    memory: 512Mi
   requests:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 2
+    memory: 8Gi
+  limits:
+    cpu: 4
+    memory: 16Gi
 
 nodeSelector: {}
 tolerations: []
