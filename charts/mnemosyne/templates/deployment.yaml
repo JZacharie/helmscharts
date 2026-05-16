@@ -66,6 +66,8 @@ spec:
               value: {{ .Values.tei.embedder.url | quote }}
             - name: TEI_RERANKER_URL
               value: {{ .Values.tei.reranker.url | quote }}
+            - name: RUST_LOG
+              value: {{ .Values.config.rustLog | default "info" | quote }}
           volumeMounts:
             {{- range .Values.persistence.pvcs }}
             - name: {{ .name }}
