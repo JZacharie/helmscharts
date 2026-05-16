@@ -20,6 +20,15 @@ ingress:
   className: "traefik"
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: search.p.zacharie.org
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: mnemosyne-ui-tls
+      hosts:
+        - search.p.zacharie.org
 
 resources:
   limits:
