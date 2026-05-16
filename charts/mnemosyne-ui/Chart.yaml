@@ -1,0 +1,6 @@
+apiVersion: v2
+name: mnemosyne-ui
+description: A premium search interface for the Mnemosyne RAG engine
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

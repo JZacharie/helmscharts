@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mnemosyne-ui.fullname" . }}-assets
+  labels:
+    {{- include "mnemosyne-ui.labels" . | nindent 4 }}
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mnemosyne | AI Search</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+        <style>
+{{ .Files.Get "files/style.css" | nindent 10 }}
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                MNEMOSYNE 🧠
+            </div>
+            <button class="settings-btn" id="settingsBtn" title="Settings">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
+        </header>
+
+        <div class="search-container">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="searchBar" class="search-bar" placeholder="Search all your enterprise documents..." autofocus>
+        </div>
+
+        <div id="resultsList" class="results-container">
+            <div style="text-align: center; color: var(--text-secondary); margin-top: 4rem;">
+                Type a query above to explore your knowledge base.
+            </div>
+        </div>
+
+        <button id="synthesizeBtn" class="btn-ai floating-ai-btn" style="display: none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+            Synthesize with AI
+        </button>
+
+        <div id="settingsModal" class="modal">
+            <div class="modal-content">
+                <h2 style="margin-bottom: 1.5rem;">Settings</h2>
+                <div class="form-group">
+                    <label>Mnemosyne API URL</label>
+                    <input type="text" id="mnemosyneInput">
+                </div>
+                <div class="form-group">
+                    <label>Ollama API URL</label>
+                    <input type="text" id="ollamaUrlInput">
+                </div>
+                <div class="form-group">
+                    <label>Ollama Model</label>
+                    <input type="text" id="ollamaModelInput">
+                </div>
+                <button id="saveSettings" class="btn-ai" style="width: 100%; justify-content: center;">Save Configuration</button>
+            </div>
+        </div>
+
+        <script>
+          const state = {
+            mnemosyneUrl: localStorage.getItem('mnemosyneUrl') || '{{ .Values.config.mnemosyneUrl }}',
+            ollamaUrl: localStorage.getItem('ollamaUrl') || '{{ .Values.config.ollamaUrl }}',
+            ollamaModel: localStorage.getItem('ollamaModel') || '{{ .Values.config.ollamaModel }}',
+            results: []
+          };
+{{ .Files.Get "files/script.js" | nindent 10 | replace "const state = {" "// state init" | replace "mnemosyneUrl: localStorage.getItem('mnemosyneUrl') || 'http://localhost:8080'," "" | replace "ollamaUrl: localStorage.getItem('ollamaUrl') || 'http://localhost:11434'," "" | replace "ollamaModel: localStorage.getItem('ollamaModel') || 'llama3'," "" | replace "results: []" "" | replace "};" "" }}
+        </script>
+    </body>
+    </html>
