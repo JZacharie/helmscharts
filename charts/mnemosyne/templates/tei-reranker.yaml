@@ -18,17 +18,22 @@ spec:
         {{- include "mnemosyne.selectorLabels" . | nindent 8 }}
         app: tei-reranker
     spec:
-      runtimeClassName: nvidia
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
       containers:
       - name: tei
-        image: ghcr.io/huggingface/text-embeddings-inference:turing-latest
+        image: ghcr.io/huggingface/text-embeddings-inference:cpu-latest
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
         args:
         - --model-id
         - {{ .Values.tei.reranker.model }}
         - --port
         - "80"
-        - --dtype
-        - float16
         ports:
         - containerPort: 80
         env:
@@ -38,8 +43,12 @@ spec:
               name: {{ include "mnemosyne.fullname" . }}-secrets
               key: HF_TOKEN
         resources:
+          requests:
+            cpu: 2
+            memory: 4Gi
           limits:
-            nvidia.com/gpu: 1
+            cpu: 4
+            memory: 8Gi
         volumeMounts:
         - name: data
           mountPath: /data
