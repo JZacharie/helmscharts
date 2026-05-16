@@ -83,7 +83,7 @@ spec:
         {{- end }}
         {{- range .Values.persistence.volumes }}
         - name: {{ .name }}
-          {{- omit . "name" "mountPath" | toYaml | nindent 10 }}
+          {{- omit . "name" "mountPath" "readOnly" | toYaml | nindent 10 }}
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
