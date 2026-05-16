@@ -67,6 +67,10 @@ spec:
                 - name: {{ .name }}
                   mountPath: {{ .mountPath }}
                 {{- end }}
+                {{- range .Values.persistence.volumes }}
+                - name: {{ .name }}
+                  mountPath: {{ .mountPath }}
+                {{- end }}
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
           restartPolicy: OnFailure
@@ -75,6 +79,9 @@ spec:
             - name: {{ .name }}
               persistentVolumeClaim:
                 claimName: {{ .claimName }}
+            {{- end }}
+            {{- with .Values.persistence.volumes }}
+            {{- toYaml . | nindent 12 }}
             {{- end }}
           {{- with .Values.nodeSelector }}
           nodeSelector:
