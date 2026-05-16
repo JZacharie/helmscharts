@@ -31,9 +31,9 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "mnemosyne-ui.fullname" $ }}
+                name: {{ .serviceName | default (include "mnemosyne-ui.fullname" $) }}
                 port:
-                  number: 80
+                  number: {{ .servicePort | default 80 }}
           {{- end }}
     {{- end }}
 {{- end }}
