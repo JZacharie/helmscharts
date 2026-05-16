@@ -1,3 +1,9 @@
+// Migration check for old internal URLs
+const savedMnemosyneUrl = localStorage.getItem('mnemosyneUrl');
+if (savedMnemosyneUrl && savedMnemosyneUrl.includes('.local')) {
+  localStorage.removeItem('mnemosyneUrl');
+}
+
 const state = {
   mnemosyneUrl: localStorage.getItem('mnemosyneUrl') || 'http://localhost:8080',
   ollamaUrl: localStorage.getItem('ollamaUrl') || 'http://localhost:11434',
