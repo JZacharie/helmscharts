@@ -18,13 +18,16 @@ spec:
         {{- include "mnemosyne.selectorLabels" . | nindent 8 }}
         app: tei-reranker
     spec:
+      {{- if .Values.tei.reranker.runtimeClassName }}
+      runtimeClassName: {{ .Values.tei.reranker.runtimeClassName }}
+      {{- end }}
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
         fsGroup: 1000
       containers:
       - name: tei
-        image: ghcr.io/huggingface/text-embeddings-inference:cpu-latest
+        image: "{{ .Values.tei.reranker.image.repository | default "ghcr.io/huggingface/text-embeddings-inference" }}:{{ .Values.tei.reranker.image.tag | default "cpu-latest" }}"
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -34,6 +37,14 @@ spec:
         - {{ .Values.tei.reranker.model }}
         - --port
         - "80"
+        {{- if .Values.tei.reranker.dtype }}
+        - --dtype
+        - {{ .Values.tei.reranker.dtype }}
+        {{- end }}
+        {{- if .Values.tei.reranker.maxBatchTokens }}
+        - --max-batch-tokens
+        - {{ .Values.tei.reranker.maxBatchTokens | quote }}
+        {{- end }}
         ports:
         - containerPort: 80
         env:

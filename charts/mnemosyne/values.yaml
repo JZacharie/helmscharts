@@ -86,6 +86,12 @@ tei:
     enabled: true
     model: "BAAI/bge-m3"
     url: "http://mnemosyne-tei-embedder.mnemosyne.svc.cluster.local"
+    image:
+      repository: ghcr.io/huggingface/text-embeddings-inference
+      tag: cpu-latest
+    # runtimeClassName: nvidia
+    # dtype: float16
+    # maxBatchTokens: "32768"
     resources:
       requests:
         cpu: 2
@@ -97,6 +103,12 @@ tei:
     enabled: true
     model: "BAAI/bge-reranker-large"
     url: "http://mnemosyne-tei-reranker.mnemosyne.svc.cluster.local"
+    image:
+      repository: ghcr.io/huggingface/text-embeddings-inference
+      tag: cpu-latest
+    # runtimeClassName: nvidia
+    # dtype: float16
+    # maxBatchTokens: "32768"
 
 
 

@@ -18,13 +18,16 @@ spec:
         {{- include "mnemosyne.selectorLabels" . | nindent 8 }}
         app: tei-embedder
     spec:
+      {{- if .Values.tei.embedder.runtimeClassName }}
+      runtimeClassName: {{ .Values.tei.embedder.runtimeClassName }}
+      {{- end }}
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
         fsGroup: 1000
       containers:
       - name: tei
-        image: ghcr.io/huggingface/text-embeddings-inference:cpu-latest
+        image: "{{ .Values.tei.embedder.image.repository | default "ghcr.io/huggingface/text-embeddings-inference" }}:{{ .Values.tei.embedder.image.tag | default "cpu-latest" }}"
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -34,6 +37,14 @@ spec:
         - {{ .Values.tei.embedder.model }}
         - --port
         - "80"
+        {{- if .Values.tei.embedder.dtype }}
+        - --dtype
+        - {{ .Values.tei.embedder.dtype }}
+        {{- end }}
+        {{- if .Values.tei.embedder.maxBatchTokens }}
+        - --max-batch-tokens
+        - {{ .Values.tei.embedder.maxBatchTokens | quote }}
+        {{- end }}
         ports:
         - containerPort: 80
         env:
