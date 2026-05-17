@@ -53,6 +53,9 @@ spec:
             secretKeyRef:
               name: {{ include "mnemosyne.fullname" . }}-secrets
               key: HF_TOKEN
+        {{- if .Values.tei.embedder.env }}
+        {{- toYaml .Values.tei.embedder.env | nindent 8 }}
+        {{- end }}
         resources:
           {{- toYaml .Values.tei.embedder.resources | nindent 10 }}
         volumeMounts:
