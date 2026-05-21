@@ -11,9 +11,9 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-    - port: 8080
-      targetPort: code
+    - port: {{ .Values.service.vncPort }}
+      targetPort: vnc
       protocol: TCP
-      name: code
+      name: vnc
   selector:
     {{- include "antigravity.selectorLabels" . | nindent 4 }}

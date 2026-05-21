@@ -1,0 +1,11 @@
+{{- if .Values.antigravityConfig }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "antigravity.fullname" . }}-config
+  labels:
+    {{- include "antigravity.labels" . | nindent 4 }}
+data:
+  antigravity.json: |
+    {{ .Values.antigravityConfig | toJson | nindent 4 }}
+{{- end }}

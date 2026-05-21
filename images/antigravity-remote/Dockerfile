@@ -139,12 +139,13 @@ RUN id -u ubuntu >/dev/null 2>&1 && (userdel -r ubuntu || userdel -f ubuntu) || 
 USER ${USER}
 WORKDIR /home/${USER}
 
-# Install Rust, UV, and RTK
+# Install Rust, UV, RTK, and Antigravity CLI
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable \
     && curl -LsSf https://astral.sh/uv/install.sh | sh \
     && curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh \
     && mkdir -p /home/${USER}/.claude \
-    && /home/${USER}/.local/bin/rtk init -g --auto-patch
+    && /home/${USER}/.local/bin/rtk init -g --auto-patch \
+    && curl -fsSL https://antigravity.google/cli/install.sh | bash -s -- --dir /home/${USER}/.local/bin
 
 USER root
 
