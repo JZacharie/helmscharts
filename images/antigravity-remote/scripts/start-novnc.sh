@@ -17,7 +17,7 @@ echo "[noVNC] Connecting to VNC server at ${VNC_HOST}:${VNC_PORT}"
 # Wait for VNC server to be ready
 echo "[noVNC] Waiting for VNC server..."
 for i in $(seq 1 30); do
-    if nc -z ${VNC_HOST} ${VNC_PORT} 2>/dev/null; then
+    if bash -c "cat < /dev/null > /dev/tcp/${VNC_HOST}/${VNC_PORT}" 2>/dev/null; then
         echo "[noVNC] VNC server is ready!"
         break
     fi
