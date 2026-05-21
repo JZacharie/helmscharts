@@ -19,10 +19,22 @@ spec:
             {{- include "kusanagi.selectorLabels" . | nindent 12 }}
         spec:
           restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            fsGroup: 1000
           containers:
           - name: cleanup
             image: minio/mc:latest
             imagePullPolicy: IfNotPresent
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              runAsUser: 1000
+              runAsGroup: 1000
+              runAsNonRoot: true
             command:
             - /bin/sh
             - -c
