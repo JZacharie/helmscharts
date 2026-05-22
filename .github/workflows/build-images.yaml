@@ -117,6 +117,13 @@ jobs:
           echo "tags<<TAGSEOF" >> "$GITHUB_OUTPUT"
           cat /tmp/tags.txt >> "$GITHUB_OUTPUT"
           echo "TAGSEOF" >> "$GITHUB_OUTPUT"
+          
+          # Detect if there's a specific hadron-extension target
+          if grep -q "AS hadron-extension" Dockerfile; then
+            echo "target=hadron-extension" >> "$GITHUB_OUTPUT"
+          else
+            echo "target=" >> "$GITHUB_OUTPUT"
+          fi
         working-directory: ${{ matrix.image_path }}
 
       - name: Set up Docker Buildx
@@ -129,3 +136,6 @@ jobs:
           push: true
           tags: ${{ steps.gen-tags.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          target: ${{ steps.gen-tags.outputs.target }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
