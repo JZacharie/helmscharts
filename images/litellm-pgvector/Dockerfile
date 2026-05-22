@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     postgresql-client \
+    nodejs \
+    npm \
     && rm -rf /var/lib/apt/lists/*
 
 # Set work directory
