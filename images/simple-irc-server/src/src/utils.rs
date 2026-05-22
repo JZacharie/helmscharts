@@ -494,7 +494,7 @@ static ARGON2_P_COST: u32 = 1;
 static ARGON2_OUT_LEN: usize = 64;
 
 lazy_static! {
-    static ref ARGON2_SALT: SaltString = SaltString::b64_encode(
+    static ref ARGON2_SALT: SaltString = SaltString::encode_b64(
         option_env!("PASSWORD_SALT")
             .unwrap_or("br8f4efc3F4heecdsdS")
             .as_bytes()

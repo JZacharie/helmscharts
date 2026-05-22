@@ -41,14 +41,14 @@ use tokio::task::JoinHandle;
 #[cfg(feature = "tls_openssl")]
 use tokio_openssl::SslStream;
 #[cfg(feature = "tls_rustls")]
-use tokio_rustls::rustls::{Certificate, PrivateKey};
+use rustls::pki_types::{CertificateDer, PrivateKeyDer};
 #[cfg(feature = "tls_rustls")]
 use tokio_rustls::TlsAcceptor;
 use tokio_stream::StreamExt;
 use tokio_util::codec::{Framed, LinesCodecError};
 use tracing::*;
 #[cfg(feature = "dns_lookup")]
-use trust_dns_resolver::{TokioAsyncResolver, TokioHandle};
+use trust_dns_resolver::TokioAsyncResolver;
 
 use crate::command::*;
 use crate::config::*;
@@ -550,7 +550,7 @@ fn initialize_dns_resolver() {
                 #[cfg(any(unix, windows))]
                 {
                     // use the system resolver configuration
-                    TokioAsyncResolver::from_system_conf(TokioHandle)
+                    TokioAsyncResolver::tokio_from_system_conf()
                 }
 
                 // for other
@@ -620,16 +620,20 @@ pub(crate) async fn run_server(
         {
             let config = {
                 let tlsconfig = cloned_tls.unwrap();
-                let certs =
+                let certs: Vec<CertificateDer> =
                     rustls_pemfile::certs(&mut BufReader::new(File::open(tlsconfig.cert_file)?))
-                        .map(|mut certs| certs.drain(..).map(Certificate).collect())?;
-                let mut keys: Vec<PrivateKey> = rustls_pemfile::pkcs8_private_keys(
+                        .collect::<Result<Vec<_>, _>>()?;
+                let mut keys: Vec<PrivateKeyDer> = rustls_pemfile::pkcs8_private_keys(
                     &mut BufReader::new(File::open(tlsconfig.cert_key_file)?),
                 )
-                .map(|mut keys| keys.drain(..).map(PrivateKey).collect())?;
+                .map(|res| res.map(PrivateKeyDer::Pkcs8))
+                .collect::<Result<Vec<_>, _>>()?;
+
+                if keys.is_empty() {
+                    return Err(io::Error::new(io::ErrorKind::InvalidInput, "No private keys found").into());
+                }
 
                 rustls::ServerConfig::builder()
-                    .with_safe_defaults()
                     .with_no_client_auth()
                     .with_single_cert(certs, keys.remove(0))
                     .map_err(|err| io::Error::new(io::ErrorKind::InvalidInput, err))?
@@ -841,18 +845,17 @@ mod test {
     pub(crate) async fn connect_to_test_tls(
         port: u16,
     ) -> Framed<tokio_rustls::client::TlsStream<TcpStream>, IRCLinesCodec> {
-        let mut certs: Vec<Certificate> = rustls_pemfile::certs(&mut BufReader::new(
+        let mut certs: Vec<CertificateDer> = rustls_pemfile::certs(&mut BufReader::new(
             File::open(get_cert_file_path()).unwrap(),
         ))
-        .map(|mut certs| certs.drain(..).map(Certificate).collect())
+        .collect::<Result<Vec<_>, _>>()
         .unwrap();
-        let dnsname = rustls::client::ServerName::try_from("localhost").unwrap();
+        let dnsname = rustls::pki_types::ServerName::try_from("localhost").unwrap().to_owned();
 
         let mut cert_store = rustls::RootCertStore { roots: vec![] };
-        cert_store.add(&certs.remove(0)).unwrap();
+        cert_store.add(certs.remove(0)).unwrap();
         let config = Arc::new(
             rustls::ClientConfig::builder()
-                .with_safe_defaults()
                 .with_root_certificates(cert_store)
                 .with_no_client_auth(),
         );

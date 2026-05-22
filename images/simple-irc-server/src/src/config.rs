@@ -68,9 +68,9 @@ pub(crate) struct TLSConfig {
 
 #[derive(PartialEq, Eq, Deserialize, Debug, Validate)]
 pub(crate) struct OperatorConfig {
-    #[validate(custom = "validate_username")]
+    #[validate(custom(function = "validate_username"))]
     pub(crate) name: String,
-    #[validate(custom = "validate_password_hash")]
+    #[validate(custom(function = "validate_password_hash"))]
     pub(crate) password: String,
     pub(crate) mask: Option<String>,
 }
@@ -271,21 +271,21 @@ impl fmt::Display for ChannelModes {
 
 #[derive(PartialEq, Eq, Deserialize, Debug, Validate)]
 pub(crate) struct ChannelConfig {
-    #[validate(custom = "validate_channel")]
+    #[validate(custom(function = "validate_channel"))]
     pub(crate) name: String,
     pub(crate) topic: Option<String>,
-    #[validate]
+    #[validate(nested)]
     pub(crate) modes: ChannelModes,
 }
 
 #[derive(PartialEq, Eq, Deserialize, Debug, Validate)]
 pub(crate) struct UserConfig {
-    #[validate(custom = "validate_username")]
+    #[validate(custom(function = "validate_username"))]
     pub(crate) name: String,
-    #[validate(custom = "validate_username")]
+    #[validate(custom(function = "validate_username"))]
     pub(crate) nick: String,
     #[validate(length(min = 6))]
-    #[validate(custom = "validate_password_hash")]
+    #[validate(custom(function = "validate_password_hash"))]
     pub(crate) password: Option<String>,
     pub(crate) mask: Option<String>,
 }
@@ -293,7 +293,7 @@ pub(crate) struct UserConfig {
 /// Main configuration structure.
 #[derive(PartialEq, Eq, Deserialize, Debug, Validate)]
 pub(crate) struct MainConfig {
-    #[validate(contains = ".")]
+    #[validate(contains(pattern = "."))]
     pub(crate) name: String,
     pub(crate) admin_info: String,
     pub(crate) admin_info2: Option<String>,
@@ -303,7 +303,7 @@ pub(crate) struct MainConfig {
     pub(crate) listen: IpAddr,
     pub(crate) port: u16,
     pub(crate) network: String,
-    #[validate(custom = "validate_password_hash")]
+    #[validate(custom(function = "validate_password_hash"))]
     pub(crate) password: Option<String>,
     pub(crate) max_connections: Option<usize>,
     pub(crate) max_joins: Option<usize>,
@@ -317,11 +317,11 @@ pub(crate) struct MainConfig {
     pub(crate) tls: Option<TLSConfig>,
     // If MainConfig modes we use Option to avoid unnecessary field definition if list
     // in this field should be. The administrator can omit fields for empty lists.
-    #[validate]
+    #[validate(nested)]
     pub(crate) operators: Option<Vec<OperatorConfig>>,
-    #[validate]
+    #[validate(nested)]
     pub(crate) users: Option<Vec<UserConfig>>,
-    #[validate]
+    #[validate(nested)]
     pub(crate) channels: Option<Vec<ChannelConfig>>,
 }
 
@@ -386,8 +386,8 @@ impl MainConfig {
             }
             // both config are required
             if (have_cert && !have_cert_key) || (!have_cert && have_cert_key) {
-                return Err(Box::new(clap::error::Error::raw(
-                    clap::ErrorKind::ValueValidation,
+                return Err(Box::new(clap::Error::raw(
+                    clap::error::ErrorKind::ValueValidation,
                     "TLS certifcate file and certificate \
                         key file together are required",
                 )));
@@ -395,8 +395,8 @@ impl MainConfig {
             if let Err(e) = config.validate() {
                 Err(Box::new(e))
             } else if !config.validate_nicknames() {
-                Err(Box::new(clap::error::Error::raw(
-                    clap::ErrorKind::ValueValidation,
+                Err(Box::new(clap::Error::raw(
+                    clap::error::ErrorKind::ValueValidation,
                     "Wrong nikname lengths",
                 )))
             } else {
