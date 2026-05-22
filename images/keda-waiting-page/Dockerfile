@@ -1,5 +1,5 @@
 # Multi-stage Dockerfile for KEDA Waiting Page
-FROM python:3.14-slim AS backend-builder
+FROM python:3.14-slim as backend-builder
 
 WORKDIR /app
 

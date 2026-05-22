@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.24
-FROM debian:13-slim
+FROM debian:12-slim
 
 ARG ALLOW_INSECURE_TLS=0
 ARG APP_UID=10001
