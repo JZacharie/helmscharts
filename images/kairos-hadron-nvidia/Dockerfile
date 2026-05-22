@@ -7,7 +7,7 @@
 ARG HADRON_VERSION=v0.2.0
 # Full Kairos image ref (includes kairos-agent required by NodeOpUpgrade).
 # BASE_IMAGE_TAG must be set explicitly — it's the full quay.io tag, not just HADRON_VERSION.
-ARG BASE_IMAGE=quay.io/kairos/hadron
+ARG BASE_IMAGE=ghcr.io/kairos-io/hadron
 ARG BASE_IMAGE_TAG=v0.2.0-standard-amd64-generic-v4.1.0-k3sv1.36.0-k3s1
 ARG VERSION=v0.2.0-standard-amd64-generic-v4.1.0-k3sv1.36.0-k3s1
 ARG JOBS=4
