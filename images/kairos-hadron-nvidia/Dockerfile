@@ -62,7 +62,15 @@ RUN apt-get update && \
         xz-utils \
         libstdc++6 \
         libgcc-s1 \
+        gnupg \
+        nvtop \
         nvidia-modprobe && \
+    curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg && \
+    curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+      sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+      tee /etc/apt/sources.list.d/nvidia-container-toolkit.list && \
+    apt-get update && \
+    apt-get install -y nvidia-container-toolkit && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /work
@@ -119,6 +127,21 @@ RUN cp -a sbin/nvidia-smi ${OUTPUT}/usr/bin/
 RUN cp -a sbin/nvidia-cuda-mps-server ${OUTPUT}/usr/bin/
 RUN cp -a sbin/nvidia-cuda-mps-control ${OUTPUT}/usr/bin/
 
+# NVIDIA Container Toolkit
+RUN cp -a /usr/bin/nvidia-container-toolkit ${OUTPUT}/usr/bin/ && \
+    cp -a /usr/bin/nvidia-container-runtime ${OUTPUT}/usr/bin/ && \
+    cp -a /usr/bin/nvidia-container-cli ${OUTPUT}/usr/bin/ && \
+    cp -a /usr/bin/nvidia-ctk ${OUTPUT}/usr/bin/
+
+# nvtop
+RUN cp -a /usr/bin/nvtop ${OUTPUT}/usr/bin/
+
+# NVIDIA Container Toolkit Configuration
+RUN if [ -d /etc/nvidia-container-runtime ]; then \
+      mkdir -p ${OUTPUT}/etc/nvidia-container-runtime && \
+      cp -a /etc/nvidia-container-runtime/* ${OUTPUT}/etc/nvidia-container-runtime/; \
+    fi
+
 # nvidia-modprobe: creates /dev/nvidia* device nodes when the kernel module loads.
 # Without it the modules load at boot but udev never creates the device files,
 # so nvidia-smi fails with "couldn't communicate with the NVIDIA driver".
@@ -155,7 +178,22 @@ RUN set -eux; \
     cp -L $GLIBC/libstdc++.so.6 ${OUTPUT}/usr/libc/lib/; \
     cp -L $GLIBC/libgcc_s.so.1 ${OUTPUT}/usr/libc/lib/; \
     cp -L $GLIBC/libnsl.so.1 ${OUTPUT}/usr/libc/lib/; \
-    cp -L $GLIBC/libcrypt.so.1 ${OUTPUT}/usr/libc/lib/
+    cp -L $GLIBC/libcrypt.so.1 ${OUTPUT}/usr/libc/lib/; \
+    # Copy libnvidia-container libraries explicitly \
+    cp -P /usr/lib/${DIR_ARCH}-linux-gnu/libnvidia-container*.so* ${OUTPUT}/usr/libc/lib/ || true; \
+    # Resolve all dynamic dependencies for our binaries and copy them \
+    for bin in nvidia-smi nvidia-modprobe nvidia-container-toolkit nvidia-container-runtime nvidia-container-cli nvidia-ctk nvtop; do \
+      binary_path=$(which $bin || echo "${OUTPUT}/usr/bin/$bin"); \
+      if [ -f "$binary_path" ]; then \
+        ldd "$binary_path" | grep "=>" | awk '{print $3}' | while read lib; do \
+          if [ -f "$lib" ]; then \
+            libdir=$(dirname "$lib"); \
+            libname=$(basename "$lib" | cut -d. -f1-2); \
+            cp -P "$libdir"/"$libname"* ${OUTPUT}/usr/libc/lib/ 2>/dev/null || true; \
+          fi; \
+        done; \
+      fi; \
+    done
 
 # Copy a ld.so.conf that only glibc reads to know where its libs are so it can find them when running the NVIDIA userspace binaries.
 # This way we have a transparent layer of glibc runtime libraries that only the glibc-linked binaries use,
