@@ -41,7 +41,7 @@ When a commit is pushed to `main`, the workflow will:
 1. Parse `ARG VERSION=` from the Dockerfile.
 2. Build the Dockerfile with Buildx.
 3. Push the image to the GitHub Container Registry:
-   `ghcr.io/jzacharie/kairos-hadron-nvidia:v0.2.0-standard-amd64-generic-v4.1.0-k3sv1.36.0-k3s1`
+   `ghcr.io/jzacharie/kairos-hadron-nvidia:v0.2.0-standard-amd64-generic-v4.1.0-k3s-v1.36.0-k3s1`
 
 ### Local Build
 To build the image manually on a local machine, run the following script:
@@ -49,7 +49,7 @@ To build the image manually on a local machine, run the following script:
 HADRON_VERSION="v0.2.0"
 NVIDIA_VERSION="580.126.20"
 BASE_IMAGE="quay.io/kairos/hadron"
-BASE_IMAGE_TAG="v0.2.0-standard-amd64-generic-v4.1.0-k3sv1.36.0-k3s1"
+BASE_IMAGE_TAG="v0.2.0-standard-amd64-generic-v4.1.0-k3s-v1.36.0-k3s1"
 IMAGE="ghcr.io/jzacharie/kairos-hadron-nvidia:${BASE_IMAGE_TAG}"
 
 docker buildx build \
