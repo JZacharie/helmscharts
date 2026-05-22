@@ -1,3 +1,4 @@
+# Trigger full rebuild of all Docker images
 name: Build and Push Docker Images
 
 on:
