@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "graphon.fullname" . }}
+  labels:
+    {{- include "graphon.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      {{- include "graphon.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "graphon.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+          command: ["/usr/local/bin/graphon-server"]
+          args: ["--server"]
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: HOST
+              value: "0.0.0.0"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.secretName | default "graphon-secrets" }}
+                  key: database-url
+            - name: GMAIL_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.gmail.secretName | default "graphon-secrets" }}
+                  key: gmail-token
+            - name: LLM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.llm.secretName | default "graphon-secrets" }}
+                  key: llm-api-key
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

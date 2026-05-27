@@ -1,0 +1,37 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/jzacharie/graphon
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+database:
+  secretName: graphon-secrets
+
+gmail:
+  secretName: graphon-secrets
+
+llm:
+  secretName: graphon-secrets
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: graphon.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
