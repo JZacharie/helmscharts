@@ -75,5 +75,7 @@ spec:
               value: {{ .Values.qdrant.collection | default "emails" }}
             - name: QDRANT_VECTOR_SIZE
               value: {{ .Values.qdrant.vectorSize | default "768" | quote }}
+            - name: SYNC_TIMEOUT_SECS
+              value: {{ .Values.syncTimeout | default "300" | quote }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
