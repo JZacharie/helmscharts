@@ -54,6 +54,16 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.gmail.secretName | default "graphon-secrets" }}
                   key: gmail-token
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.gmail.secretName | default "graphon-secrets" }}
+                  key: google-client-id
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.gmail.secretName | default "graphon-secrets" }}
+                  key: google-client-secret
             - name: LLM_API_KEY
               valueFrom:
                 secretKeyRef:
