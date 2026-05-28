@@ -69,5 +69,11 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.llm.secretName | default "graphon-secrets" }}
                   key: llm-api-key
+            - name: QDRANT_URL
+              value: {{ .Values.qdrant.url | default "http://qdrant.qdrant.svc.cluster.local:6333" }}
+            - name: QDRANT_COLLECTION
+              value: {{ .Values.qdrant.collection | default "emails" }}
+            - name: QDRANT_VECTOR_SIZE
+              value: {{ .Values.qdrant.vectorSize | default "768" | quote }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

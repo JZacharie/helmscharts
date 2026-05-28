@@ -14,6 +14,11 @@ gmail:
 llm:
   secretName: graphon-secrets
 
+qdrant:
+  url: "http://qdrant.qdrant.svc.cluster.local:6333"
+  collection: "emails"
+  vectorSize: 768
+
 service:
   type: ClusterIP
   port: 8080
