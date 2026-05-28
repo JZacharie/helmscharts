@@ -19,6 +19,12 @@ qdrant:
   collection: "emails"
   vectorSize: 768
 
+pylos:
+  baseUrl: "http://pylos.pylos.svc.cluster.local:3000"
+  model: "deepseek-v4-flash"
+  secretName: "graphon-secrets"
+  secretKey: "pylos-api-key"
+
 service:
   type: ClusterIP
   port: 8080

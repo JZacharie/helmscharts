@@ -77,5 +77,14 @@ spec:
               value: {{ .Values.qdrant.vectorSize | default "768" | quote }}
             - name: SYNC_TIMEOUT_SECS
               value: {{ .Values.syncTimeout | default "300" | quote }}
+            - name: PYLOS_BASE_URL
+              value: {{ .Values.pylos.baseUrl }}
+            - name: PYLOS_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.pylos.secretName }}
+                  key: {{ .Values.pylos.secretKey }}
+            - name: PYLOS_MODEL
+              value: {{ .Values.pylos.model }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
