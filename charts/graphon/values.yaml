@@ -22,6 +22,7 @@ qdrant:
 pylos:
   baseUrl: "http://pylos.pylos.svc.cluster.local:3000"
   model: "deepseek-v4-flash"
+  embeddingModel: "nomic-embed-text-v2-moe-GGUF"
   secretName: "graphon-secrets"
   secretKey: "pylos-api-key"
 

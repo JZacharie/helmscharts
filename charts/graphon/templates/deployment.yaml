@@ -86,5 +86,7 @@ spec:
                   key: {{ .Values.pylos.secretKey }}
             - name: PYLOS_MODEL
               value: {{ .Values.pylos.model }}
+            - name: PYLOS_EMBEDDING_MODEL
+              value: {{ .Values.pylos.embeddingModel | default "nomic-embed-text-v2-moe-GGUF" }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
