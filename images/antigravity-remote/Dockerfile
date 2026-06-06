@@ -103,7 +103,7 @@ RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor
     && mkdir -p /etc/apt/keyrings \
     && curl -fsSL https://us-central1-apt.pkg.dev/doc/repo-signing-key.gpg | gpg --dearmor --yes -o /etc/apt/keyrings/antigravity-repo-key.gpg \
     && echo "deb [signed-by=/etc/apt/keyrings/antigravity-repo-key.gpg] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/ antigravity-debian main" | tee /etc/apt/sources.list.d/antigravity.list \
-    && apt-get update && apt-get install -y --no-install-recommends \
+    && apt-get update && yes | apt-get install -y --no-install-recommends \
     google-chrome-stable \
     terraform \
     docker.io \
