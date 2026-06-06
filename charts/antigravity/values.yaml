@@ -144,3 +144,11 @@ antigravityConfig:
     coder:
       model: "litellm.gpt-oss-120b"
       reasoningEffort: "high"
+
+gitPersistence:
+  enabled: false
+  size: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClass: ""
+  mountPath: /home/antigravity/workspace/git

@@ -51,11 +51,20 @@ spec:
               cp /mnt/config/antigravity.json /mnt/home/.antigravity.json
             fi
 
+            # Ensure mountPath directory exists
+            {{- if .Values.gitPersistence.enabled }}
+            mkdir -p /mnt/home/workspace/git
+            {{- end }}
+
             echo "Enforcing ownership..."
             chown -R 1000:1000 /mnt/home
         volumeMounts:
         - name: data
           mountPath: /mnt/home
+        {{- if .Values.gitPersistence.enabled }}
+        - name: git-data
+          mountPath: /mnt/home/workspace/git
+        {{- end }}
         {{- if .Values.antigravityConfig }}
         - name: config
           mountPath: /mnt/config/antigravity.json
@@ -94,6 +103,10 @@ spec:
           mountPath: /home/antigravity
         - name: dshm
           mountPath: /dev/shm
+        {{- if .Values.gitPersistence.enabled }}
+        - name: git-data
+          mountPath: {{ .Values.gitPersistence.mountPath | default "/home/antigravity/workspace/git" }}
+        {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
         livenessProbe:
@@ -124,6 +137,11 @@ spec:
         emptyDir:
           medium: Memory
           sizeLimit: 2Gi
+      {{- if .Values.gitPersistence.enabled }}
+      - name: git-data
+        persistentVolumeClaim:
+          claimName: {{ include "antigravity.fullname" . }}-git
+      {{- end }}
       {{- if .Values.antigravityConfig }}
       - name: config
         configMap:

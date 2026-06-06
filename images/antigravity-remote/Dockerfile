@@ -116,6 +116,9 @@ RUN KUBECTL_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt) \
     && curl -L "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl \
     && chmod +x /usr/local/bin/kubectl
 
+# Install Azure CLI
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
 # Copy tools from downloader stage
 COPY --from=downloader /opt/novnc /opt/novnc
 COPY --from=downloader /opt/websockify /opt/websockify
@@ -158,7 +161,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --de
 USER root
 
 # Add RTK aliases globally (only for main tools, avoiding common utilities like ls, grep, cat)
-RUN for tool in git kubectl helm terraform rustc cargo go python python3 pip uv mc psql docker; do \
+RUN for tool in git kubectl helm terraform rustc cargo go python python3 pip uv mc psql docker az aws; do \
     echo "alias $tool='rtk $tool'" >> /etc/bash.bashrc; \
     done
 

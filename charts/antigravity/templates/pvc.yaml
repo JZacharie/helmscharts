@@ -17,3 +17,24 @@ spec:
   storageClassName: {{ .Values.persistence.storageClass | quote }}
   {{- end }}
 {{- end }}
+
+{{ if .Values.gitPersistence.enabled }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "antigravity.fullname" . }}-git
+  labels:
+    {{- include "antigravity.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    {{- range .Values.gitPersistence.accessModes }}
+    - {{ . | quote }}
+    {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.gitPersistence.size | quote }}
+  {{- if .Values.gitPersistence.storageClass }}
+  storageClassName: {{ .Values.gitPersistence.storageClass | quote }}
+  {{- end }}
+{{- end }}
