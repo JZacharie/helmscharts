@@ -108,7 +108,6 @@ RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor
     terraform \
     docker.io \
     antigravity \
-    antigravity-ide \
     && rm -rf /var/lib/apt/lists/*
 
 # Install kubectl
