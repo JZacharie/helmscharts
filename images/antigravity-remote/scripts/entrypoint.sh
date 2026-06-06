@@ -125,6 +125,150 @@ EOF
     chmod +x /home/${USER}/Desktop/Freelens.desktop
 fi
 
+# Create OpenCode Desktop Shortcut
+if [ ! -f /home/${USER}/Desktop/Opencode.desktop ]; then
+    echo "Creating OpenCode desktop shortcut..."
+    cat > /home/${USER}/Desktop/Opencode.desktop << 'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=OpenCode
+Comment=OpenCode AI Coding Agent
+Exec=xfce4-terminal -e "opencode"
+Icon=utilities-terminal
+Path=
+Terminal=false
+StartupNotify=false
+EOF
+    chmod +x /home/${USER}/Desktop/Opencode.desktop
+fi
+
+# Create Antigravity Desktop Shortcut
+if [ ! -f /home/${USER}/Desktop/Antigravity.desktop ]; then
+    echo "Creating Antigravity desktop shortcut..."
+    cat > /home/${USER}/Desktop/Antigravity.desktop << 'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Antigravity
+Comment=Google Antigravity Agent
+Exec=antigravity
+Icon=system-run
+Path=
+Terminal=false
+StartupNotify=false
+EOF
+    chmod +x /home/${USER}/Desktop/Antigravity.desktop
+fi
+
+# Create Antigravity IDE Desktop Shortcut
+if [ ! -f /home/${USER}/Desktop/AntigravityIDE.desktop ]; then
+    echo "Creating Antigravity IDE desktop shortcut..."
+    cat > /home/${USER}/Desktop/AntigravityIDE.desktop << 'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Antigravity IDE
+Comment=Antigravity Intelligent Development Environment
+Exec=antigravity-ide
+Icon=system-run
+Path=
+Terminal=false
+StartupNotify=false
+EOF
+    chmod +x /home/${USER}/Desktop/AntigravityIDE.desktop
+fi
+
+# Create Helm Desktop Shortcut
+if [ ! -f /home/${USER}/Desktop/Helm.desktop ]; then
+    echo "Creating Helm desktop shortcut..."
+    cat > /home/${USER}/Desktop/Helm.desktop << 'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Helm
+Comment=Kubernetes Package Manager
+Exec=xfce4-terminal -hold -e "helm"
+Icon=utilities-terminal
+Path=
+Terminal=false
+StartupNotify=false
+EOF
+    chmod +x /home/${USER}/Desktop/Helm.desktop
+fi
+
+# Create Kubectl Desktop Shortcut
+if [ ! -f /home/${USER}/Desktop/Kubectl.desktop ]; then
+    echo "Creating Kubectl desktop shortcut..."
+    cat > /home/${USER}/Desktop/Kubectl.desktop << 'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Kubectl
+Comment=Kubernetes Command Line Tool
+Exec=xfce4-terminal -hold -e "kubectl"
+Icon=utilities-terminal
+Path=
+Terminal=false
+StartupNotify=false
+EOF
+    chmod +x /home/${USER}/Desktop/Kubectl.desktop
+fi
+
+# Create Terraform Desktop Shortcut
+if [ ! -f /home/${USER}/Desktop/Terraform.desktop ]; then
+    echo "Creating Terraform desktop shortcut..."
+    cat > /home/${USER}/Desktop/Terraform.desktop << 'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Terraform
+Comment=Infrastructure as Code
+Exec=xfce4-terminal -hold -e "terraform"
+Icon=utilities-terminal
+Path=
+Terminal=false
+StartupNotify=false
+EOF
+    chmod +x /home/${USER}/Desktop/Terraform.desktop
+fi
+
+# Create Rust Desktop Shortcut
+if [ ! -f /home/${USER}/Desktop/Rust.desktop ]; then
+    echo "Creating Rust desktop shortcut..."
+    cat > /home/${USER}/Desktop/Rust.desktop << 'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Rust
+Comment=Rust Toolchain
+Exec=xfce4-terminal -hold -e "cargo --version"
+Icon=utilities-terminal
+Path=
+Terminal=false
+StartupNotify=false
+EOF
+    chmod +x /home/${USER}/Desktop/Rust.desktop
+fi
+
+# Create Python Desktop Shortcut
+if [ ! -f /home/${USER}/Desktop/Python.desktop ]; then
+    echo "Creating Python desktop shortcut..."
+    cat > /home/${USER}/Desktop/Python.desktop << 'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Python
+Comment=Python Interpreter
+Exec=xfce4-terminal -hold -e "python3"
+Icon=utilities-terminal
+Path=
+Terminal=false
+StartupNotify=false
+EOF
+    chmod +x /home/${USER}/Desktop/Python.desktop
+fi
+
 # =============================================================================
 # Fix permissions
 # =============================================================================

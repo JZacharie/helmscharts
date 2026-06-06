@@ -12,6 +12,7 @@ ARG WEBSOCKIFY_VERSION=0.13.0
 ARG GO_VERSION=1.26.1
 ARG FREELENS_VERSION=1.8.1
 ARG HELM_VERSION=3.17.1
+ARG OPENCODE_VERSION=v1.15.0
 
 RUN apk add --no-cache curl tar unzip
 
@@ -43,6 +44,11 @@ RUN curl -L "https://github.com/freelensapp/freelens/releases/download/v${FREELE
 
 # Download MinIO Client
 RUN curl -fsSL https://dl.min.io/client/mc/release/linux-amd64/mc -o mc
+
+# Download OpenCode
+RUN curl -fsSL -o /tmp/opencode.tar.gz "https://github.com/anomalyco/opencode/releases/download/${OPENCODE_VERSION}/opencode-linux-x64.tar.gz" \
+    && mkdir -p /tmp/opencode \
+    && tar -xzf /tmp/opencode.tar.gz -C /tmp/opencode
 
 # --- Stage 2: Final Image ---
 FROM nvidia/cuda:13.2.1-runtime-ubuntu24.04
@@ -102,6 +108,7 @@ RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor
     terraform \
     docker.io \
     antigravity \
+    antigravity-ide \
     && rm -rf /var/lib/apt/lists/*
 
 # Install kubectl
@@ -117,12 +124,13 @@ COPY --from=downloader /tmp/aws /tmp/aws_install
 COPY --from=downloader /tmp/freelens.deb /tmp/freelens.deb
 COPY --from=downloader /tmp/mc /usr/local/bin/mc
 COPY --from=downloader /tmp/helm/helm /usr/local/bin/helm
+COPY --from=downloader /tmp/opencode/opencode /usr/local/bin/opencode
 
 # Install Go, AWS CLI, and FreeLens
 RUN tar -xz -C /usr/local -f /tmp/go.tar.gz \
     && /tmp/aws_install/install \
     && apt-get update && apt-get install -y /tmp/freelens.deb \
-    && chmod +x /usr/local/bin/mc /usr/local/bin/helm \
+    && chmod +x /usr/local/bin/mc /usr/local/bin/helm /usr/local/bin/opencode \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
 # Create Non-Root User (Handling potential existing 'ubuntu' user)
