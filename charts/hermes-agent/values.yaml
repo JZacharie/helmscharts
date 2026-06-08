@@ -1,0 +1,90 @@
+replicaCount: 1
+
+image:
+  repository: nousresearch/hermes-agent
+  pullPolicy: Always
+  tag: "latest"
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 10000
+
+securityContext:
+  runAsUser: 10000
+  runAsGroup: 10000
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  dashboardPort: 9119
+
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production-dns
+    gethomepage.dev/description: Hermes AI Agent
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: AI
+    gethomepage.dev/icon: mdi-robot
+    gethomepage.dev/name: Hermes
+    gethomepage.dev/ping: hermes.p.zacharie.org
+    kubernetes.io/ingress.class: traefik
+  hosts:
+    - host: hermes.p.zacharie.org
+      paths:
+        - path: /
+          pathType: Prefix
+          port: 9119
+  tls:
+    - secretName: hermes-agent-tls
+      hosts:
+        - hermes.p.zacharie.org
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+  requests:
+    cpu: 500m
+    memory: 1Gi
+
+persistence:
+  enabled: true
+  size: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClass: ""
+
+externalSecret:
+  enabled: true
+  refreshInterval: "1h"
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  remoteRefs:
+    PYLOS_API_KEY:
+      key: hermes-agent
+      property: PYLOS_API_KEY
+
+env:
+  OPENAI_BASE_URL: "http://pylos.pylos.svc.cluster.local:3000/v1"
+  OPENAI_MODEL: "gemma4:12b"
+  HERMES_DASHBOARD_PORT: "9119"
+
+imagePullSecrets: []
+nodeSelector: {}
+tolerations: []
+affinity: {}

@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "hermes-agent.fullname" . }}
+  labels:
+    {{- include "hermes-agent.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      {{- include "hermes-agent.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "hermes-agent.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "hermes-agent.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: gateway
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: ["hermes", "gateway", "run"]
+        env:
+        - name: HERMES_HOME
+          value: /opt/data
+        - name: HERMES_UID
+          value: "10000"
+        - name: HERMES_GID
+          value: "10000"
+        - name: OPENAI_BASE_URL
+          value: {{ .Values.env.OPENAI_BASE_URL | quote }}
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "hermes-agent.fullname" . }}-secrets
+              key: PYLOS_API_KEY
+              optional: true
+        envFrom:
+        - secretRef:
+            name: {{ include "hermes-agent.fullname" . }}-secrets
+            optional: true
+        volumeMounts:
+        - name: data
+          mountPath: /opt/data
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+      - name: dashboard
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: ["hermes", "dashboard", "--host", "0.0.0.0", "--no-open", "--port", {{ .Values.env.HERMES_DASHBOARD_PORT | quote }}]
+        env:
+        - name: HERMES_HOME
+          value: /opt/data
+        - name: HERMES_UID
+          value: "10000"
+        - name: HERMES_GID
+          value: "10000"
+        envFrom:
+        - secretRef:
+            name: {{ include "hermes-agent.fullname" . }}-secrets
+            optional: true
+        ports:
+        - containerPort: {{ .Values.service.dashboardPort }}
+          name: dashboard
+          protocol: TCP
+        volumeMounts:
+        - name: data
+          mountPath: /opt/data
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+      volumes:
+      - name: data
+        {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ include "hermes-agent.fullname" . }}-data
+        {{- else }}
+        emptyDir: {}
+        {{- end }}
+      dnsPolicy: Default
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30

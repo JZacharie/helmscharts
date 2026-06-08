@@ -1,0 +1,6 @@
+apiVersion: v2
+name: hermes-agent
+description: A Helm chart for Hermes Agent by Nous Research - The agent that grows with you
+type: application
+version: 0.1.0
+appVersion: "0.16.0"
