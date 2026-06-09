@@ -58,7 +58,7 @@ spec:
       - name: dashboard
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        command: ["hermes", "dashboard", "--host", "0.0.0.0", "--no-open", "--port", {{ .Values.env.HERMES_DASHBOARD_PORT | quote }}]
+        command: ["hermes", "dashboard", "--host", "0.0.0.0", "--no-open", "--port", {{ .Values.env.HERMES_DASHBOARD_PORT | quote }}, "--insecure"]
         env:
         - name: HERMES_HOME
           value: /opt/data
