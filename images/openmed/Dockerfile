@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN python -m pip install --upgrade pip \
     && pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu torch \
-    && pip install --no-cache-dir "git+https://github.com/maziyarpanahi/openmed.git#egg=openmed[hf,service]"
+    && pip install --no-cache-dir "openmed[hf,service] @ git+https://github.com/maziyarpanahi/openmed.git"
 
 EXPOSE 8080
 
