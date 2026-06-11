@@ -2845,6 +2845,21 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/opencode-0.1.0/opencode-0.1.0.tgz
     version: 0.1.0
+  openmed:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2026-06-11T12:04:31.378564986Z"
+    dependencies:
+    - name: common
+      repository: https://zekker6.github.io/helm-charts
+      version: 0.5.2
+    description: OpenMed server Helm package
+    digest: 89747081f26114a681aef3dc5ec0472feb2363e48ddd0a62d3182ab21d59e1cd
+    name: openmed
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/openmed-0.1.0/openmed-0.1.0.tgz
+    version: 0.1.0
   openobserve-collector:
   - apiVersion: v2
     appVersion: 0.136.0
@@ -3920,4 +3935,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-06-08T19:03:04.047321371Z"
+generated: "2026-06-11T12:04:31.379203892Z"
