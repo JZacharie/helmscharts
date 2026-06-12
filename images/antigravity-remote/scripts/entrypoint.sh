@@ -131,6 +131,7 @@ StartupNotify=false
 EOF
     chmod +x /home/${USER}/Desktop/Freelens.desktop
 fi
+cp -f /home/${USER}/Desktop/Freelens.desktop /usr/share/applications/Freelens.desktop
 
 # Create OpenCode Desktop Shortcut
 if [ ! -f /home/${USER}/Desktop/Opencode.desktop ]; then
@@ -149,6 +150,7 @@ StartupNotify=false
 EOF
     chmod +x /home/${USER}/Desktop/Opencode.desktop
 fi
+cp -f /home/${USER}/Desktop/Opencode.desktop /usr/share/applications/Opencode.desktop
 
 # Create Antigravity Desktop Shortcut
 if [ ! -f /home/${USER}/Desktop/Antigravity.desktop ]; then
@@ -167,6 +169,7 @@ StartupNotify=false
 EOF
     chmod +x /home/${USER}/Desktop/Antigravity.desktop
 fi
+cp -f /home/${USER}/Desktop/Antigravity.desktop /usr/share/applications/antigravity.desktop
 
 # Create Antigravity IDE Desktop Shortcut
 if [ ! -f /home/${USER}/Desktop/AntigravityIDE.desktop ]; then
@@ -185,6 +188,7 @@ StartupNotify=false
 EOF
     chmod +x /home/${USER}/Desktop/AntigravityIDE.desktop
 fi
+cp -f /home/${USER}/Desktop/AntigravityIDE.desktop /usr/share/applications/antigravity-ide.desktop
 
 # Create Helm Desktop Shortcut
 if [ ! -f /home/${USER}/Desktop/Helm.desktop ]; then
