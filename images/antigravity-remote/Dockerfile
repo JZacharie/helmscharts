@@ -137,6 +137,8 @@ RUN tar -xz -C /usr/local -f /tmp/go.tar.gz \
     && chmod +x /usr/share/antigravity/antigravity-ide \
     && chmod 4755 /usr/share/antigravity/chrome-sandbox \
     && ln -sf /usr/share/antigravity/antigravity-ide /usr/bin/antigravity \
+    && ln -sf /opt/Freelens/freelens /usr/bin/Freelens \
+    && ln -sf /opt/Freelens/freelens /usr/bin/freelens \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
 # Create Non-Root User (Handling potential existing 'ubuntu' user)
@@ -162,6 +164,10 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --de
     && curl -fsSL https://antigravity.google/cli/install.sh | bash -s -- --dir /home/${USER}/.local/bin
 
 USER root
+
+# Backup home directory for PVC initialization
+RUN mkdir -p /opt/antigravity-home-backup \
+    && cp -a /home/antigravity/. /opt/antigravity-home-backup/
 
 # Add RTK aliases globally (only for main tools, avoiding common utilities like ls, grep, cat)
 RUN for tool in git kubectl helm terraform rustc cargo go python python3 pip uv mc psql docker az aws; do \

@@ -12,6 +12,13 @@ echo "  Antigravity Remote Docker"
 echo "  Starting container initialization..."
 echo "==========================================="
 
+# Initialize /home/antigravity if it is a mounted PVC and empty/uninitialized
+if [ ! -f /home/antigravity/.bashrc ]; then
+    echo "PVC initialization: Copying initial home files to /home/antigravity..."
+    cp -a /opt/antigravity-home-backup/. /home/antigravity/
+    chown -R ${USER}:${USER} /home/antigravity
+fi
+
 # =============================================================================
 # Set VNC Password
 # =============================================================================
