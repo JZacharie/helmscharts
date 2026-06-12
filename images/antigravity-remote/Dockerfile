@@ -50,6 +50,10 @@ RUN curl -fsSL -o /tmp/opencode.tar.gz "https://github.com/anomalyco/opencode/re
     && mkdir -p /tmp/opencode \
     && tar -xzf /tmp/opencode.tar.gz -C /tmp/opencode
 
+# Download Antigravity
+RUN mkdir -p /tmp/antigravity \
+    && curl -fsSL "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.0.4-6381998290370560/linux-x64/Antigravity%20IDE.tar.gz" | tar -xz -C /tmp/antigravity
+
 # --- Stage 2: Final Image ---
 FROM nvidia/cuda:13.2.1-runtime-ubuntu24.04
 
@@ -95,19 +99,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && locale-gen en_US.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Google Chrome, Hashicorp Tools, and Antigravity
+# Install Google Chrome and Hashicorp Tools
 RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
     && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
     && curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg \
     && echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list \
-    && mkdir -p /etc/apt/keyrings \
-    && curl -fsSL https://us-central1-apt.pkg.dev/doc/repo-signing-key.gpg | gpg --dearmor --yes -o /etc/apt/keyrings/antigravity-repo-key.gpg \
-    && echo "deb [signed-by=/etc/apt/keyrings/antigravity-repo-key.gpg] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/ antigravity-debian main" | tee /etc/apt/sources.list.d/antigravity.list \
     && apt-get update && yes | apt-get install -y --no-install-recommends \
     google-chrome-stable \
     terraform \
     docker.io \
-    antigravity \
     && rm -rf /var/lib/apt/lists/*
 
 # Install kubectl
@@ -127,12 +127,16 @@ COPY --from=downloader /tmp/freelens.deb /tmp/freelens.deb
 COPY --from=downloader /tmp/mc /usr/local/bin/mc
 COPY --from=downloader /tmp/helm/helm /usr/local/bin/helm
 COPY --from=downloader /tmp/opencode/opencode /usr/local/bin/opencode
+COPY --from=downloader ["/tmp/antigravity/Antigravity IDE", "/usr/share/antigravity"]
 
-# Install Go, AWS CLI, and FreeLens
+# Install Go, AWS CLI, FreeLens and Antigravity
 RUN tar -xz -C /usr/local -f /tmp/go.tar.gz \
     && /tmp/aws_install/install \
     && apt-get update && apt-get install -y /tmp/freelens.deb \
     && chmod +x /usr/local/bin/mc /usr/local/bin/helm /usr/local/bin/opencode \
+    && chmod +x /usr/share/antigravity/antigravity-ide \
+    && chmod 4755 /usr/share/antigravity/chrome-sandbox \
+    && ln -sf /usr/share/antigravity/antigravity-ide /usr/bin/antigravity \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
 # Create Non-Root User (Handling potential existing 'ubuntu' user)
