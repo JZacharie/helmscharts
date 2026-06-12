@@ -4,7 +4,7 @@ FROM ubuntu:24.04
 
 # --- Build Arguments for Cache Invalidation & Versioning ---
 ARG GO_VERSION=1.26.3
-ARG OPENCODE_VERSION=v1.16.0
+ARG OPENCODE_VERSION=v1.17.3
 ARG EZA_VERSION=v0.23.4
 ARG BAT_VERSION=v0.26.1
 ARG FZF_VERSION=0.72.0
