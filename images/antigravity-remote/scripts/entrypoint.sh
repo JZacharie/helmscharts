@@ -298,6 +298,13 @@ chown -R ${USER}:${USER} \
 chown ${USER}:${USER} /home/${USER} 2>/dev/null || true
 
 # =============================================================================
+# Clean up Google Chrome locks
+# =============================================================================
+echo "Cleaning up Google Chrome lock files..."
+rm -f /home/${USER}/.config/google-chrome/Singleton* 2>/dev/null || true
+
+
+# =============================================================================
 # Check for Antigravity updates (if enabled)
 # =============================================================================
 if [ "${ANTIGRAVITY_AUTO_UPDATE}" = "true" ]; then
