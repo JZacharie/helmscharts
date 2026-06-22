@@ -45,11 +45,18 @@ spec:
                     secretKeyRef:
                       name: {{ include "mnemosyne.fullname" . }}-secrets
                       key: LITELLM_API_KEY
+                - name: PYLOS_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "mnemosyne.fullname" . }}-secrets
+                      key: LITELLM_API_KEY
                 - name: COLLECTION_NAME
                   value: {{ .Values.config.collectionName | quote }}
                 - name: EMBEDDING_MODEL
                   value: {{ .Values.config.embeddingModel | quote }}
                 - name: LITELLM_URL
+                  value: {{ .Values.config.litellmUrl | quote }}
+                - name: PYLOS_URL
                   value: {{ .Values.config.litellmUrl | quote }}
                 - name: NFS_PATH
                   valueFrom:
