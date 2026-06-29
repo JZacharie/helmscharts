@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: outlinewiki/outline
   pullPolicy: IfNotPresent
-  tag: "1.7.0"
+  tag: "1.8.1"
 
 imagePullSecrets: []
 nameOverride: ""
