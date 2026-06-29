@@ -2000,6 +2000,16 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
     version: 0.5.2-rc
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-06-29T05:33:18.280178668Z"
+    description: Common library chart for JZacharie Helm charts
+    digest: bc533c5afcda4997ed2169b2dc1711281335be5ac86b1dc91e502654bf7c3c8a
+    name: common
+    type: library
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
+    version: 0.5.2-rc
   cursor:
   - annotations:
       artifacthub.io/changes: |-
@@ -3442,6 +3452,16 @@ entries:
     version: 0.1.0
   outline:
   - apiVersion: v2
+    appVersion: 1.8.1
+    created: "2026-06-29T05:33:18.829493716Z"
+    description: A custom Helm chart for Outline Wiki
+    digest: bf6b6a85e595dea3a41131037bc711ef9f72d4c314a328948f60edb8aaea4fb6
+    name: outline
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/outline-0.1.1/outline-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     appVersion: 1.6.1
     created: "2026-03-30T17:52:30.61249604Z"
     description: A custom Helm chart for Outline Wiki
@@ -3935,4 +3955,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-06-11T12:04:31.379203892Z"
+generated: "2026-06-29T05:33:18.829876331Z"
