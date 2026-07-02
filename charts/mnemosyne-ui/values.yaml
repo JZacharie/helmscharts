@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/jzacharie/mnemosyne-ui
+  repository: ghcr.io/jzcharie/mnemosyne-ui
   pullPolicy: IfNotPresent
   tag: "latest"
 
