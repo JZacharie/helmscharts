@@ -43,6 +43,6 @@ tolerations: []
 affinity: {}
 
 config:
-  mnemosyneUrl: "https://search.p.zacharie.org"
+  mnemosyneUrl: ""
   ollamaUrl: "http://192.168.0.58:11434"
   ollamaModel: "llama3"
