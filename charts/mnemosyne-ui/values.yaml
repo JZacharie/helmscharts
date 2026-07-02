@@ -1,9 +1,9 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/jzcharie/mnemosyne-ui
+  repository: nginx
   pullPolicy: IfNotPresent
-  tag: "latest"
+  tag: "alpine"
 
 imagePullSecrets:
   - name: regcred
