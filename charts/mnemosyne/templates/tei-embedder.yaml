@@ -30,6 +30,8 @@ spec:
         image: "{{ .Values.tei.embedder.image.repository | default "ghcr.io/huggingface/text-embeddings-inference" }}:{{ .Values.tei.embedder.image.tag | default "cpu-latest" }}"
         securityContext:
           allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 1000
           capabilities:
             drop: ["ALL"]
         args:
