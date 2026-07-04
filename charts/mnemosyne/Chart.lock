@@ -1,0 +1,6 @@
+dependencies:
+- name: mnemosyne-ui
+  repository: file://../mnemosyne-ui
+  version: 0.1.0
+digest: sha256:8c6e8e52da9e78559d775e8736e25a062f04d2c890f5d957b758487331f83a3b
+generated: "2026-07-04T07:06:19.951696887+02:00"

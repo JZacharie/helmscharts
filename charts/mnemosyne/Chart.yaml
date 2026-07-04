@@ -4,3 +4,8 @@ description: A modern Rust-based RAG indexer for PVCs
 type: application
 version: 0.1.0
 appVersion: "0.1.0"
+
+dependencies:
+  - name: mnemosyne-ui
+    version: 0.1.0
+    repository: "file://../mnemosyne-ui"
