@@ -70,10 +70,12 @@ spec:
               value: {{ .Values.config.collectionName | quote }}
             - name: EMBEDDING_MODEL
               value: {{ .Values.config.embeddingModel | quote }}
+            {{- if .Values.config.litellmUrl }}
             - name: LITELLM_URL
               value: {{ .Values.config.litellmUrl | quote }}
             - name: PYLOS_URL
               value: {{ .Values.config.litellmUrl | quote }}
+            {{- end }}
             - name: NFS_PATH
               valueFrom:
                 secretKeyRef:
