@@ -43,6 +43,10 @@ spec:
         - --dtype
         - {{ .Values.tei.reranker.dtype }}
         {{- end }}
+        {{- if .Values.tei.reranker.backend }}
+        - --backend
+        - {{ .Values.tei.reranker.backend }}
+        {{- end }}
         {{- if .Values.tei.reranker.maxBatchTokens }}
         - --max-batch-tokens
         - {{ .Values.tei.reranker.maxBatchTokens | quote }}

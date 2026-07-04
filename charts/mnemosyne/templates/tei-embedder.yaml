@@ -43,6 +43,10 @@ spec:
         - --dtype
         - {{ .Values.tei.embedder.dtype }}
         {{- end }}
+        {{- if .Values.tei.embedder.backend }}
+        - --backend
+        - {{ .Values.tei.embedder.backend }}
+        {{- end }}
         {{- if .Values.tei.embedder.maxBatchTokens }}
         - --max-batch-tokens
         - {{ .Values.tei.embedder.maxBatchTokens | quote }}
