@@ -1,0 +1,17 @@
+{{- if and .Values.tei.embedder.enabled .Values.tei.embedder.persistence.enabled (not .Values.tei.embedder.persistence.existingClaim) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "mnemosyne.fullname" . }}-tei-embedder
+  labels:
+    {{- include "mnemosyne.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    {{- toYaml .Values.tei.embedder.persistence.accessModes | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ .Values.tei.embedder.persistence.size | quote }}
+  {{- if .Values.tei.embedder.persistence.storageClass }}
+  storageClassName: {{ .Values.tei.embedder.persistence.storageClass | quote }}
+  {{- end }}
+{{- end }}

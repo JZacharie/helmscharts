@@ -99,6 +99,12 @@ tei:
       limits:
         cpu: 4
         memory: 12Gi
+    persistence:
+      enabled: false
+      accessModes:
+        - ReadWriteOnce
+      size: 10Gi
+      storageClass: ""
   reranker:
     enabled: true
     model: "BAAI/bge-reranker-large"
