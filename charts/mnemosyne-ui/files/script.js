@@ -1,6 +1,6 @@
 // Migration check for old internal or subdomain URLs
 const savedMnemosyneUrl = localStorage.getItem('mnemosyneUrl');
-if (savedMnemosyneUrl && (savedMnemosyneUrl.includes('.local') || savedMnemosyneUrl.includes('api-mnemosyne'))) {
+if (savedMnemosyneUrl && (savedMnemosyneUrl.includes('.local') || savedMnemosyneUrl.includes('api-mnemosyne') || savedMnemosyneUrl.includes('localhost') || savedMnemosyneUrl.includes('127.0.0.1'))) {
   localStorage.removeItem('mnemosyneUrl');
 }
 
