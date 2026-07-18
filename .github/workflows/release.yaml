@@ -91,9 +91,9 @@ jobs:
             exit 0
           fi
           git fetch origin gh-pages
-          git checkout gh-pages
+          git checkout -f gh-pages
           git checkout main -- index.html
           git add index.html
           git commit -m "docs: update landing page [skip ci]" || echo "No changes to index.html"
           git push origin gh-pages
-          git checkout main
+          git checkout -f main
