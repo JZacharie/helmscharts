@@ -36,7 +36,8 @@ spec:
             - -c
             - |
               cp -a /home/powerpipe/. /data/
-              cp /tmp/mod-config/mod.pp /data/mod.pp
+              mkdir -p /data/workspace
+              cp /tmp/mod-config/mod.pp /data/workspace/mod.pp
               chown -R 11234:11234 /data
           volumeMounts:
             - name: mod-config
@@ -50,6 +51,14 @@ spec:
             {{- toYaml .Values.powerpipe.securityContext | nindent 12 }}
           image: "{{ .Values.powerpipe.image.repository }}:{{ .Values.powerpipe.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.powerpipe.image.pullPolicy }}
+          {{- with .Values.powerpipe.command }}
+          command:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.powerpipe.args }}
+          args:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           envFrom:
           - configMapRef:
               name: {{ include "powerpipe.fullname" . }}-cm-env-vars
