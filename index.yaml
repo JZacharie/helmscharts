@@ -2020,6 +2020,16 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
     version: 0.5.2-rc
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-07-18T06:23:02.76698758Z"
+    description: Common library chart for JZacharie Helm charts
+    digest: 9154bdd21795823ba2104a08bfe52c12d7301ddae9cb0801ea3d91f4d717cc00
+    name: common
+    type: library
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
+    version: 0.5.2-rc
   cursor:
   - annotations:
       artifacthub.io/changes: |-
@@ -3965,4 +3975,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-07-18T05:43:21.940754171Z"
+generated: "2026-07-18T06:23:03.601321634Z"
