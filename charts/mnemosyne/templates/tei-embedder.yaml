@@ -72,7 +72,12 @@ spec:
         effect: NoSchedule
       volumes:
       - name: data
+        {{- if .Values.tei.embedder.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.tei.embedder.persistence.existingClaim | default (printf "%s-tei-embedder" (include "mnemosyne.fullname" .)) }}
+        {{- else }}
         emptyDir: {}
+        {{- end }}
 ---
 apiVersion: v1
 kind: Service
