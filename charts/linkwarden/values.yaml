@@ -2,7 +2,7 @@ image:
   # -- image repository
   repository: ghcr.io/linkwarden/linkwarden
   # -- image tag
-  tag: "v2.14.1"
+  tag: "v2.15.1"
   # -- image pull policy
   pullPolicy: IfNotPresent
 
