@@ -143,6 +143,16 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/common-0.5.2-rc.tgz
     version: 0.5.2-rc
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-07-19T08:08:00.651476468Z"
+    description: Common library chart for JZacharie Helm charts
+    digest: 536da99d278a1b333e0e8a6b76f6eb07ff1862a986dd3e4d77e56e58b86155f8
+    name: common
+    type: library
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/common-0.5.2-rc/common-0.5.2-rc.tgz
+    version: 0.5.2-rc
   cursor:
   - annotations:
       artifacthub.io/changes: |-
@@ -510,6 +520,32 @@ entries:
     name: maker-management-platform
     urls:
     - https://jzacharie.github.io/helmscharts/maker-management-platform-0.1.0.tgz
+    version: 0.1.0
+  mnemosyne:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2026-07-19T08:08:01.298411796Z"
+    dependencies:
+    - name: mnemosyne-ui
+      repository: file://../mnemosyne-ui
+      version: 0.1.0
+    description: A modern Rust-based RAG indexer for PVCs
+    digest: be055f281da5fb7caf39d87f2327f6023114bd699acde90cee143acfe2b138b8
+    name: mnemosyne
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/mnemosyne-0.1.0/mnemosyne-0.1.0.tgz
+    version: 0.1.0
+  mnemosyne-ui:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-07-19T08:08:01.510353444Z"
+    description: A premium search interface for the Mnemosyne RAG engine
+    digest: 4145595f94f20c0742a5e0c3e2d6e663cf99dc2c2a83a5bd2f0e62b467097130
+    name: mnemosyne-ui
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/mnemosyne-ui-0.1.0/mnemosyne-ui-0.1.0.tgz
     version: 0.1.0
   openai-whisper-asr-webservice:
   - apiVersion: v2
@@ -1073,4 +1109,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-07-18T16:58:58.855665694+02:00"
+generated: "2026-07-19T08:08:01.510437802Z"
