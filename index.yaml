@@ -3,7 +3,7 @@ entries:
   maintenance:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-07-21T08:45:35.766784261+02:00"
+    created: "2026-07-21T08:51:10.328192748+02:00"
     description: Maintenance CronJobs for cluster operations
     digest: 7eeb8f3eae9755b5b9afd90829a52333b8590abf0dd80c059405fce468343a97
     name: maintenance
@@ -14,9 +14,9 @@ entries:
   steampipe-powerpipe-kubernetes:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2026-07-21T08:45:35.767207923+02:00"
+    created: "2026-07-21T08:51:10.328652576+02:00"
     description: A Helm chart for deploying turbot's Steampipe and Powerpipe to Kubernetes
-    digest: f162e488f520dd4448f79c48bf3e606fca832c6187786ebfa5270d2a09ddb8c2
+    digest: 49c8315886a5c329161aff3dcf15e3ddfde0d41d0e7c9211db7a9ebb8effa0f7
     name: steampipe-powerpipe-kubernetes
     type: application
     urls:
@@ -25,7 +25,7 @@ entries:
   thelounge:
   - apiVersion: v2
     appVersion: 4.4.3
-    created: "2026-07-21T08:45:35.767441801+02:00"
+    created: "2026-07-21T08:51:10.328918752+02:00"
     description: A Helm chart for The Lounge - Modern web IRC client
     digest: 79d9302a0458e5bf7aaa037667e5922fdfe7f081f5ec36aef0f474fbbad58d37
     name: thelounge
@@ -33,4 +33,4 @@ entries:
     urls:
     - thelounge-0.1.0.tgz
     version: 0.1.0
-generated: "2026-07-21T08:45:35.766426744+02:00"
+generated: "2026-07-21T08:51:10.327837742+02:00"
