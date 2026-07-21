@@ -38,6 +38,7 @@ spec:
               cp -a /home/powerpipe/. /data/
               mkdir -p /data/workspace
               cp /tmp/mod-config/mod.pp /data/workspace/mod.pp
+              cp /tmp/mod-config/mod.pp /data/mod.pp
           volumeMounts:
             - name: mod-config
               mountPath: /tmp/mod-config
