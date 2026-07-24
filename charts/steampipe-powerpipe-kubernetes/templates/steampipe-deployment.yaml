@@ -37,11 +37,27 @@ spec:
             {{- toYaml .Values.steampipe.securityContext | nindent 12 }}
           image: "{{ .Values.steampipe.image.repository }}:{{ .Values.steampipe.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.steampipe.image.pullPolicy }}
-          #command: ["sleep", "3000"]
+          {{- with .Values.steampipe.command }}
+          command:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.steampipe.args }}
+          args:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           ports:
             - name: postgres
               containerPort: {{ .Values.steampipe.containerPort }}
               protocol: TCP
+          startupProbe:
+            exec:
+              command:
+              - bash
+              - ./healthcheck.sh
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 30
           livenessProbe:
             exec:
               command:
@@ -49,6 +65,7 @@ spec:
               - ./healthcheck.sh
             initialDelaySeconds: 60
             periodSeconds: 10
+            timeoutSeconds: 10
             failureThreshold: 6
           {{- if .Values.steampipe.resources }}
           resources:

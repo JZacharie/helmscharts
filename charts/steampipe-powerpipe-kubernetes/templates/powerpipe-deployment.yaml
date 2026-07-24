@@ -73,9 +73,10 @@ spec:
               command:
               - bash
               - ./healthcheck.sh
-            initialDelaySeconds: 10
+            initialDelaySeconds: 15
             periodSeconds: 10
-            failureThreshold: 18
+            timeoutSeconds: 10
+            failureThreshold: 30
           livenessProbe:
             exec:
               command:
@@ -83,6 +84,7 @@ spec:
               - ./healthcheck.sh
             initialDelaySeconds: 60
             periodSeconds: 10
+            timeoutSeconds: 10
             failureThreshold: 6
           volumeMounts:
           {{- if .Values.powerpipe.modConfig }}
