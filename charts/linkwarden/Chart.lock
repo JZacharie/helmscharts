@@ -1,0 +1,6 @@
+dependencies:
+- name: common
+  repository: https://zekker6.github.io/helm-charts
+  version: 0.5.2
+digest: sha256:7aa9fa687dfac37ae1677fe0df729cfdb2ab5c4d7e3b2d4f022c8544839d4e19
+generated: "2026-07-18T16:58:21.208470157+02:00"
