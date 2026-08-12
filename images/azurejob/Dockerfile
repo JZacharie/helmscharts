@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.25
+# syntax=docker/dockerfile:1.26
 FROM debian:12-slim
 
 ARG ALLOW_INSECURE_TLS=0
