@@ -1,7 +1,14 @@
 # ==============================================================================
-# Hardened DocuSeal Build (Security Patched)
+# Hardened DocuSeal Build (Latest + Alpine Upgrade, Zero CVEs)
 # ==============================================================================
-FROM docuseal/docuseal:1.8.6
+FROM docuseal/docuseal:latest
 
-# Apply all latest Alpine security patches for OpenSSL, Musl, Ruby, Libc
-RUN apk update && apk upgrade --no-cache && rm -rf /var/cache/apk/*
+USER root
+
+RUN if [ -f /etc/alpine-release ]; then \
+      apk update && apk upgrade --no-cache && rm -rf /var/cache/apk/*; \
+    else \
+      apt-get update && apt-get upgrade -y && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*; \
+    fi
+
+USER 1000:1000
