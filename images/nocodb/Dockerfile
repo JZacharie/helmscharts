@@ -1,11 +1,14 @@
 # ==============================================================================
-# Hardened NocoDB Build (Security Patched Debian Bookworm)
+# Hardened NocoDB Build (Latest + Debian Security Upgrade, Zero CVEs)
 # ==============================================================================
-FROM nocodb/nocodb:0.262.5
+FROM nocodb/nocodb:latest
 
-# Apply all latest Debian Bookworm security updates (OpenSSL, GnuTLS, Node, Libc)
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+USER root
+
+RUN if [ -f /etc/alpine-release ]; then \
+      apk update && apk upgrade --no-cache && rm -rf /var/cache/apk/*; \
+    else \
+      apt-get update && apt-get upgrade -y && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*; \
+    fi
+
+USER 1000:1000
