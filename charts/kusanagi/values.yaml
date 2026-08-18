@@ -184,7 +184,7 @@ reportsCleanup:
 
 # Trivy PVC Cleanup job
 trivyPvcCleanup:
-  enabled: true
+  enabled: false
   # Run hourly by default
   schedule: "0 * * * *"
   # Namespace where the PVC is located
