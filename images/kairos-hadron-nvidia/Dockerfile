@@ -2,16 +2,16 @@
 # and packages them along with the NVIDIA userspace components and a glibc shim.
 #
 # It is designed to extend:
-# quay.io/kairos/hadron:v0.2.0-standard-amd64-generic-v4.1.0-k3s-v1.36.0-k3s1
+# quay.io/kairos/hadron:v0.5.1-standard-amd64-generic-v4.3.0-rc7-k3s-v1.36.4-k3s1
 
 ARG HADRON_VERSION=v0.5.1
 # Full Kairos image ref (includes kairos-agent required by NodeOpUpgrade).
 # BASE_IMAGE_TAG must be set explicitly — it's the full quay.io tag, not just HADRON_VERSION.
 ARG BASE_IMAGE=quay.io/kairos/hadron
-ARG BASE_IMAGE_TAG=v0.2.0-standard-amd64-generic-v4.1.0-k3s-v1.36.0-k3s1
-ARG VERSION=v0.2.0-standard-amd64-generic-v4.1.0-k3s-v1.36.0-k3s1
+ARG BASE_IMAGE_TAG=v0.5.1-standard-amd64-generic-v4.3.0-rc7-k3s-v1.36.4-k3s1
+ARG VERSION=v0.5.1-standard-amd64-generic-v4.3.0-rc7-k3s-v1.36.4-k3s1
 ARG JOBS=4
-ARG NVIDIA_VERSION=580.126.20
+ARG NVIDIA_VERSION=580.178.04
 ARG TARGETARCH=amd64
 # KERNEL_ARCH uses Linux kernel naming (x86_64, arm64) rather than Docker's (amd64, arm64)
 ARG KERNEL_ARCH=x86_64
