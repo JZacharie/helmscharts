@@ -31,6 +31,12 @@ On Hadron, the filesystem root contains symlinks for system directories:
 Hadron's devtmpfs does not automatically spawn `/dev/nvidia*` character devices.
 * We package a custom udev rule (`/etc/udev/rules.d/71-nvidia.rules`) that triggers `nvidia-modprobe -c 0` (for GPU device) and `nvidia-modprobe -u` (for UVM device) upon module initialization.
 
+### 5. Proxmox QEMU Guest Agent
+Includes the QEMU Guest Agent (`qemu-ga`) and systemd unit (`qemu-guest-agent.service`) with udev rules (`60-qemu-guest-agent.rules`) for seamless integration with Proxmox VE (dynamic IP discovery, clean VM shutdown, and fsfreeze snapshots).
+* Binary placed in `/usr/bin/qemu-ga` (resolved transparently via `/usr/sbin/qemu-ga` symlink).
+* Dynamic glibc dependencies (`glib-2.0`, `libnuma`, `liburing`, etc.) bundled into `/usr/libc/lib`.
+* Auto-starts on boot when the virtio-serial port `org.qemu.guest_agent.0` is exposed by Proxmox.
+
 ---
 
 ## Building the Image
