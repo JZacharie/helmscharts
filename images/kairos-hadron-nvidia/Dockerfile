@@ -4,7 +4,7 @@
 # It is designed to extend:
 # quay.io/kairos/hadron:v0.5.1-standard-amd64-generic-v4.3.0-rc7-k3s-v1.36.4-k3s1
 
-ARG HADRON_VERSION=v0.5.1
+ARG HADRON_VERSION=v0.5.2
 # Full Kairos image ref (includes kairos-agent required by NodeOpUpgrade).
 # BASE_IMAGE_TAG must be set explicitly — it's the full quay.io tag, not just HADRON_VERSION.
 ARG BASE_IMAGE=quay.io/kairos/hadron
