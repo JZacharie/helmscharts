@@ -1,0 +1,83 @@
+replicaCount: 1
+
+image:
+  repository: jzacharie/alexa-leclerc-mcp
+  pullPolicy: Always
+  tag: "latest"
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production-dns
+    gethomepage.dev/description: Alexa Shopping List to Leclerc Drive MCP Server
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: MCP
+    gethomepage.dev/icon: mdi-cart-arrow-down
+    gethomepage.dev/name: Alexa Leclerc MCP
+    gethomepage.dev/ping: https://alexa-leclerc-mcp.p.zacharie.org/health
+    kubernetes.io/ingress.class: traefik
+  hosts:
+    - host: alexa-leclerc-mcp.p.zacharie.org
+      paths:
+        - path: /
+          pathType: Prefix
+          port: 8080
+  tls:
+    - secretName: alexa-leclerc-mcp-tls
+      hosts:
+        - alexa-leclerc-mcp.p.zacharie.org
+
+env:
+  BIND_ADDR: "0.0.0.0:8080"
+  BROWSERLESS_WS_URL: "ws://browserless-chrome.browserless-chrome.svc.cluster.local:3000"
+  AMAZON_SHOPPING_URL: "https://www.amazon.fr/alexaquantum/sp/alexaShoppingList"
+  LECLERC_STORE_URL: "https://fd7-courses.leclercdrive.fr"
+  RUST_LOG: "alexa_leclerc_mcp=info,tower_http=info"
+
+# ExternalSecrets integration with Vault
+externalSecret:
+  enabled: true
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  targetSecretName: alexa-leclerc-mcp-secrets
+  vaultKey: "apps/productivity/alexa-leclerc-mcp"
+  data:
+    - secretKey: AMAZON_COOKIES_JSON
+      remoteProperty: amazon_cookies
+    - secretKey: LECLERC_COOKIES_JSON
+      remoteProperty: leclerc_cookies
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

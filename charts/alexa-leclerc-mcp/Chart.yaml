@@ -1,0 +1,6 @@
+apiVersion: v2
+name: alexa-leclerc-mcp
+description: Helm chart for Alexa Shopping List to Leclerc Drive MCP Server
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
