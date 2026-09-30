@@ -1,12 +1,12 @@
 replicaCount: 1
 
 image:
-  repository: jo3-registry.internal/orchestrator/aramaki
+  repository: ghcr.io/jzacharie/aramaki
   pullPolicy: IfNotPresent
   tag: "latest"
 
 agentRunnerImage:
-  repository: jo3-registry.internal/agents/opencode-agent
+  repository: ghcr.io/jzacharie/opencode-agent
   tag: "latest"
 
 secrets:
