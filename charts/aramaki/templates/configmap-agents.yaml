@@ -1,0 +1,22 @@
+{{- range $key, $agent := .Values.agents }}
+{{- if $agent.enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $agent.name }}
+  labels:
+    type: opencode-agent-config
+    app.kubernetes.io/name: {{ $.Chart.Name }}
+data:
+  agent.json: |
+    {
+      "name": {{ $agent.name | quote }},
+      "description": {{ $agent.description | quote }},
+      "model": {{ $agent.model | quote }},
+      "system_prompt": {{ $agent.systemPrompt | quote }},
+      "mcp_servers": {{ $agent.mcpServers | toJson }},
+      "max_iterations": {{ $agent.maxIterations }}
+    }
+{{- end }}
+{{- end }}
