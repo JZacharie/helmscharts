@@ -89,4 +89,26 @@ spec:
                   name: {{ .Values.secrets.existingSecret }}
                   key: {{ .Values.secrets.slackAppTokenKey }}
                   optional: true
+            - name: GROQ_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.existingSecret }}
+                  key: {{ .Values.secrets.groqApiKey | default "GROQ_API_KEY" }}
+                  optional: true
+            - name: WHISPER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.existingSecret }}
+                  key: {{ .Values.secrets.whisperApiKey | default "WHISPER_API_KEY" }}
+                  optional: true
+            {{- end }}
+            {{- if .Values.whisper }}
+            {{- if .Values.whisper.url }}
+            - name: WHISPER_URL
+              value: {{ .Values.whisper.url | quote }}
+            {{- end }}
+            {{- if .Values.whisper.model }}
+            - name: WHISPER_MODEL
+              value: {{ .Values.whisper.model | quote }}
+            {{- end }}
             {{- end }}
