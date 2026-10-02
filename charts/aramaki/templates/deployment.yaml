@@ -82,6 +82,7 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.secrets.existingSecret }}
                   key: {{ .Values.secrets.slackSigningSecretKey }}
+                  optional: true
             - name: SLACK_APP_TOKEN
               valueFrom:
                 secretKeyRef:
