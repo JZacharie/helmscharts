@@ -89,6 +89,17 @@ entries:
   aramaki:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2026-10-02T01:18:19.913392075Z"
+    description: A Helm chart for Aramaki (Chief Section 9) - Slack Agent Orchestrator
+      & Dynamic Job Provisioner
+    digest: 1bc33f79709d4bd7c90a39db26581296869fdc321e9ec36f4a87692755f67162
+    name: aramaki
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/aramaki-0.2.0/aramaki-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2026-09-30T04:59:16.5288399Z"
     description: A Helm chart for Aramaki (Chief Section 9) - Slack Agent Orchestrator
       & Dynamic Job Provisioner
@@ -1192,4 +1203,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-09-30T04:59:16.958983305Z"
+generated: "2026-10-02T01:18:20.350887092Z"
