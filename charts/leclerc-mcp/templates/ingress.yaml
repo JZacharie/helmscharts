@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "alexa-leclerc-mcp.fullname" . }}
+  name: {{ include "leclerc-mcp.fullname" . }}
   labels:
-    {{- include "alexa-leclerc-mcp.labels" . | nindent 4 }}
+    {{- include "leclerc-mcp.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -33,7 +33,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "alexa-leclerc-mcp.fullname" $ }}
+                name: {{ include "leclerc-mcp.fullname" $ }}
                 port:
                   number: {{ .port | default $.Values.service.port }}
           {{- end }}

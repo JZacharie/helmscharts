@@ -1,0 +1,6 @@
+apiVersion: v2
+name: leclerc-mcp
+description: Helm chart for Leclerc Drive MCP Server
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
