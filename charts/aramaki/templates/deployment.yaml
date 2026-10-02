@@ -32,7 +32,21 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           ports:
-            - containerPort: {{ .Values.service.targetPort }}
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
           env:
             - name: POD_NAMESPACE
               valueFrom:
@@ -40,6 +54,23 @@ spec:
                   fieldPath: metadata.namespace
             - name: AGENT_RUNNER_IMAGE
               value: "{{ .Values.agentRunnerImage.repository }}:{{ .Values.agentRunnerImage.tag }}"
+            {{- if .Values.auth }}
+            {{- if .Values.auth.username }}
+            - name: ARAMAKI_AUTH_USER
+              value: {{ .Values.auth.username | quote }}
+            {{- end }}
+            {{- if .Values.auth.password }}
+            - name: ARAMAKI_AUTH_PASSWORD
+              value: {{ .Values.auth.password | quote }}
+            {{- end }}
+            {{- if .Values.auth.existingSecret }}
+            - name: ARAMAKI_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.auth.existingSecret }}
+                  key: {{ .Values.auth.passwordKey | default "ARAMAKI_AUTH_PASSWORD" }}
+            {{- end }}
+            {{- end }}
             {{- if .Values.secrets.existingSecret }}
             - name: SLACK_BOT_TOKEN
               valueFrom:
