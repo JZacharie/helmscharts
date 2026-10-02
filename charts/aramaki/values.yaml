@@ -1,9 +1,23 @@
 replicaCount: 1
 
+imagePullSecrets: []
+
 image:
   repository: ghcr.io/jzacharie/aramaki
   pullPolicy: IfNotPresent
   tag: "latest"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: false
 
 agentRunnerImage:
   repository: ghcr.io/jzacharie/opencode-agent
