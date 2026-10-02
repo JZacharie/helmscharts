@@ -3,7 +3,7 @@ replicaCount: 1
 imagePullSecrets: []
 
 image:
-  repository: ghcr.io/jzacharie/aramaki
+  repository: ghcr.io/jzacharie/amaraki
   pullPolicy: IfNotPresent
   tag: "latest"
 
@@ -13,6 +13,8 @@ podSecurityContext:
   fsGroup: 1000
 
 securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
   allowPrivilegeEscalation: false
   capabilities:
     drop:
