@@ -11,6 +11,17 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/alexa-leclerc-mcp-0.1.0/alexa-leclerc-mcp-0.1.0.tgz
     version: 0.1.0
+  alexa-mcp:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2026-10-02T16:15:58.74463963Z"
+    description: Helm chart for Alexa Shopping List MCP Server
+    digest: 7f9633322cbcfbc5b850e31dfc679a67e79962e3ca637e543f0f51dd8efd9633
+    name: alexa-mcp
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/alexa-mcp-0.1.0/alexa-mcp-0.1.0.tgz
+    version: 0.1.0
   antigravity:
   - apiVersion: v2
     appVersion: 1.0.0
@@ -507,6 +518,17 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/kusanagi-0.3.11.tgz
     version: 0.3.11
+  leclerc-mcp:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2026-10-02T16:15:59.62492827Z"
+    description: Helm chart for Leclerc Drive MCP Server
+    digest: 89bb515dac2991e0c4c4c8eefb5c591175ea02865d69b1147f921e706aa676be
+    name: leclerc-mcp
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/leclerc-mcp-0.1.0/leclerc-mcp-0.1.0.tgz
+    version: 0.1.0
   linkwarden:
   - annotations:
       artifacthub.io/changes: |-
@@ -1203,4 +1225,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-10-02T01:18:20.350887092Z"
+generated: "2026-10-02T16:16:00.09893249Z"
