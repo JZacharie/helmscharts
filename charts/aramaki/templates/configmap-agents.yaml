@@ -14,9 +14,10 @@ data:
       "name": {{ $agent.name | quote }},
       "description": {{ $agent.description | quote }},
       "model": {{ $agent.model | quote }},
-      "system_prompt": {{ $agent.systemPrompt | quote }},
-      "mcp_servers": {{ $agent.mcpServers | toJson }},
-      "max_iterations": {{ $agent.maxIterations }}
+      "system_prompt": {{ $agent.systemPrompt | toJson }},
+      "mcp_servers": {{ $agent.mcpServers | default list | toJson }},
+      "max_iterations": {{ $agent.maxIterations | default 10 }},
+      "env": {{ $agent.env | default dict | toJson }}
     }
 {{- end }}
 {{- end }}

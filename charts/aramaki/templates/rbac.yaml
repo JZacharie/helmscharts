@@ -5,6 +5,10 @@ metadata:
   name: {{ .Values.serviceAccount.name }}
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}
+{{- if .Values.imagePullSecrets }}
+imagePullSecrets:
+  {{- toYaml .Values.imagePullSecrets | nindent 2 }}
+{{- end }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
