@@ -4,7 +4,7 @@ FROM ubuntu:24.04
 
 # --- Build Arguments for Cache Invalidation & Versioning ---
 ARG GO_VERSION=1.26.3
-ARG OPENCODE_VERSION=v1.18.34
+ARG OPENCODE_VERSION=2.0.22
 ARG EZA_VERSION=v0.23.4
 ARG BAT_VERSION=v0.26.1
 ARG FZF_VERSION=0.72.0
@@ -52,11 +52,12 @@ RUN if id -u 1000 >/dev/null 2>&1; then userdel -r $(id -un 1000); fi && \
     echo "developer:10000:65536" > /etc/subuid && \
     echo "developer:10000:65536" > /etc/subgid
 
-# --- 4. System-Wide CLI Installations (Root) ---
-# OpenCode CLI (glibc)
-RUN curl -fsSL -o /tmp/opencode.tar.gz "https://github.com/anomalyco/opencode/releases/download/${OPENCODE_VERSION}/opencode-linux-x64.tar.gz" && \
-    tar -xzf /tmp/opencode.tar.gz -C /usr/local/bin/ && \
-    rm /tmp/opencode.tar.gz
+# OpenCode CLI v2 (standalone Linux x64 binary)
+RUN curl -fsSL -o /tmp/opencode.tgz "https://registry.npmjs.org/@opencode/cli-linux-x64/-/cli-linux-x64-${OPENCODE_VERSION}.tgz" && \
+    tar -xzf /tmp/opencode.tgz -C /tmp/ && \
+    mv /tmp/package/bin/opencode /usr/local/bin/opencode && \
+    chmod +x /usr/local/bin/opencode && \
+    rm -rf /tmp/opencode.tgz /tmp/package
 
 # VS Code (code-server)
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version 4.118.0
