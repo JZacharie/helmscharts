@@ -1,7 +1,7 @@
 # ==============================================================================
 # Hardened ActualBudget Server Build (Security Patched)
 # ==============================================================================
-FROM actualbudget/actual-server:26.8.1
+FROM actualbudget/actual-server:26.10.0
 
 USER root
 
