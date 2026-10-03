@@ -26,7 +26,7 @@ agentRunnerImage:
   tag: "latest"
 
 secrets:
-  existingSecret: "aramaki-slack-credentials"
+  existingSecret: "amaraki-slack-credentials"
   slackBotTokenKey: "SLACK_BOT_TOKEN"
   slackSigningSecretKey: "SLACK_SIGNING_SECRET"
   slackAppTokenKey: "SLACK_APP_TOKEN"
@@ -37,7 +37,7 @@ slack:
 
 serviceAccount:
   create: true
-  name: aramaki-sa
+  name: amaraki-sa
 
 service:
   type: ClusterIP
@@ -49,7 +49,7 @@ ingress:
   className: ""
   annotations: {}
   hosts:
-    - host: aramaki.local
+    - host: amaraki.local
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -60,7 +60,7 @@ agents:
     name: agent-code-reviewer
     description: "Analyse le code et propose des optimisations"
     model: "opencode/free-default-model"
-    systemPrompt: "Tu es un expert en revue de code Rust et Kubernetes sur le cluster Jo3 sous le commandement d'Aramaki."
+    systemPrompt: "Tu es un expert en revue de code Rust et Kubernetes sur le cluster Jo3 sous le commandement d'Amaraki."
     maxIterations: 5
     skills:
       - "find-skills"
