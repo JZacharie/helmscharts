@@ -1,0 +1,73 @@
+replicaCount: 1
+
+imagePullSecrets: []
+
+image:
+  repository: ghcr.io/jzacharie/amaraki
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: false
+
+agentRunnerImage:
+  repository: ghcr.io/jzacharie/opencode
+  tag: "latest"
+
+secrets:
+  existingSecret: "amaraki-slack-credentials"
+  slackBotTokenKey: "SLACK_BOT_TOKEN"
+  slackSigningSecretKey: "SLACK_SIGNING_SECRET"
+  slackAppTokenKey: "SLACK_APP_TOKEN"
+
+slack:
+  aiChannelId: ""
+  joeUserId: ""
+
+serviceAccount:
+  create: true
+  name: amaraki-sa
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: amaraki.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+agents:
+  codeReviewer:
+    enabled: true
+    name: agent-code-reviewer
+    description: "Analyse le code et propose des optimisations"
+    model: "opencode/free-default-model"
+    systemPrompt: "Tu es un expert en revue de code Rust et Kubernetes sur le cluster Jo3 sous le commandement d'Amaraki."
+    maxIterations: 5
+    skills:
+      - "find-skills"
+    mcpServers:
+      - name: filesystem
+        command: npx
+        args: ["-y", "@modelcontextprotocol/server-filesystem", "/workspace"]
+      - name: git
+        command: npx
+        args: ["-y", "@modelcontextprotocol/server-git"]
