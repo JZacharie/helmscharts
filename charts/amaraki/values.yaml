@@ -25,6 +25,12 @@ agentRunnerImage:
   repository: ghcr.io/jzacharie/opencode
   tag: "latest"
 
+# Pin de placement appliqué au Pod template de chaque Job K8s lancé par Amaraki
+# (ex: opencode-mail-*). Rendu dans la variable AGENT_NODE_SELECTOR.
+agentJobs:
+  nodeSelector:
+    kubernetes.io/arch: amd64
+
 secrets:
   existingSecret: "amaraki-slack-credentials"
   slackBotTokenKey: "SLACK_BOT_TOKEN"

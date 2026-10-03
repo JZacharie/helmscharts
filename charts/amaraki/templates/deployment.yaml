@@ -54,6 +54,13 @@ spec:
                   fieldPath: metadata.namespace
             - name: AGENT_RUNNER_IMAGE
               value: "{{ .Values.agentRunnerImage.repository }}:{{ .Values.agentRunnerImage.tag }}"
+            {{- if .Values.agentJobs }}
+            {{- if .Values.agentJobs.nodeSelector }}
+            # Force l'architecture des Jobs pilotés par Amaraki (amd64 par défaut)
+            - name: AGENT_NODE_SELECTOR
+              value: {{ .Values.agentJobs.nodeSelector | toJson | quote }}
+            {{- end }}
+            {{- end }}
             {{- if .Values.auth }}
             {{- if .Values.auth.username }}
             - name: AMARAKI_AUTH_USER
