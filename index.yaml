@@ -22,6 +22,18 @@ entries:
     urls:
     - https://github.com/JZacharie/helmscharts/releases/download/alexa-mcp-0.1.0/alexa-mcp-0.1.0.tgz
     version: 0.1.0
+  amaraki:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-10-03T01:45:47.690050193Z"
+    description: A Helm chart for Amaraki (Chief Section 9) - Slack Agent Orchestrator
+      & Dynamic Job Provisioner
+    digest: 88be4139fd948ea84a424419438757ee831075e9d9a371396a44c0d19f02204f
+    name: amaraki
+    type: application
+    urls:
+    - https://github.com/JZacharie/helmscharts/releases/download/amaraki-0.2.0/amaraki-0.2.0.tgz
+    version: 0.2.0
   antigravity:
   - apiVersion: v2
     appVersion: 1.0.0
@@ -1225,4 +1237,4 @@ entries:
     urls:
     - https://jzacharie.github.io/helmscharts/whisperx-0.1.2.tgz
     version: 0.1.2
-generated: "2026-10-02T16:16:00.09893249Z"
+generated: "2026-10-03T01:45:48.362782138Z"
