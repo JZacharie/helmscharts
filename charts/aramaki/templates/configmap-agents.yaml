@@ -17,7 +17,8 @@ data:
       "system_prompt": {{ $agent.systemPrompt | toJson }},
       "mcp_servers": {{ $agent.mcpServers | default list | toJson }},
       "max_iterations": {{ $agent.maxIterations | default 10 }},
-      "env": {{ $agent.env | default dict | toJson }}
+      "env": {{ $agent.env | default dict | toJson }},
+      "skills": {{ $agent.skills | default list | toJson }}
     }
 {{- end }}
 {{- end }}

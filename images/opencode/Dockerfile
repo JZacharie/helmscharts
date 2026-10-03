@@ -36,8 +36,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     buildah \
     fuse-overlayfs \
     openssh-client \
+    python3 \
+    python3-pip \
+    python3-venv \
+    python-is-python3 \
     && locale-gen en_US.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
+
+# --- 1b. Node.js LTS (v22), npm, npx, Skills CLI & uv (System-wide) ---
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y --no-install-recommends nodejs && \
+    npm install -g npm@latest skills && \
+    curl -LsSf https://astral.sh/uv/install.sh | env CARGO_DIST_FORCE_INSTALL_DIR=/usr/local/bin sh && \
+    rm -rf /var/lib/apt/lists/*
 
 # --- 2. Buildah Storage Config (Rootless) ---
 RUN mkdir -p /etc/containers && \
@@ -89,10 +100,9 @@ RUN curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" | tar -xz 
     go install github.com/go-delve/delve/cmd/dlv@latest && \
     rm -rf /tmp/go
 
-# Python (uv) & Node (Bun)
+# Python tooling & Node (Bun, pnpm)
 ENV PATH="/home/developer/.bun/bin:${PATH}"
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
-    ~/.local/bin/uv tool install ruff && \
+RUN uv tool install ruff && \
     curl -fsSL https://bun.sh/install | bash && \
     export SHELL=/bin/bash && curl -fsSL https://get.pnpm.io/install.sh | sh - && \
     ~/.bun/bin/bun add -g @biomejs/biome

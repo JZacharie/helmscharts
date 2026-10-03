@@ -22,7 +22,7 @@ securityContext:
   readOnlyRootFilesystem: false
 
 agentRunnerImage:
-  repository: ghcr.io/jzacharie/opencode-agent
+  repository: ghcr.io/jzacharie/opencode
   tag: "latest"
 
 secrets:
@@ -30,6 +30,10 @@ secrets:
   slackBotTokenKey: "SLACK_BOT_TOKEN"
   slackSigningSecretKey: "SLACK_SIGNING_SECRET"
   slackAppTokenKey: "SLACK_APP_TOKEN"
+
+slack:
+  aiChannelId: ""
+  joeUserId: ""
 
 serviceAccount:
   create: true
@@ -58,6 +62,8 @@ agents:
     model: "opencode/free-default-model"
     systemPrompt: "Tu es un expert en revue de code Rust et Kubernetes sur le cluster Jo3 sous le commandement d'Aramaki."
     maxIterations: 5
+    skills:
+      - "find-skills"
     mcpServers:
       - name: filesystem
         command: npx

@@ -112,3 +112,13 @@ spec:
               value: {{ .Values.whisper.model | quote }}
             {{- end }}
             {{- end }}
+            {{- if .Values.slack }}
+            {{- if .Values.slack.aiChannelId }}
+            - name: SLACK_AI_CHANNEL_ID
+              value: {{ .Values.slack.aiChannelId | quote }}
+            {{- end }}
+            {{- if .Values.slack.joeUserId }}
+            - name: SLACK_JOE_USER_ID
+              value: {{ .Values.slack.joeUserId | quote }}
+            {{- end }}
+            {{- end }}
