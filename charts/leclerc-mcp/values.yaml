@@ -59,6 +59,9 @@ env:
   BIND_ADDR: "0.0.0.0:8080"
   BROWSERLESS_WS_URL: "ws://browserless-chrome.browserless-chrome.svc.cluster.local:3000"
   LECLERC_STORE_URL: "https://fd7-courses.leclercdrive.fr"
+  LECLERC_STORE_ID: "166902"
+  LECLERC_BROWSER_MODE: "connect"
+  LECLERC_INJECT_COOKIES: "true"
   RUST_LOG: "leclerc_mcp=info,tower_http=info"
 
 # ExternalSecrets integration with Vault
