@@ -1,9 +1,12 @@
 replicaCount: 1
 
 image:
-  repository: jzacharie/leclerc-mcp
+  repository: ghcr.io/jzacharie/leclerc-mcp
   pullPolicy: Always
   tag: "latest"
+
+# The GHCR package is private: reference a docker-registry secret to pull it.
+imagePullSecrets: []
 
 nameOverride: ""
 fullnameOverride: ""
