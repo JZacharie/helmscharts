@@ -70,10 +70,20 @@ agents:
     maxIterations: 5
     skills:
       - "find-skills"
+    # Serveurs MCP locaux exécutés dans le Pod de l'agent par l'image runner
+    # (Node.js LTS + uv/uvx). La racine de travail est /home/developer/workspace :
+    # le script de démarrage du Job la crée et l'initialise en dépôt Git.
+    # NB : @modelcontextprotocol/server-git n'existe pas sur npm (404) ; le
+    # serveur Git officiel est le paquet PyPI mcp-server-git, lancé via uvx.
+    # timeout : délai de chargement des outils MCP. Le défaut d'OpenCode est de
+    # 5000 ms, insuffisant pour un serveur local au premier démarrage à froid
+    # (mesuré ~8 s pour le serveur filesystem via npx).
     mcpServers:
       - name: filesystem
         command: npx
-        args: ["-y", "@modelcontextprotocol/server-filesystem", "/workspace"]
+        args: ["-y", "@modelcontextprotocol/server-filesystem", "/home/developer/workspace"]
+        timeout: 60000
       - name: git
-        command: npx
-        args: ["-y", "@modelcontextprotocol/server-git"]
+        command: uvx
+        args: ["mcp-server-git", "--repository", "/home/developer/workspace"]
+        timeout: 60000
