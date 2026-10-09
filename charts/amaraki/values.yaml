@@ -87,3 +87,15 @@ agents:
         command: uvx
         args: ["mcp-server-git", "--repository", "/home/developer/workspace"]
         timeout: 60000
+    # Dépôts Git configurés pour l'agent (Mémoire persistante, Pouvoirs, Skills, Playbooks).
+    # Clonant automatiquement au démarrage dans /home/developer/workspace/<path>.
+    # Si writable: true, les modifications (nouveaux pouvoirs, retours d'expériences)
+    # sont automatiquement commitées et pushées à la fin du Job K8s.
+    gitRepos: []
+    #   - url: "https://github.com/jzacharie/agent-memory-code-reviewer.git"
+    #     name: "memory"
+    #     branch: "main"
+    #     path: "memory"
+    #     writable: true
+    #     secretRef: "amaraki-github-credentials"
+    #     tokenKey: "GITHUB_TOKEN"
