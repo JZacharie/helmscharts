@@ -72,6 +72,8 @@ externalSecret:
   data:
     - secretKey: AMAZON_COOKIES_JSON
       remoteProperty: amazon_cookies
+    - secretKey: ALEXA_COOKIES_JSON
+      remoteProperty: amazon_cookies
 
 resources:
   limits:
