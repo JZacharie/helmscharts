@@ -1,0 +1,140 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: AGENT_RUNNER_IMAGE
+              value: "{{ .Values.agentRunnerImage.repository }}:{{ .Values.agentRunnerImage.tag }}"
+            {{- if .Values.agentJobs }}
+            {{- if .Values.agentJobs.nodeSelector }}
+            # Force l'architecture des Jobs pilotés par Amaraki (amd64 par défaut)
+            - name: AGENT_NODE_SELECTOR
+              value: {{ .Values.agentJobs.nodeSelector | toJson | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.auth }}
+            {{- if .Values.auth.username }}
+            - name: AMARAKI_AUTH_USER
+              value: {{ .Values.auth.username | quote }}
+            - name: ARAMAKI_AUTH_USER
+              value: {{ .Values.auth.username | quote }}
+            {{- end }}
+            {{- if .Values.auth.password }}
+            - name: AMARAKI_AUTH_PASSWORD
+              value: {{ .Values.auth.password | quote }}
+            - name: ARAMAKI_AUTH_PASSWORD
+              value: {{ .Values.auth.password | quote }}
+            {{- end }}
+            {{- if .Values.auth.existingSecret }}
+            - name: AMARAKI_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.auth.existingSecret }}
+                  key: {{ .Values.auth.passwordKey | default "AMARAKI_AUTH_PASSWORD" }}
+            - name: ARAMAKI_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.auth.existingSecret }}
+                  key: {{ .Values.auth.passwordKey | default "ARAMAKI_AUTH_PASSWORD" }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.secrets.existingSecret }}
+            - name: SLACK_BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.existingSecret }}
+                  key: {{ .Values.secrets.slackBotTokenKey }}
+            - name: SLACK_SIGNING_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.existingSecret }}
+                  key: {{ .Values.secrets.slackSigningSecretKey }}
+                  optional: true
+            - name: SLACK_APP_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.existingSecret }}
+                  key: {{ .Values.secrets.slackAppTokenKey }}
+                  optional: true
+            - name: GROQ_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.existingSecret }}
+                  key: {{ .Values.secrets.groqApiKey | default "GROQ_API_KEY" }}
+                  optional: true
+            - name: WHISPER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.existingSecret }}
+                  key: {{ .Values.secrets.whisperApiKey | default "WHISPER_API_KEY" }}
+                  optional: true
+            {{- end }}
+            {{- if .Values.whisper }}
+            {{- if .Values.whisper.url }}
+            - name: WHISPER_URL
+              value: {{ .Values.whisper.url | quote }}
+            {{- end }}
+            {{- if .Values.whisper.model }}
+            - name: WHISPER_MODEL
+              value: {{ .Values.whisper.model | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.slack }}
+            {{- if .Values.slack.aiChannelId }}
+            - name: SLACK_AI_CHANNEL_ID
+              value: {{ .Values.slack.aiChannelId | quote }}
+            {{- end }}
+            {{- if .Values.slack.joeUserId }}
+            - name: SLACK_JOE_USER_ID
+              value: {{ .Values.slack.joeUserId | quote }}
+            {{- end }}
+            {{- end }}

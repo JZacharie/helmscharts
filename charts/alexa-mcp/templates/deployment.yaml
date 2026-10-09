@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "alexa-leclerc-mcp.fullname" . }}
+  name: {{ include "alexa-mcp.fullname" . }}
   labels:
-    {{- include "alexa-leclerc-mcp.labels" . | nindent 4 }}
+    {{- include "alexa-mcp.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "alexa-leclerc-mcp.selectorLabels" . | nindent 6 }}
+      {{- include "alexa-mcp.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "alexa-leclerc-mcp.selectorLabels" . | nindent 8 }}
+        {{- include "alexa-mcp.selectorLabels" . | nindent 8 }}
       {{- with .Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}

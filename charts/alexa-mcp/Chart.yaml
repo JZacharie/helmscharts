@@ -1,0 +1,6 @@
+apiVersion: v2
+name: alexa-mcp
+description: Helm chart for Alexa Shopping List MCP Server
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
