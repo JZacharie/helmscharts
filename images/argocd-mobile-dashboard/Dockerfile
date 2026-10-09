@@ -7,7 +7,7 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM nginx:alpine
+FROM nginx:1.27.4-alpine3.21 AS runner
 COPY --from=build /app/dist /usr/share/nginx/html
 # Custom nginx config if needed for SPA fallback
 RUN echo 'server { \

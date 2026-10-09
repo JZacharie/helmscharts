@@ -4,7 +4,7 @@ FROM ubuntu:24.04
 
 # --- Build Arguments for Cache Invalidation & Versioning ---
 ARG GO_VERSION=1.26.3
-ARG OPENCODE_VERSION=v1.17.3
+ARG OPENCODE_VERSION=2.0.22
 ARG EZA_VERSION=v0.23.4
 ARG BAT_VERSION=v0.26.1
 ARG FZF_VERSION=0.72.0
@@ -36,8 +36,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     buildah \
     fuse-overlayfs \
     openssh-client \
+    python3 \
+    python3-pip \
+    python3-venv \
+    python-is-python3 \
     && locale-gen en_US.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
+
+# --- 1b. Node.js LTS (v22), npm, npx, Skills CLI & uv (System-wide) ---
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y --no-install-recommends nodejs && \
+    npm install -g npm@latest skills && \
+    curl -LsSf https://astral.sh/uv/install.sh | env CARGO_DIST_FORCE_INSTALL_DIR=/usr/local/bin sh && \
+    rm -rf /var/lib/apt/lists/*
 
 # --- 2. Buildah Storage Config (Rootless) ---
 RUN mkdir -p /etc/containers && \
@@ -52,11 +63,12 @@ RUN if id -u 1000 >/dev/null 2>&1; then userdel -r $(id -un 1000); fi && \
     echo "developer:10000:65536" > /etc/subuid && \
     echo "developer:10000:65536" > /etc/subgid
 
-# --- 4. System-Wide CLI Installations (Root) ---
-# OpenCode CLI (glibc)
-RUN curl -fsSL -o /tmp/opencode.tar.gz "https://github.com/anomalyco/opencode/releases/download/${OPENCODE_VERSION}/opencode-linux-x64.tar.gz" && \
-    tar -xzf /tmp/opencode.tar.gz -C /usr/local/bin/ && \
-    rm /tmp/opencode.tar.gz
+# OpenCode CLI v2 (standalone Linux x64 binary)
+RUN curl -fsSL -o /tmp/opencode.tgz "https://registry.npmjs.org/@opencode/cli-linux-x64/-/cli-linux-x64-${OPENCODE_VERSION}.tgz" && \
+    tar -xzf /tmp/opencode.tgz -C /tmp/ && \
+    mv /tmp/package/bin/opencode /usr/local/bin/opencode && \
+    chmod +x /usr/local/bin/opencode && \
+    rm -rf /tmp/opencode.tgz /tmp/package
 
 # VS Code (code-server)
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version 4.118.0
@@ -88,10 +100,9 @@ RUN curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" | tar -xz 
     go install github.com/go-delve/delve/cmd/dlv@latest && \
     rm -rf /tmp/go
 
-# Python (uv) & Node (Bun)
+# Python tooling & Node (Bun, pnpm)
 ENV PATH="/home/developer/.bun/bin:${PATH}"
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
-    ~/.local/bin/uv tool install ruff && \
+RUN uv tool install ruff && \
     curl -fsSL https://bun.sh/install | bash && \
     export SHELL=/bin/bash && curl -fsSL https://get.pnpm.io/install.sh | sh - && \
     ~/.bun/bin/bun add -g @biomejs/biome

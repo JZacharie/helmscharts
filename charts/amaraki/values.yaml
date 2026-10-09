@@ -1,0 +1,101 @@
+replicaCount: 1
+
+imagePullSecrets: []
+
+image:
+  repository: ghcr.io/jzacharie/amaraki
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: false
+
+agentRunnerImage:
+  repository: ghcr.io/jzacharie/opencode
+  tag: "latest"
+
+# Pin de placement appliqué au Pod template de chaque Job K8s lancé par Amaraki
+# (ex: opencode-mail-*). Rendu dans la variable AGENT_NODE_SELECTOR.
+agentJobs:
+  nodeSelector:
+    kubernetes.io/arch: amd64
+
+secrets:
+  existingSecret: "amaraki-slack-credentials"
+  slackBotTokenKey: "SLACK_BOT_TOKEN"
+  slackSigningSecretKey: "SLACK_SIGNING_SECRET"
+  slackAppTokenKey: "SLACK_APP_TOKEN"
+
+slack:
+  aiChannelId: ""
+  joeUserId: ""
+
+serviceAccount:
+  create: true
+  name: amaraki-sa
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: amaraki.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+agents:
+  codeReviewer:
+    enabled: true
+    name: agent-code-reviewer
+    description: "Analyse le code et propose des optimisations"
+    model: "opencode/free-default-model"
+    systemPrompt: "Tu es un expert en revue de code Rust et Kubernetes sur le cluster Jo3 sous le commandement d'Amaraki."
+    maxIterations: 5
+    skills:
+      - "find-skills"
+    # Serveurs MCP locaux exécutés dans le Pod de l'agent par l'image runner
+    # (Node.js LTS + uv/uvx). La racine de travail est /home/developer/workspace :
+    # le script de démarrage du Job la crée et l'initialise en dépôt Git.
+    # NB : @modelcontextprotocol/server-git n'existe pas sur npm (404) ; le
+    # serveur Git officiel est le paquet PyPI mcp-server-git, lancé via uvx.
+    # timeout : délai de chargement des outils MCP. Le défaut d'OpenCode est de
+    # 5000 ms, insuffisant pour un serveur local au premier démarrage à froid
+    # (mesuré ~8 s pour le serveur filesystem via npx).
+    mcpServers:
+      - name: filesystem
+        command: npx
+        args: ["-y", "@modelcontextprotocol/server-filesystem", "/home/developer/workspace"]
+        timeout: 60000
+      - name: git
+        command: uvx
+        args: ["mcp-server-git", "--repository", "/home/developer/workspace"]
+        timeout: 60000
+    # Dépôts Git configurés pour l'agent (Mémoire persistante, Pouvoirs, Skills, Playbooks).
+    # Clonant automatiquement au démarrage dans /home/developer/workspace/<path>.
+    # Si writable: true, les modifications (nouveaux pouvoirs, retours d'expériences)
+    # sont automatiquement commitées et pushées à la fin du Job K8s.
+    gitRepos: []
+    #   - url: "https://github.com/jzacharie/agent-memory-code-reviewer.git"
+    #     name: "memory"
+    #     branch: "main"
+    #     path: "memory"
+    #     writable: true
+    #     secretRef: "amaraki-github-credentials"
+    #     tokenKey: "GITHUB_TOKEN"

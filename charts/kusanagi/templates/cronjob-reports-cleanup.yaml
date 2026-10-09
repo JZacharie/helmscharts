@@ -25,7 +25,7 @@ spec:
             fsGroup: 1000
           containers:
           - name: cleanup
-            image: minio/mc:latest
+            image: pgsty/mc:latest
             imagePullPolicy: IfNotPresent
             securityContext:
               allowPrivilegeEscalation: false

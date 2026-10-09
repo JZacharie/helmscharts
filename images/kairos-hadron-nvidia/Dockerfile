@@ -2,16 +2,16 @@
 # and packages them along with the NVIDIA userspace components and a glibc shim.
 #
 # It is designed to extend:
-# quay.io/kairos/hadron:v0.2.0-standard-amd64-generic-v4.1.0-k3s-v1.36.0-k3s1
+# quay.io/kairos/hadron:v0.5.1-standard-amd64-generic-v4.3.0-rc7-k3s-v1.36.4-k3s1
 
-ARG HADRON_VERSION=v0.5.1
+ARG HADRON_VERSION=v0.5.2
 # Full Kairos image ref (includes kairos-agent required by NodeOpUpgrade).
 # BASE_IMAGE_TAG must be set explicitly — it's the full quay.io tag, not just HADRON_VERSION.
 ARG BASE_IMAGE=quay.io/kairos/hadron
-ARG BASE_IMAGE_TAG=v0.2.0-standard-amd64-generic-v4.1.0-k3s-v1.36.0-k3s1
-ARG VERSION=v0.2.0-standard-amd64-generic-v4.1.0-k3s-v1.36.0-k3s1
+ARG BASE_IMAGE_TAG=v0.5.1-standard-amd64-generic-v4.3.0-rc7-k3s-v1.36.4-k3s1
+ARG VERSION=v0.5.1-standard-amd64-generic-v4.3.0-rc7-k3s-v1.36.4-k3s1
 ARG JOBS=4
-ARG NVIDIA_VERSION=580.126.20
+ARG NVIDIA_VERSION=580.178.04
 ARG TARGETARCH=amd64
 # KERNEL_ARCH uses Linux kernel naming (x86_64, arm64) rather than Docker's (amd64, arm64)
 ARG KERNEL_ARCH=x86_64
@@ -64,7 +64,8 @@ RUN apt-get update && \
         libgcc-s1 \
         gnupg \
         nvtop \
-        nvidia-modprobe && \
+        nvidia-modprobe \
+        qemu-guest-agent && \
     curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg && \
     curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
       sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
@@ -136,6 +137,20 @@ RUN cp -a /usr/bin/nvidia-container-toolkit ${OUTPUT}/usr/bin/ && \
 # nvtop
 RUN cp -a /usr/bin/nvtop ${OUTPUT}/usr/bin/
 
+# QEMU Guest Agent (Proxmox VE integration)
+# Placed in /usr/bin/qemu-ga (on Hadron /usr/sbin is a symlink to bin, so /usr/sbin/qemu-ga resolves here).
+# Service unit, udev rule, and multi-user target symlink enable automatic start when virtio-serial is detected.
+RUN cp -a /usr/sbin/qemu-ga ${OUTPUT}/usr/bin/qemu-ga && \
+    mkdir -p ${OUTPUT}/usr/lib/systemd/system \
+             ${OUTPUT}/etc/systemd/system/multi-user.target.wants \
+             ${OUTPUT}/etc/udev/rules.d && \
+    cp -a /usr/lib/systemd/system/qemu-guest-agent.service ${OUTPUT}/usr/lib/systemd/system/ && \
+    cp -a /usr/lib/udev/rules.d/60-qemu-guest-agent.rules ${OUTPUT}/etc/udev/rules.d/ && \
+    ln -sf /usr/lib/systemd/system/qemu-guest-agent.service ${OUTPUT}/etc/systemd/system/multi-user.target.wants/qemu-guest-agent.service && \
+    if [ -d /etc/qemu ]; then \
+      mkdir -p ${OUTPUT}/etc/qemu && cp -a /etc/qemu/* ${OUTPUT}/etc/qemu/ 2>/dev/null || true; \
+    fi
+
 # NVIDIA Container Toolkit Configuration
 RUN if [ -d /etc/nvidia-container-runtime ]; then \
       mkdir -p ${OUTPUT}/etc/nvidia-container-runtime && \
@@ -182,7 +197,7 @@ RUN set -eux; \
     # Copy libnvidia-container libraries explicitly \
     cp -P /usr/lib/${DIR_ARCH}-linux-gnu/libnvidia-container*.so* ${OUTPUT}/usr/libc/lib/ || true; \
     # Resolve all dynamic dependencies for our binaries and copy them \
-    for bin in nvidia-smi nvidia-modprobe nvidia-container-toolkit nvidia-container-runtime nvidia-container-cli nvidia-ctk nvtop; do \
+    for bin in nvidia-smi nvidia-modprobe nvidia-container-toolkit nvidia-container-runtime nvidia-container-cli nvidia-ctk nvtop qemu-ga; do \
       binary_path=$(which $bin || echo "${OUTPUT}/usr/bin/$bin"); \
       if [ -f "$binary_path" ]; then \
         ldd "$binary_path" | grep "=>" | awk '{print $3}' | while read lib; do \

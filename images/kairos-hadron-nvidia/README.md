@@ -31,6 +31,12 @@ On Hadron, the filesystem root contains symlinks for system directories:
 Hadron's devtmpfs does not automatically spawn `/dev/nvidia*` character devices.
 * We package a custom udev rule (`/etc/udev/rules.d/71-nvidia.rules`) that triggers `nvidia-modprobe -c 0` (for GPU device) and `nvidia-modprobe -u` (for UVM device) upon module initialization.
 
+### 5. Proxmox QEMU Guest Agent
+Includes the QEMU Guest Agent (`qemu-ga`) and systemd unit (`qemu-guest-agent.service`) with udev rules (`60-qemu-guest-agent.rules`) for seamless integration with Proxmox VE (dynamic IP discovery, clean VM shutdown, and fsfreeze snapshots).
+* Binary placed in `/usr/bin/qemu-ga` (resolved transparently via `/usr/sbin/qemu-ga` symlink).
+* Dynamic glibc dependencies (`glib-2.0`, `libnuma`, `liburing`, etc.) bundled into `/usr/libc/lib`.
+* Auto-starts on boot when the virtio-serial port `org.qemu.guest_agent.0` is exposed by Proxmox.
+
 ---
 
 ## Building the Image
@@ -41,15 +47,15 @@ When a commit is pushed to `main`, the workflow will:
 1. Parse `ARG VERSION=` from the Dockerfile.
 2. Build the Dockerfile with Buildx.
 3. Push the image to the GitHub Container Registry:
-   `ghcr.io/jzacharie/kairos-hadron-nvidia:v0.2.0-standard-amd64-generic-v4.1.0-k3s-v1.36.0-k3s1`
+   `ghcr.io/jzacharie/kairos-hadron-nvidia:v0.5.1-standard-amd64-generic-v4.3.0-rc7-k3s-v1.36.4-k3s1`
 
 ### Local Build
 To build the image manually on a local machine, run the following script:
 ```bash
-HADRON_VERSION="v0.2.0"
-NVIDIA_VERSION="580.126.20"
+HADRON_VERSION="v0.5.1"
+NVIDIA_VERSION="580.178.04"
 BASE_IMAGE="quay.io/kairos/hadron"
-BASE_IMAGE_TAG="v0.2.0-standard-amd64-generic-v4.1.0-k3s-v1.36.0-k3s1"
+BASE_IMAGE_TAG="v0.5.1-standard-amd64-generic-v4.3.0-rc7-k3s-v1.36.4-k3s1"
 IMAGE="ghcr.io/jzacharie/kairos-hadron-nvidia:${BASE_IMAGE_TAG}"
 
 docker buildx build \

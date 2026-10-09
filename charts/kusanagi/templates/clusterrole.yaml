@@ -6,6 +6,13 @@ metadata:
   labels:
     {{- include "kusanagi.labels" . | nindent 4 }}
 rules:
+  # Apps & Deployments (for scaling workloads like GPU apps)
+  - apiGroups: ["apps"]
+    resources: ["deployments", "deployments/scale"]
+    verbs: ["get", "list", "watch", "patch", "update"]
+  - apiGroups: ["apps"]
+    resources: ["statefulsets", "statefulsets/scale", "daemonsets", "replicasets"]
+    verbs: ["get", "list", "watch", "patch"]
   # ArgoCD Applications
   - apiGroups: ["argoproj.io"]
     resources: ["applications"]
