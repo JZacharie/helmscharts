@@ -91,6 +91,12 @@ spec:
               name: {{ include "antigravity.fullname" . }}-secrets
               key: VNC_PASSWORD
               optional: true
+        - name: GH_PAT
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "antigravity.fullname" . }}-secrets
+              key: GH_PAT
+              optional: true
         ports:
         - containerPort: {{ .Values.service.port }}
           name: http

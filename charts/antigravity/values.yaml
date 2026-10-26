@@ -84,6 +84,9 @@ externalSecret:
     ANTIGRAVITY_SERVER_PASSWORD:
       key: antigravity
       property: ANTIGRAVITY_SERVER_PASSWORD
+    GH_PAT:
+      key: antigravity
+      property: GH_PAT
 
 env:
   DISPLAY_WIDTH: "1920"
