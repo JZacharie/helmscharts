@@ -63,13 +63,14 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /data
+      {{- with .Values.tei.embedder.nodeSelector | default .Values.nodeSelector }}
       nodeSelector:
-        kubernetes.io/hostname: vm169
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tei.embedder.tolerations | default .Values.tolerations }}
       tolerations:
-      - key: special-node
-        operator: Equal
-        value: gpu
-        effect: NoSchedule
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
       - name: data
         {{- if .Values.tei.embedder.persistence.enabled }}
