@@ -36,10 +36,20 @@ secrets:
   slackBotTokenKey: "SLACK_BOT_TOKEN"
   slackSigningSecretKey: "SLACK_SIGNING_SECRET"
   slackAppTokenKey: "SLACK_APP_TOKEN"
+  groqApiKey: "GROQ_API_KEY"
+  whisperApiKey: "WHISPER_API_KEY"
+  gradiumApiKey: "GRADIUM_API_KEY"
+  gradiumVoiceId: "GRADIUM_VOICE_ID"
 
 slack:
   aiChannelId: ""
   joeUserId: ""
+
+llama:
+  baseUrl: ""
+  apiKey: ""
+
+extraEnv: []
 
 serviceAccount:
   create: true

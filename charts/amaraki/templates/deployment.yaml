@@ -117,6 +117,28 @@ spec:
                   name: {{ .Values.secrets.existingSecret }}
                   key: {{ .Values.secrets.whisperApiKey | default "WHISPER_API_KEY" }}
                   optional: true
+            - name: GRADIUM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.existingSecret }}
+                  key: {{ .Values.secrets.gradiumApiKey | default "GRADIUM_API_KEY" }}
+                  optional: true
+            - name: GRADIUM_VOICE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.existingSecret }}
+                  key: {{ .Values.secrets.gradiumVoiceId | default "GRADIUM_VOICE_ID" }}
+                  optional: true
+            {{- end }}
+            {{- if .Values.gradium }}
+            {{- if .Values.gradium.voiceId }}
+            - name: GRADIUM_VOICE_ID
+              value: {{ .Values.gradium.voiceId | quote }}
+            {{- end }}
+            {{- if .Values.gradium.url }}
+            - name: GRADIUM_URL
+              value: {{ .Values.gradium.url | quote }}
+            {{- end }}
             {{- end }}
             {{- if .Values.whisper }}
             {{- if .Values.whisper.url }}
@@ -137,4 +159,17 @@ spec:
             - name: SLACK_JOE_USER_ID
               value: {{ .Values.slack.joeUserId | quote }}
             {{- end }}
+            {{- end }}
+            {{- if .Values.llama }}
+            {{- if .Values.llama.baseUrl }}
+            - name: LLAMA_BASE_URL
+              value: {{ .Values.llama.baseUrl | quote }}
+            {{- end }}
+            {{- if .Values.llama.apiKey }}
+            - name: LLAMA_API_KEY
+              value: {{ .Values.llama.apiKey | quote }}
+            {{- end }}
+            {{- end }}
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
             {{- end }}
