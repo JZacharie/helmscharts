@@ -170,6 +170,16 @@ spec:
               value: {{ .Values.llama.apiKey | quote }}
             {{- end }}
             {{- end }}
+            {{- if .Values.strata }}
+            {{- if .Values.strata.baseUrl }}
+            - name: STRATA_BASE_URL
+              value: {{ .Values.strata.baseUrl | quote }}
+            {{- end }}
+            {{- if .Values.strata.apiKey }}
+            - name: STRATA_API_KEY
+              value: {{ .Values.strata.apiKey | quote }}
+            {{- end }}
+            {{- end }}
             {{- with .Values.extraEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
