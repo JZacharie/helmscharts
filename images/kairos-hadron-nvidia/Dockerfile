@@ -24,8 +24,7 @@ ARG KERNEL_ARCH
 WORKDIR /build
 # kernel version is stored under /usr/share/kernel-misc/kernel-version file
 # Pull kernel sources so we can build the modules
-RUN kver=$(cat /usr/share/kernel-misc/kernel-version) && major=$(echo "$kver" | cut -d. -f1) && curl -L "https://cdn.kernel.org/pub/linux/kernel/v$major.x/linux-$kver.tar.xz" -o "linux-$kver.tar.xz"
-RUN kver=$(cat /usr/share/kernel-misc/kernel-version) && tar -xf linux-${kver}.tar.xz && mv linux-${kver} linux
+RUN kver=$(cat /usr/share/kernel-misc/kernel-version) && tar_ver=${kver%.0} && major=$(echo "$kver" | cut -d. -f1) && curl -fL "https://cdn.kernel.org/pub/linux/kernel/v$major.x/linux-$tar_ver.tar.xz" -o linux.tar.xz && tar -xf linux.tar.xz && rm linux.tar.xz && mv linux-${tar_ver} linux
 WORKDIR /build/linux
 RUN cp /usr/share/kernel-misc/kernel-config .config
 # Disable module signing cleanly
