@@ -17,9 +17,9 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v5
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
-          python-version: 3.14
+          python-version: 3.15
 
       - name: Install chart-testing
         uses: helm/chart-testing-action@v2.8.0
