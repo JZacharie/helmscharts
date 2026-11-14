@@ -1,7 +1,7 @@
 # ==============================================================================
 # Hardened Changedetection.io Build (Security Patched)
 # ==============================================================================
-FROM ghcr.io/dgtlmoon/changedetection.io:0.54.7
+FROM ghcr.io/dgtlmoon/changedetection.io:0.70.3
 
 USER root
 
