@@ -1,0 +1,497 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "filebrowser-quantum.fullname" . }}-configmap
+  labels:
+    {{- include "filebrowser-quantum.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    server:
+      cacheDir: "/home/filebrowser/data/tmp"
+      sources:
+        {{- range .Values.config.sources }}
+        - name: {{ .name | quote }}
+          path: {{ .path | quote }}
+          config:
+            defaultEnabled: {{ .defaultEnabled | default true }}
+            defaultUserScope: {{ .defaultUserScope | default "/" | quote }}
+            createUserDir: {{ .createUserDir | default false }}
+        {{- end }}
+
+    auth:
+      adminUsername: "${FB_USERNAME}"
+      adminPassword: "${FB_PASSWORD}"
+      methods:
+        password:
+          enabled: true
+
+  drop_server.py: |
+    #!/usr/bin/env python3
+    import cgi
+    import json
+    import os
+    import re
+    import shutil
+    import stat
+    import time
+    import urllib.parse
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+    from pathlib import Path
+
+    PORT = int(os.environ.get("DROP_PORT", "8081"))
+    API_USER = os.environ.get("FB_USERNAME", "admin")
+    API_PASS = os.environ.get("FB_PASSWORD", "")
+
+    POOLS = {
+        "podcasts": Path("/mnt/apool/share/plex/Podcasts"),
+        "apool": Path("/mnt/apool/share"),
+        "xpool": Path("/mnt/xpool"),
+    }
+
+    PRESETS = [
+        {"id": "podcasts", "label": "🎙️ Podcasts NotebookLM (Plex)", "pool": "podcasts", "subpath": ""},
+        {"id": "musiques", "label": "🎵 Musiques (apool)", "pool": "apool", "subpath": "Musiques"},
+        {"id": "ebook", "label": "📚 Ebooks (apool)", "pool": "apool", "subpath": "Ebook"},
+        {"id": "pdf", "label": "📄 PDF (apool)", "pool": "apool", "subpath": "PDF"},
+        {"id": "documentaire", "label": "🎬 Documentaires (apool/plex)", "pool": "apool", "subpath": "plex/Documentaire"},
+        {"id": "films", "label": "🍿 Films (apool/plex)", "pool": "apool", "subpath": "plex/Films"},
+        {"id": "series", "label": "📺 Séries (apool/plex)", "pool": "apool", "subpath": "plex/Series"},
+        {"id": "xpool-docs", "label": "🗂️ Documents (xpool)", "pool": "xpool", "subpath": "Documents"},
+        {"id": "xpool-photos", "label": "📷 Photos à trier (xpool)", "pool": "xpool", "subpath": "photos_a_trier"},
+        {"id": "xpool-apps", "label": "📦 Apps (xpool)", "pool": "xpool", "subpath": "Apps"},
+    ]
+
+    def sanitize_filename(name: str) -> str:
+        name = os.path.basename(name.strip())
+        name = re.sub(r'[<>:"/\\|?*\x00-\x1f]', '_', name)
+        name = re.sub(r'\s+', '_', name)
+        return name or f"podcast_{int(time.time())}.m4a"
+
+    def resolve_safe_path(pool_key: str, subpath: str = "") -> Path:
+        if pool_key not in POOLS:
+            raise ValueError(f"Pool inconnu: {pool_key}. Valeurs autorisées: {list(POOLS.keys())}")
+        base = POOLS[pool_key].resolve()
+        clean_sub = subpath.strip("/\\")
+        target = (base / clean_sub).resolve() if clean_sub else base
+        if target != base and not str(target).startswith(str(base) + os.sep):
+            raise ValueError("Chemin invalide (tentative de traversée de répertoire)")
+        return target
+
+    def apply_permissions(path: Path):
+        try:
+            os.chmod(path, 0o777)
+        except Exception:
+            pass
+
+    HTML_PAGE = """<!DOCTYPE html>
+    <html lang="fr" class="dark">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Pool & Podcast Drop — FileBrowser Quantum (jo3)</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <style>
+        body { background: #0f172a; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+        .drop-active { border-color: #38bdf8 !important; background: rgba(56, 189, 248, 0.1) !important; }
+      </style>
+    </head>
+    <body class="min-h-screen p-6">
+      <div class="max-w-5xl mx-auto space-y-6">
+        <header class="flex flex-wrap items-center justify-between gap-4 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-lg">
+          <div>
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
+              🎙️ NotebookLM Podcast & Pool Drop (apool / xpool)
+            </h1>
+            <p class="text-sm text-slate-400 mt-1">
+              Copie directe par Web & API sur les PVCs NFS <code class="text-sky-300">apool</code> et <code class="text-indigo-300">xpool</code>
+            </p>
+          </div>
+          <div class="flex gap-3">
+            <a href="/" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-medium text-sm transition">
+              🗂️ Ouvrir FileBrowser Quantum
+            </a>
+            <a href="/swagger" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-sm border border-slate-700 transition">
+              ⚡ Swagger API
+            </a>
+          </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Upload Card -->
+          <div class="lg:col-span-2 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-lg">
+            <h2 class="text-lg font-semibold text-slate-100">1. Envoyer un Podcast NotebookLM ou un fichier</h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Destination rapide</label>
+                <select id="presetSelect" class="w-full rounded-xl bg-slate-800 border border-slate-700 px-3 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-sky-500">
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Pool PVC</label>
+                <select id="poolSelect" class="w-full rounded-xl bg-slate-800 border border-slate-700 px-3 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-sky-500">
+                  <option value="podcasts">podcasts (/mnt/apool/share/plex/Podcasts)</option>
+                  <option value="apool">apool (/mnt/apool/share)</option>
+                  <option value="xpool">xpool (/mnt/xpool)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Sous-dossier cible (optionnel)</label>
+                <input id="subpathInput" type="text" placeholder="ex: SousDossier ou vide pour la racine"
+                  class="w-full rounded-xl bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-sky-500">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Renommer le fichier (optionnel, ex: Titre_Podcast.m4a)</label>
+                <input id="customNameInput" type="text" placeholder="Laisser vide pour garder le nom original"
+                  class="w-full rounded-xl bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-sky-500">
+              </div>
+            </div>
+
+            <div id="dropZone" class="border-2 border-dashed border-slate-700 rounded-2xl p-8 text-center cursor-pointer hover:border-sky-400 transition">
+              <input id="fileInput" type="file" multiple class="hidden">
+              <div class="text-4xl mb-2">📥</div>
+              <p class="text-slate-200 font-medium">Glissez-déposez vos fichiers (.m4a, .mp3, .wav, .pdf, .mp4...) ici</p>
+              <p class="text-xs text-slate-400 mt-1">ou cliquez pour sélectionner depuis votre ordinateur / téléphone</p>
+            </div>
+
+            <div id="uploadStatus" class="hidden rounded-xl p-4 text-sm"></div>
+
+            <!-- Copy between pools -->
+            <div class="pt-4 border-t border-slate-800 space-y-3">
+              <h3 class="text-sm font-semibold text-slate-300">🔄 Copier / Déplacer un fichier existant entre apool et xpool</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input id="srcPath" type="text" placeholder="Source (ex: apool:plex/Podcasts/mon_podcast.m4a)"
+                  class="rounded-xl bg-slate-800 border border-slate-700 px-3 py-2 text-xs text-slate-100">
+                <input id="dstPath" type="text" placeholder="Destination (ex: xpool:Documents/mon_podcast.m4a)"
+                  class="rounded-xl bg-slate-800 border border-slate-700 px-3 py-2 text-xs text-slate-100">
+              </div>
+              <button onclick="copyBetweenPools()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium transition">
+                Copier le fichier
+              </button>
+            </div>
+          </div>
+
+          <!-- Recent Podcasts & API Guide -->
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-lg">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-semibold text-slate-100">🎙️ Podcasts présents</h2>
+              <button onclick="loadFiles()" class="text-xs text-sky-400 hover:underline">Actualiser</button>
+            </div>
+            <ul id="fileList" class="space-y-2 text-xs text-slate-300 max-h-60 overflow-y-auto"></ul>
+
+            <div class="pt-4 border-t border-slate-800 space-y-2">
+              <h3 class="text-sm font-semibold text-slate-200">⚡ Exemples API (cURL / Automatisation)</h3>
+              <p class="text-xs text-slate-400">1. Pousser un podcast NotebookLM en 1 commande :</p>
+              <pre class="bg-slate-950 p-3 rounded-xl text-[11px] text-sky-300 overflow-x-auto">curl -X POST https://filebrowser.p.zacharie.org/drop/api/upload -F "pool=podcasts" -F "filename=Mon_Podcast_IA.m4a" -F "file=@audio.m4a"</pre>
+              <p class="text-xs text-slate-400 mt-2">2. Copier vers apool ou xpool :</p>
+              <pre class="bg-slate-950 p-3 rounded-xl text-[11px] text-indigo-300 overflow-x-auto">curl -X POST https://filebrowser.p.zacharie.org/drop/api/upload -F "pool=xpool" -F "subpath=Documents" -F "file=@rapport.pdf"</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        let presets = [];
+        const presetSelect = document.getElementById('presetSelect');
+        const poolSelect = document.getElementById('poolSelect');
+        const subpathInput = document.getElementById('subpathInput');
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const statusBox = document.getElementById('uploadStatus');
+
+        async function init() {
+          const res = await fetch('/drop/api/presets');
+          const data = await res.json();
+          presets = data.presets || [];
+          presetSelect.innerHTML = presets.map((p, i) => `<option value="${i}">${p.label}</option>`).join('');
+          presetSelect.addEventListener('change', () => {
+            const p = presets[presetSelect.value];
+            if (p) {
+              poolSelect.value = p.pool;
+              subpathInput.value = p.subpath;
+            }
+          });
+          loadFiles();
+        }
+
+        async function loadFiles() {
+          const pool = poolSelect.value;
+          const subpath = subpathInput.value;
+          const res = await fetch(`/drop/api/files?pool=${encodeURIComponent(pool)}&subpath=${encodeURIComponent(subpath)}`);
+          const data = await res.json();
+          const list = document.getElementById('fileList');
+          if (!data.files || data.files.length === 0) {
+            list.innerHTML = '<li class="text-slate-500">Aucun fichier dans ce dossier</li>';
+            return;
+          }
+          list.innerHTML = data.files.map(f => `
+            <li class="flex items-center justify-between bg-slate-800/70 px-3 py-2 rounded-lg">
+              <span class="truncate pr-2" title="${f.name}">${f.is_dir ? '📁' : '🎵'} ${f.name}</span>
+              <span class="text-slate-400 shrink-0">${f.size_human}</span>
+            </li>
+          `).join('');
+        }
+
+        poolSelect.addEventListener('change', loadFiles);
+        subpathInput.addEventListener('change', loadFiles);
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drop-active'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drop-active'));
+        dropZone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          dropZone.classList.remove('drop-active');
+          if (e.dataTransfer.files.length) uploadFiles(e.dataTransfer.files);
+        });
+        fileInput.addEventListener('change', () => {
+          if (fileInput.files.length) uploadFiles(fileInput.files);
+        });
+
+        async function uploadFiles(files) {
+          statusBox.className = 'rounded-xl p-4 text-sm bg-sky-950/80 border border-sky-700 text-sky-200';
+          statusBox.textContent = `⏳ Envoi de ${files.length} fichier(s) en cours...`;
+          statusBox.classList.remove('hidden');
+
+          const results = [];
+          for (const file of files) {
+            const fd = new FormData();
+            fd.append('pool', poolSelect.value);
+            fd.append('subpath', subpathInput.value);
+            const customName = document.getElementById('customNameInput').value.trim();
+            if (customName && files.length === 1) fd.append('filename', customName);
+            fd.append('file', file);
+
+            const res = await fetch('/drop/api/upload', { method: 'POST', body: fd });
+            const out = await res.json();
+            results.push(out);
+          }
+          const ok = results.every(r => r.ok);
+          statusBox.className = ok
+            ? 'rounded-xl p-4 text-sm bg-emerald-950/80 border border-emerald-700 text-emerald-200'
+            : 'rounded-xl p-4 text-sm bg-rose-950/80 border border-rose-700 text-rose-200';
+          statusBox.innerHTML = results.map(r => r.ok ? `✅ Copié : <code>${r.path}</code> (${r.size_human})` : `❌ Erreur : ${r.error}`).join('<br>');
+          loadFiles();
+        }
+
+        async function copyBetweenPools() {
+          const src = document.getElementById('srcPath').value.trim();
+          const dst = document.getElementById('dstPath').value.trim();
+          if (!src || !dst) return;
+          const res = await fetch('/drop/api/copy', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({source: src, destination: dst})
+          });
+          const out = await res.json();
+          statusBox.className = out.ok
+            ? 'rounded-xl p-4 text-sm bg-emerald-950/80 border border-emerald-700 text-emerald-200'
+            : 'rounded-xl p-4 text-sm bg-rose-950/80 border border-rose-700 text-rose-200';
+          statusBox.innerHTML = out.ok ? `✅ Copié vers <code>${out.destination}</code>` : `❌ ${out.error}`;
+          statusBox.classList.remove('hidden');
+          loadFiles();
+        }
+
+        init();
+      </script>
+    </body>
+    </html>
+    """
+
+    def human_size(size: int) -> str:
+        for unit in ["B", "KB", "MB", "GB", "TB"]:
+            if size < 1024:
+                return f"{size:.1f} {unit}" if unit != "B" else f"{size} B"
+            size /= 1024
+        return f"{size:.1f} PB"
+
+    class DropHandler(BaseHTTPRequestHandler):
+        def _send_json(self, status: int, payload: dict):
+            body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+            self.send_response(status)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(body)
+
+        def do_OPTIONS(self):
+            self.send_response(204)
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type, X-API-Key, Authorization, X-Filename")
+            self.end_headers()
+
+        def do_GET(self):
+            parsed = urllib.parse.urlparse(self.path)
+            path = parsed.path.rstrip("/") or "/drop"
+            qs = urllib.parse.parse_qs(parsed.query)
+
+            if path in ("/healthz", "/drop/healthz", "/drop/api/health"):
+                return self._send_json(200, {
+                    "ok": True,
+                    "service": "filebrowser-quantum-drop",
+                    "pools": {k: str(v) for k, v in POOLS.items()},
+                })
+
+            if path == "/drop/api/presets":
+                return self._send_json(200, {"ok": True, "presets": PRESETS})
+
+            if path == "/drop/api/files":
+                pool = qs.get("pool", ["podcasts"])[0]
+                subpath = qs.get("subpath", [""])[0]
+                try:
+                    target_dir = resolve_safe_path(pool, subpath)
+                    target_dir.mkdir(parents=True, exist_ok=True)
+                    items = []
+                    for entry in sorted(target_dir.iterdir(), key=lambda e: e.stat().st_mtime, reverse=True)[:100]:
+                        st = entry.stat()
+                        items.append({
+                            "name": entry.name,
+                            "is_dir": entry.is_dir(),
+                            "size": st.st_size,
+                            "size_human": human_size(st.st_size),
+                            "mtime": int(st.st_mtime),
+                        })
+                    return self._send_json(200, {"ok": True, "pool": pool, "dir": str(target_dir), "files": items})
+                except Exception as e:
+                    return self._send_json(400, {"ok": False, "error": str(e)})
+
+            if path in ("/drop", "/drop/"):
+                body = HTML_PAGE.encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+                return
+
+            return self._send_json(404, {"ok": False, "error": f"Route non trouvée: {path}"})
+
+        def do_POST(self):
+            parsed = urllib.parse.urlparse(self.path)
+            path = parsed.path.rstrip("/")
+            qs = urllib.parse.parse_qs(parsed.query)
+
+            if path in ("/drop/api/upload", "/drop/api/podcast"):
+                try:
+                    ctype = self.headers.get("Content-Type", "")
+                    if "multipart/form-data" in ctype:
+                        form = cgi.FieldStorage(
+                            fp=self.rfile,
+                            headers=self.headers,
+                            environ={"REQUEST_METHOD": "POST", "CONTENT_TYPE": ctype},
+                        )
+                        pool = form.getvalue("pool", "podcasts")
+                        subpath = form.getvalue("subpath", "")
+                        custom_name = form.getvalue("filename", "") or form.getvalue("title", "")
+                        if "file" not in form:
+                            return self._send_json(400, {"ok": False, "error": "Champ 'file' manquant"})
+                        file_item = form["file"]
+                        orig_name = getattr(file_item, "filename", None) or "podcast.m4a"
+                        if custom_name:
+                            ext = os.path.splitext(orig_name)[1] or ".m4a"
+                            if not os.path.splitext(custom_name)[1]:
+                                custom_name = custom_name + ext
+                            fname = sanitize_filename(custom_name)
+                        else:
+                            fname = sanitize_filename(orig_name)
+
+                        target_dir = resolve_safe_path(pool, subpath)
+                        target_dir.mkdir(parents=True, exist_ok=True)
+                        apply_permissions(target_dir)
+                        dest_file = target_dir / fname
+                        with open(dest_file, "wb") as f:
+                            shutil.copyfileobj(file_item.file, f)
+                        apply_permissions(dest_file)
+                        size = dest_file.stat().st_size
+                        return self._send_json(200, {
+                            "ok": True,
+                            "pool": pool,
+                            "filename": fname,
+                            "path": str(dest_file),
+                            "size": size,
+                            "size_human": human_size(size),
+                        })
+                    else:
+                        # Raw binary body upload: POST /drop/api/upload?pool=podcasts&filename=mon_podcast.m4a
+                        length = int(self.headers.get("Content-Length", "0"))
+                        if length <= 0:
+                            return self._send_json(400, {"ok": False, "error": "Corps de fichier vide"})
+                        pool = qs.get("pool", ["podcasts"])[0]
+                        subpath = qs.get("subpath", [""])[0]
+                        raw_name = qs.get("filename", [self.headers.get("X-Filename", f"podcast_{int(time.time())}.m4a")])[0]
+                        fname = sanitize_filename(raw_name)
+                        target_dir = resolve_safe_path(pool, subpath)
+                        target_dir.mkdir(parents=True, exist_ok=True)
+                        apply_permissions(target_dir)
+                        dest_file = target_dir / fname
+                        remaining = length
+                        with open(dest_file, "wb") as f:
+                            while remaining > 0:
+                                chunk = self.rfile.read(min(65536, remaining))
+                                if not chunk:
+                                    break
+                                f.write(chunk)
+                                remaining -= len(chunk)
+                        apply_permissions(dest_file)
+                        size = dest_file.stat().st_size
+                        return self._send_json(200, {
+                            "ok": True,
+                            "pool": pool,
+                            "filename": fname,
+                            "path": str(dest_file),
+                            "size": size,
+                            "size_human": human_size(size),
+                        })
+                except Exception as e:
+                    return self._send_json(500, {"ok": False, "error": str(e)})
+
+            if path == "/drop/api/copy":
+                try:
+                    length = int(self.headers.get("Content-Length", "0"))
+                    body = json.loads(self.rfile.read(length).decode("utf-8")) if length > 0 else {}
+                    src_spec = body.get("source", "")
+                    dst_spec = body.get("destination", "")
+                    move = bool(body.get("move", False))
+                    if ":" not in src_spec or ":" not in dst_spec:
+                        return self._send_json(400, {
+                            "ok": False,
+                            "error": "Format attendu: 'pool:chemin/fichier' (ex: 'apool:plex/Podcasts/audio.m4a' -> 'xpool:Documents/audio.m4a')"
+                        })
+                    s_pool, s_rel = src_spec.split(":", 1)
+                    d_pool, d_rel = dst_spec.split(":", 1)
+                    src_path = resolve_safe_path(s_pool, s_rel)
+                    dst_path = resolve_safe_path(d_pool, d_rel)
+                    if not src_path.exists():
+                        return self._send_json(404, {"ok": False, "error": f"Fichier source introuvable: {src_path}"})
+                    if dst_path.is_dir():
+                        dst_path = dst_path / src_path.name
+                    dst_path.parent.mkdir(parents=True, exist_ok=True)
+                    if move:
+                        shutil.move(str(src_path), str(dst_path))
+                    else:
+                        shutil.copy2(str(src_path), str(dst_path))
+                    apply_permissions(dst_path)
+                    return self._send_json(200, {
+                        "ok": True,
+                        "action": "moved" if move else "copied",
+                        "source": str(src_path),
+                        "destination": str(dst_path),
+                    })
+                except Exception as e:
+                    return self._send_json(500, {"ok": False, "error": str(e)})
+
+            return self._send_json(404, {"ok": False, "error": f"Route POST inconnue: {path}"})
+
+    if __name__ == "__main__":
+        for p in POOLS.values():
+            try:
+                p.mkdir(parents=True, exist_ok=True)
+            except Exception as exc:
+                print(f"[WARN] Impossible de vérifier {p}: {exc}")
+        print(f"[DROP-SERVER] Listening on 0.0.0.0:{PORT}")
+        server = ThreadingHTTPServer(("0.0.0.0", PORT), DropHandler)
+        server.serve_forever()

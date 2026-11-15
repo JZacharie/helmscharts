@@ -1,0 +1,63 @@
+{{- if .Values.persistence.config.enabled }}
+{{- if not .Values.persistence.config.existingClaim }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "filebrowser-quantum.fullname" . }}-config
+  labels:
+    {{- include "filebrowser-quantum.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.config.accessMode | default "ReadWriteOnce" }}
+  {{- if .Values.persistence.config.storageClass }}
+  storageClassName: {{ .Values.persistence.config.storageClass | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.config.size | default "1Gi" }}
+{{- end }}
+{{- end }}
+{{- range .Values.nfsShares }}
+{{- if .enabled }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-{{ include "filebrowser-quantum.fullname" $ }}-{{ .name }}
+  labels:
+    {{- include "filebrowser-quantum.labels" $ | nindent 4 }}
+    share: {{ .name | quote }}
+spec:
+  capacity:
+    storage: {{ .size | default "100Gi" }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  {{- with .mountOptions }}
+  mountOptions:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  nfs:
+    server: {{ .server | quote }}
+    path: {{ .path | quote }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-{{ include "filebrowser-quantum.fullname" $ }}-{{ .name }}
+  labels:
+    {{- include "filebrowser-quantum.labels" $ | nindent 4 }}
+    share: {{ .name | quote }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: {{ .size | default "100Gi" }}
+  storageClassName: ""
+  volumeName: pv-{{ include "filebrowser-quantum.fullname" $ }}-{{ .name }}
+{{- end }}
+{{- end }}

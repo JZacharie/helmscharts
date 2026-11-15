@@ -1,0 +1,143 @@
+replicaCount: 1
+
+image:
+  repository: gtstef/filebrowser
+  tag: "stable"
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+nodeSelector:
+  kubernetes.io/arch: amd64
+  nfs: "true"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  supplementalGroups:
+    - 100
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 80
+
+env:
+  TZ: "Europe/Paris"
+
+config:
+  baseURL: "/"
+  sources:
+    - name: "Podcasts"
+      path: "/mnt/apool/share/plex/Podcasts"
+      defaultEnabled: true
+      defaultUserScope: "/"
+      createUserDir: false
+    - name: "apool"
+      path: "/mnt/apool/share"
+      defaultEnabled: true
+      defaultUserScope: "/"
+      createUserDir: false
+    - name: "xpool"
+      path: "/mnt/xpool"
+      defaultEnabled: true
+      defaultUserScope: "/"
+      createUserDir: false
+
+persistence:
+  config:
+    enabled: true
+    existingClaim: ""
+    storageClass: "nfs-client"
+    accessMode: ReadWriteOnce
+    size: 1Gi
+
+nfsShares:
+  - name: apool
+    enabled: true
+    server: 192.168.0.50
+    path: /apool
+    mountPath: /mnt/apool
+    size: 100Gi
+    mountOptions:
+      - nfsvers=4.2
+  - name: xpool
+    enabled: true
+    server: 192.168.0.50
+    path: /xpool/share/share
+    mountPath: /mnt/xpool
+    size: 100Gi
+    mountOptions:
+      - nfsvers=4.2
+
+dropApi:
+  enabled: true
+  port: 8081
+  image:
+    repository: python
+    tag: "3.11-slim"
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+externalSecret:
+  enabled: true
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  targetSecretName: filebrowser-secret
+  vaultKey: "dev-tools/filebrowser"
+  data:
+    - secretKey: FB_USERNAME
+      remoteProperty: username
+    - secretKey: FB_PASSWORD
+      remoteProperty: password
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/description: "FileBrowser Quantum & Podcast Drop (apool/xpool)"
+    gethomepage.dev/group: "Tools"
+    gethomepage.dev/icon: "filebrowser"
+    gethomepage.dev/name: "Filebrowser Quantum"
+    gethomepage.dev/ping: "https://filebrowser.p.zacharie.org"
+  hosts:
+    - host: filebrowser.p.zacharie.org
+      paths:
+        - path: /
+          pathType: Prefix
+          port: 8080
+  tls:
+    - secretName: tls-zacharie-org
+      hosts:
+        - filebrowser.p.zacharie.org
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi

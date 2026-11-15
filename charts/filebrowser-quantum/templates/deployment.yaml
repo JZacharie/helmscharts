@@ -1,0 +1,184 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "filebrowser-quantum.fullname" . }}
+  labels:
+    {{- include "filebrowser-quantum.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount | default 1 }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "filebrowser-quantum.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "filebrowser-quantum.selectorLabels" . | nindent 8 }}
+    spec:
+      terminationGracePeriodSeconds: 5
+      automountServiceAccountToken: false
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      initContainers:
+        - name: init-config
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /home/filebrowser/data/tmp /home/filebrowser/data/legacy-backup
+              if [ -f /home/filebrowser/data/filebrowser.db ]; then
+                mv /home/filebrowser/data/filebrowser.db /home/filebrowser/data/legacy-backup/filebrowser.db.bak || true
+              fi
+              if [ -f /home/filebrowser/data/settings.json ]; then
+                mv /home/filebrowser/data/settings.json /home/filebrowser/data/legacy-backup/settings.json.bak || true
+              fi
+              cp /config-src/config.yaml /home/filebrowser/data/config.yaml
+              chmod 0600 /home/filebrowser/data/config.yaml
+              mkdir -p /mnt/apool/share/plex/Podcasts || true
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          volumeMounts:
+            - name: config-data
+              mountPath: /home/filebrowser/data
+            - name: configmap
+              mountPath: /config-src
+            {{- range .Values.nfsShares }}
+            {{- if .enabled }}
+            - name: share-{{ .name }}
+              mountPath: {{ .mountPath }}
+            {{- end }}
+            {{- end }}
+      containers:
+        - name: filebrowser-quantum
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort | default 80 }}
+              protocol: TCP
+          env:
+            - name: TZ
+              value: {{ .Values.env.TZ | default "Europe/Paris" | quote }}
+            - name: FILEBROWSER_CONFIG
+              value: "/home/filebrowser/data/config.yaml"
+            {{- if .Values.externalSecret.enabled }}
+            - name: FB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalSecret.targetSecretName }}
+                  key: FB_USERNAME
+            - name: FB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalSecret.targetSecretName }}
+                  key: FB_PASSWORD
+            {{- end }}
+          volumeMounts:
+            - name: config-data
+              mountPath: /home/filebrowser/data
+            {{- range .Values.nfsShares }}
+            {{- if .enabled }}
+            - name: share-{{ .name }}
+              mountPath: {{ .mountPath }}
+            {{- end }}
+            {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        {{- if .Values.dropApi.enabled }}
+        - name: podcast-drop-api
+          image: "{{ .Values.dropApi.image.repository }}:{{ .Values.dropApi.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          command: ["python3", "-u", "/config-src/drop_server.py"]
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          ports:
+            - name: drop
+              containerPort: {{ .Values.dropApi.port | default 8081 }}
+              protocol: TCP
+          env:
+            - name: TZ
+              value: {{ .Values.env.TZ | default "Europe/Paris" | quote }}
+            - name: DROP_PORT
+              value: {{ .Values.dropApi.port | default 8081 | quote }}
+            {{- if .Values.externalSecret.enabled }}
+            - name: FB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalSecret.targetSecretName }}
+                  key: FB_USERNAME
+            - name: FB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalSecret.targetSecretName }}
+                  key: FB_PASSWORD
+            {{- end }}
+          volumeMounts:
+            - name: configmap
+              mountPath: /config-src
+            {{- range .Values.nfsShares }}
+            {{- if .enabled }}
+            - name: share-{{ .name }}
+              mountPath: {{ .mountPath }}
+            {{- end }}
+            {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: drop
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: drop
+            initialDelaySeconds: 5
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.dropApi.resources | nindent 12 }}
+        {{- end }}
+      volumes:
+        - name: configmap
+          configMap:
+            name: {{ include "filebrowser-quantum.fullname" . }}-configmap
+            defaultMode: 0755
+        - name: config-data
+          {{- if .Values.persistence.config.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.config.existingClaim | default (printf "%s-config" (include "filebrowser-quantum.fullname" .)) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- range .Values.nfsShares }}
+        {{- if .enabled }}
+        - name: share-{{ .name }}
+          persistentVolumeClaim:
+            claimName: pvc-{{ include "filebrowser-quantum.fullname" $ }}-{{ .name }}
+        {{- end }}
+        {{- end }}
