@@ -1,7 +1,7 @@
 # ==============================================================================
 # Hardened Miniflux Build (Security Patched)
 # ==============================================================================
-FROM ghcr.io/miniflux/miniflux:2.2.18
+FROM ghcr.io/miniflux/miniflux:2.3.5
 
 USER root
 
