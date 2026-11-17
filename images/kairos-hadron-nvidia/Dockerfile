@@ -12,7 +12,7 @@ ARG BASE_IMAGE_TAG=v0.6.3-standard-amd64-generic-v4.4.0-k3s-v1.37.1-k3s1
 ARG VERSION=v0.6.3-standard-amd64-generic-v4.4.0-k3s-v1.37.1-k3s1-gpu-unlock
 ARG JOBS=4
 ARG NVIDIA_VERSION=580.178.04
-ARG GPU_UNLOCK_VERSION=2.0.0
+ARG GPU_UNLOCK_VERSION=3.0.0-beta
 ARG TARGETARCH=amd64
 # KERNEL_ARCH uses Linux kernel naming (x86_64, arm64) rather than Docker's (amd64, arm64)
 ARG KERNEL_ARCH=x86_64
@@ -48,6 +48,7 @@ RUN ARCH=${KERNEL_ARCH} KERNEL_UNAME="$(cat /usr/share/kernel-misc/kernel-releas
 ARG GPU_UNLOCK_VERSION
 WORKDIR /build
 RUN curl -fL "https://github.com/Zagitta/gpu-unlock/archive/refs/tags/${GPU_UNLOCK_VERSION}.tar.gz" -o gpu-unlock.tar.gz || \
+    curl -fL "https://github.com/Zagitta/gpu-unlock/archive/refs/heads/${GPU_UNLOCK_VERSION}.tar.gz" -o gpu-unlock.tar.gz || \
     curl -fL "https://github.com/Zagitta/gpu-unlock/archive/refs/heads/main.tar.gz" -o gpu-unlock.tar.gz
 RUN tar -xf gpu-unlock.tar.gz && rm gpu-unlock.tar.gz && mv gpu-unlock-* gpu-unlock
 WORKDIR /build/gpu-unlock/kernel/gpu_unlock
