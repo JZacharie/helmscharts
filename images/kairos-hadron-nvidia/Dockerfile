@@ -9,9 +9,10 @@ ARG HADRON_VERSION=v0.6.4
 # BASE_IMAGE_TAG must be set explicitly — it's the full quay.io tag, not just HADRON_VERSION.
 ARG BASE_IMAGE=quay.io/kairos/hadron
 ARG BASE_IMAGE_TAG=v0.6.3-standard-amd64-generic-v4.4.0-k3s-v1.37.1-k3s1
-ARG VERSION=v0.6.3-standard-amd64-generic-v4.4.0-k3s-v1.37.1-k3s1
+ARG VERSION=v0.6.3-standard-amd64-generic-v4.4.0-k3s-v1.37.1-k3s1-gpu-unlock
 ARG JOBS=4
 ARG NVIDIA_VERSION=580.178.04
+ARG GPU_UNLOCK_VERSION=2.0.0
 ARG TARGETARCH=amd64
 # KERNEL_ARCH uses Linux kernel naming (x86_64, arm64) rather than Docker's (amd64, arm64)
 ARG KERNEL_ARCH=x86_64
@@ -43,6 +44,23 @@ ENV LDFLAGS="--gc-sections --as-needed"
 RUN ARCH=${KERNEL_ARCH} KERNEL_UNAME="$(cat /usr/share/kernel-misc/kernel-release)" SYSSRC=/build/linux SYSOUT=/build/linux make -s -j${JOBS} modules
 RUN ARCH=${KERNEL_ARCH} KERNEL_UNAME="$(cat /usr/share/kernel-misc/kernel-release)" SYSSRC=/build/linux SYSOUT=/build/linux ZSTD_CLEVEL=19 INSTALL_MOD_PATH="/output" INSTALL_MOD_STRIP=1 DEPMOD=true make -s -j${JOBS} modules_install
 
+# Build gpu_unlock kernel module
+ARG GPU_UNLOCK_VERSION
+WORKDIR /build
+RUN curl -fL "https://github.com/Zagitta/gpu-unlock/archive/refs/tags/${GPU_UNLOCK_VERSION}.tar.gz" -o gpu-unlock.tar.gz || \
+    curl -fL "https://github.com/Zagitta/gpu-unlock/archive/refs/heads/main.tar.gz" -o gpu-unlock.tar.gz
+RUN tar -xf gpu-unlock.tar.gz && rm gpu-unlock.tar.gz && mv gpu-unlock-* gpu-unlock
+WORKDIR /build/gpu-unlock/kernel/gpu_unlock
+RUN ARCH=${KERNEL_ARCH} KDIR=/build/linux make -s -j${JOBS}
+RUN kver="$(cat /usr/share/kernel-misc/kernel-release)" && \
+    mkdir -p /output/lib/modules/${kver}/kernel/drivers/video && \
+    strip --strip-debug gpu_unlock.ko && \
+    if command -v zstd >/dev/null; then \
+        zstd -19 -T0 --rm gpu_unlock.ko -o /output/lib/modules/${kver}/kernel/drivers/video/gpu_unlock.ko.zst; \
+    else \
+        cp gpu_unlock.ko /output/lib/modules/${kver}/kernel/drivers/video/; \
+    fi
+
 # Stage 2: Extract NVIDIA userspace tools and glibc shim
 # As the nvidia userspace components are linked against glibc, we also need to copy the glibc runtime libraries to ensure they can run properly in the musl-based Hadron image.
 # We can do this by copying the necessary .so files from the builder stage, which is based on Ubuntu and has glibc, to a separate output directory.
@@ -62,6 +80,9 @@ RUN apt-get update && \
         libstdc++6 \
         libgcc-s1 \
         gnupg \
+        make \
+        python3 \
+        zstd \
         nvtop \
         nvidia-modprobe \
         qemu-guest-agent && \
@@ -219,6 +240,19 @@ RUN ldconfig -r ${OUTPUT} -f /etc/ld.so.conf
 # Copy the firmware, this needs the version as each version stores it in a separated folder
 RUN cp -a firmware/* ${OUTPUT}/usr/lib/firmware/nvidia/${NVIDIA_VERSION}/
 
+# ---- Build gpu-unlock firmware & dracut config ----
+WORKDIR /work/gpu-unlock
+ARG GPU_UNLOCK_VERSION
+RUN curl -fL "https://github.com/Zagitta/gpu-unlock/archive/refs/tags/${GPU_UNLOCK_VERSION}.tar.gz" -o gpu-unlock.tar.gz || \
+    curl -fL "https://github.com/Zagitta/gpu-unlock/archive/refs/heads/main.tar.gz" -o gpu-unlock.tar.gz && \
+    tar -xf gpu-unlock.tar.gz --strip-components=1 && rm gpu-unlock.tar.gz && \
+    make ASSETS="/work/gpu-unlock/assets" INPUTS="/work/gpu-unlock/inputs" assets && \
+    mkdir -p ${OUTPUT}/usr/lib/firmware/gpu-unlock/610.43.03 && \
+    cp /work/gpu-unlock/assets/*.bin ${OUTPUT}/usr/lib/firmware/gpu-unlock/610.43.03/ && \
+    mkdir -p ${OUTPUT}/usr/lib/dracut/dracut.conf.d && \
+    cp packaging/boot/dracut.conf ${OUTPUT}/usr/lib/dracut/dracut.conf.d/gpu-unlock.conf && \
+    echo 'install_items+=" /usr/lib/firmware/gpu-unlock/610.43.03/* "' >> ${OUTPUT}/usr/lib/dracut/dracut.conf.d/gpu-unlock.conf
+
 # blacklist nouveau driver by adding a conf file to modprobe.d,
 # this way the modules will autoload and not collide with nouveau
 RUN echo "blacklist nouveau" > ${OUTPUT}/etc/modprobe.d/blacklist-nouveau.conf
@@ -251,6 +285,13 @@ RUN cp -a /sbin/ldconfig.real ${OUTPUT}/usr/bin/ldconfig
 FROM ${BASE_IMAGE}:${BASE_IMAGE_TAG} AS hadron-extension
 COPY --link --from=modules-builder /output/ /usr/
 COPY --link --from=nvidia-builder /output/ /
-# Regenerate modules.dep with the full module tree (base kernel + nvidia).
+# Regenerate modules.dep with the full module tree (base kernel + nvidia + gpu_unlock).
 # The modules-builder depmod only saw nvidia modules, overwriting the base image's modules.dep.
 RUN depmod -a $(ls /usr/lib/modules/ | head -1)
+# Inject gpu_unlock.targets=all into default cos bootargs
+RUN if [ -f /etc/cos/bootargs.cfg ]; then \
+      sed -i 's/baseExtraArgs=""/baseExtraArgs="gpu_unlock.targets=all"/g' /etc/cos/bootargs.cfg; \
+    fi
+# Regenerate initramfs with dracut including gpu_unlock
+RUN kver=$(ls /usr/lib/modules/ | head -1) && \
+    dracut -f /boot/initrd ${kver}

@@ -37,6 +37,13 @@ Includes the QEMU Guest Agent (`qemu-ga`) and systemd unit (`qemu-guest-agent.se
 * Dynamic glibc dependencies (`glib-2.0`, `libnuma`, `liburing`, etc.) bundled into `/usr/libc/lib`.
 * Auto-starts on boot when the virtio-serial port `org.qemu.guest_agent.0` is exposed by Proxmox.
 
+### 6. Zagitta GPU Unlock (Tensor Cores Pre-Driver Unlock)
+Integrates [Zagitta/gpu-unlock](https://github.com/Zagitta/gpu-unlock) to lift NVIDIA's hardware-imposed caps on FP16, BF16, and TF32 matrix issue rates on consumer GeForce GPUs (Turing RTX 2060, Ada Lovelace, etc.).
+* Pre-driver kernel module `gpu_unlock.ko` compiled against the Hadron kernel headers in `modules-builder`.
+* Microcodes and booter firmware extracted into `/usr/lib/firmware/gpu-unlock/610.43.03/`.
+* Included into initramfs via dracut (`force_drivers+=" gpu_unlock "`) so it runs before `nvidia` binds to the GPU.
+* Injected into default Kairos boot arguments (`gpu_unlock.targets=all`).
+
 ---
 
 ## Building the Image
