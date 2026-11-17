@@ -240,7 +240,7 @@ RUN ldconfig -r ${OUTPUT} -f /etc/ld.so.conf
 # Copy the firmware, this needs the version as each version stores it in a separated folder
 RUN cp -a firmware/* ${OUTPUT}/usr/lib/firmware/nvidia/${NVIDIA_VERSION}/
 
-# ---- Build gpu-unlock firmware & dracut config ----
+# ---- Build gpu-unlock firmware & modprobe config ----
 WORKDIR /work/gpu-unlock
 ARG GPU_UNLOCK_VERSION
 RUN curl -fL "https://github.com/Zagitta/gpu-unlock/archive/refs/tags/${GPU_UNLOCK_VERSION}.tar.gz" -o gpu-unlock.tar.gz || \
@@ -249,9 +249,8 @@ RUN curl -fL "https://github.com/Zagitta/gpu-unlock/archive/refs/tags/${GPU_UNLO
     make ASSETS="/work/gpu-unlock/assets" INPUTS="/work/gpu-unlock/inputs" assets && \
     mkdir -p ${OUTPUT}/usr/lib/firmware/gpu-unlock/610.43.03 && \
     cp /work/gpu-unlock/assets/*.bin ${OUTPUT}/usr/lib/firmware/gpu-unlock/610.43.03/ && \
-    mkdir -p ${OUTPUT}/usr/lib/dracut/dracut.conf.d && \
-    cp packaging/boot/dracut.conf ${OUTPUT}/usr/lib/dracut/dracut.conf.d/gpu-unlock.conf && \
-    echo 'install_items+=" /usr/lib/firmware/gpu-unlock/610.43.03/* "' >> ${OUTPUT}/usr/lib/dracut/dracut.conf.d/gpu-unlock.conf
+    mkdir -p ${OUTPUT}/etc/modprobe.d && \
+    echo "options gpu_unlock targets=all" > ${OUTPUT}/etc/modprobe.d/gpu-unlock.conf
 
 # blacklist nouveau driver by adding a conf file to modprobe.d,
 # this way the modules will autoload and not collide with nouveau
@@ -285,6 +284,14 @@ RUN cp -a /sbin/ldconfig.real ${OUTPUT}/usr/bin/ldconfig
 FROM ${BASE_IMAGE}:${BASE_IMAGE_TAG} AS hadron-extension
 COPY --link --from=modules-builder /output/ /usr/
 COPY --link --from=nvidia-builder /output/ /
+# Ensure /boot/vmlinuz is a relative symlink to avoid GRUB loopback resolution failure
+RUN if [ -L /boot/vmlinuz ]; then \
+      target=$(readlink /boot/vmlinuz); \
+      cd /boot && ln -sf $(basename "$target") vmlinuz; \
+    fi
+# Load gpu_unlock at boot
+RUN mkdir -p /etc/modules-load.d && \
+    echo "gpu_unlock" > /etc/modules-load.d/gpu-unlock.conf
 # Regenerate modules.dep with the full module tree (base kernel + nvidia + gpu_unlock).
 # The modules-builder depmod only saw nvidia modules, overwriting the base image's modules.dep.
 RUN depmod -a $(ls /usr/lib/modules/ | head -1)
@@ -292,6 +299,3 @@ RUN depmod -a $(ls /usr/lib/modules/ | head -1)
 RUN if [ -f /etc/cos/bootargs.cfg ]; then \
       sed -i 's/baseExtraArgs=""/baseExtraArgs="gpu_unlock.targets=all"/g' /etc/cos/bootargs.cfg; \
     fi
-# Regenerate initramfs with dracut including gpu_unlock
-RUN kver=$(ls /usr/lib/modules/ | head -1) && \
-    dracut -f /boot/initrd ${kver}
