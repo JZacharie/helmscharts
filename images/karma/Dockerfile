@@ -3,7 +3,7 @@
 # ==============================================================================
 FROM gcr.io/distroless/static:nonroot AS runner
 
-COPY --from=ghcr.io/prymitive/karma:v0.120 /karma /karma
+COPY --from=ghcr.io/prymitive/karma:v0.134 /karma /karma
 
 USER 65532:65532
 
